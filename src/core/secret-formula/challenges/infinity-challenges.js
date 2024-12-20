@@ -8,8 +8,8 @@ export const infinityChallenges = [
     goal: DC.E650,
     isQuickResettable: true,
     reward: {
-      description: () => `${formatX(1.3, 1, 1)} on all Infinity Dimensions for each Infinity Challenge completed`,
-      effect: () => Math.pow(1.3, InfinityChallenges.completed.length),
+      description: () => `${formatX(5, 1, 1)} on all Infinity Dimensions for each Infinity Challenge completed`,
+      effect: () => Math.pow(5, InfinityChallenges.completed.length),
       formatEffect: value => formatX(value, 1, 1)
     },
     unlockAM: DC.E2000,
@@ -97,20 +97,20 @@ export const infinityChallenges = [
       // necessarily 2.5x by the time the player sees this challenge; it's probably most accurate to say what it
       // currently is, and this phrasing avoids 10x ➜ 10x with the old description.
       const mult = Effects.max(
-        2,
+        2.5,
         InfinityUpgrade.dimboostMult,
         InfinityChallenge(7).reward,
         TimeStudy(81)
       );
       return `you cannot buy Antimatter Galaxies. Base Dimension Boost multiplier is increased to a maximum
-        of ${formatX(10)}. (Current base multiplier: ${formatX(mult, 2, 1)})`;
+        of ${formatX(15)}. (Current base multiplier: ${formatX(mult, 2, 1)})`;
     },
     goal: DC.E10000,
     isQuickResettable: false,
-    effect: 10,
+    effect: 15,
     reward: {
-      description: () => `Dimension Boost multiplier is increased to a minimum of ${formatX(4)}`,
-      effect: 4
+      description: () => `Dimension Boost multiplier is increased to a minimum of ${formatX(10)}`,
+      effect: 10
     },
     unlockAM: DC.E23000,
   },

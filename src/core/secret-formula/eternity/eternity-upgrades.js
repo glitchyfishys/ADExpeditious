@@ -16,11 +16,11 @@ export const eternityUpgrades = {
     effect() {
       const log4 = Math.log4;
       const eterPreCap = Currency.eternities.value.clampMax(1e5).toNumber();
-      const base = eterPreCap / 200 + 1;
+      const base = eterPreCap / 180 + 1;
       const pow = Math.log(eterPreCap * 2 + 1) / log4;
       const multPreCap = Math.pow(base, pow);
       const eterPostCap = Currency.eternities.value.sub(1e5);
-      const mult1 = eterPostCap.divide(200).plus(1);
+      const mult1 = eterPostCap.divide(180).plus(1);
       const mult2 = eterPostCap.times(2).plus(1).log(Math.E) / log4;
       const multPostCap = mult1.times(mult2).clampMin(1);
       return multPostCap.times(multPreCap);

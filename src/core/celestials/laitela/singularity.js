@@ -248,15 +248,22 @@ export const Singularity = {
     return Currency.darkEnergy.gte(this.cap);
   },
 
-  increaseCap() {
-    if (player.celestials.laitela.singularityCapIncreases >= 50) return;
-    player.celestials.laitela.singularityCapIncreases++;
-  },
-
-  decreaseCap() {
-    if (player.celestials.laitela.singularityCapIncreases === 0) return;
-    player.celestials.laitela.singularityCapIncreases--;
-  },
+  increaseCap(t = false) {
+    const cap = 60;
+    if (player.celestials.laitela.singularityCapIncreases >= cap ) return;
+      if(t){
+        player.celestials.laitela.singularityCapIncreases = Math.min(Math.floor(Math.log10(Currency.darkEnergy.productionPerSecond / 200 * getGlobalSpeedFactor() ** 0.5)), cap);
+      }
+      else{
+        player.celestials.laitela.singularityCapIncreases++;
+      }
+    },
+  
+    decreaseCap(t = false) {
+      if (player.celestials.laitela.singularityCapIncreases === 0) return;
+      if(!t) player.celestials.laitela.singularityCapIncreases--;
+      else  player.celestials.laitela.singularityCapIncreases = 0;
+    },
 
   perform() {
     if (!this.capIsReached || Pelle.isDoomed) return;

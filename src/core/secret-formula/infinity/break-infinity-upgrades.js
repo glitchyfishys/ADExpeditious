@@ -31,14 +31,14 @@ export const breakInfinityUpgrades = {
     id: "totalMult",
     cost: 1e4,
     description: "Antimatter Dimensions gain a multiplier based on total antimatter produced",
-    effect: () => Math.pow(player.records.totalAntimatter.exponent + 1, 0.5),
+    effect: () => Math.pow(player.records.totalAntimatter.exponent + 1, 0.66),
     formatEffect: value => formatX(value, 2, 2)
   },
   currentAMMult: {
     id: "currentMult",
     cost: 5e4,
     description: "Antimatter Dimensions gain a multiplier based on current antimatter",
-    effect: () => Math.pow(Currency.antimatter.exponent + 1, 0.5),
+    effect: () => Math.pow(Currency.antimatter.exponent + 1, 0.66),
     formatEffect: value => formatX(value, 2, 2)
   },
   galaxyBoost: {
@@ -54,7 +54,7 @@ export const breakInfinityUpgrades = {
     id: "infinitiedMult",
     cost: 1e5,
     description: "Antimatter Dimensions gain a multiplier based on Infinities",
-    effect: () => 1 + Currency.infinitiesTotal.value.pLog10() * 10,
+    effect: () => 1 + Currency.infinitiesTotal.value.pLog10() * 100,
     formatEffect: value => formatX(value, 2, 2)
   },
   achievementMult: {
@@ -119,7 +119,7 @@ export const breakInfinityUpgrades = {
   dimCostMult: rebuyable({
     id: 1,
     initialCost: 1e7,
-    costIncrease: 5e3,
+    costIncrease: 1e3,
     maxUpgrades: 7,
     description: "Reduce post-infinity Antimatter Dimension cost multiplier scaling",
     afterEC: () => (EternityChallenge(6).completions > 0

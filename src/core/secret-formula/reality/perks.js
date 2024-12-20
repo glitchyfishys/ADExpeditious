@@ -36,9 +36,9 @@ export const perks = {
     family: PERK_FAMILY.REALITY,
     get description() {
       return `Remove the achievement requirement from the Reality Study
-      and allow you to choose from ${formatInt(4)} different Glyphs on Reality.`;
+      and allow you to choose from ${formatInt(5)} different Glyphs on Reality.`;
     },
-    effect: 4,
+    effect: 5,
     layoutPosList: [76596, 80200, 80600, 80200, 80188, 67769],
   },
   startAM: {
@@ -116,11 +116,11 @@ export const perks = {
     label: "STP",
     family: PERK_FAMILY.DILATION,
     get description() {
-      return `After unlocking Dilation, gain ${formatInt(10)} Tachyon Particles.`;
+      return `After unlocking Dilation, gain ${formatInt(100)} Tachyon Particles.`;
     },
-    effect: () => (Enslaved.isRunning ? 1 : 10),
+    effect: () => (Enslaved.isRunning ? 1 : 100),
     automatorPoints: 5,
-    shortDescription: () => `Start with ${formatInt(10)} TP`,
+    shortDescription: () => `Start with ${formatInt(100)} TP`,
     layoutPosList: [102120, 81399, 79399, 80197, 81800, 109376],
   },
   antimatterNoReset: {

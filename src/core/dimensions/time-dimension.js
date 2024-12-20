@@ -323,7 +323,7 @@ export const TimeDimensions = {
 
   tick(diff) {
     for (let tier = 8; tier > 1; tier--) {
-      TimeDimension(tier).produceDimensions(TimeDimension(tier - 1), diff / 10);
+      TimeDimension(tier).produceDimensions(TimeDimension(tier - 1), diff);
     }
 
     if (EternityChallenge(7).isRunning) {

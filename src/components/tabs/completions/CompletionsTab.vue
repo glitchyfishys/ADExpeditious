@@ -3,8 +3,9 @@ import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SliderComponent from "@/components/SliderComponent";
-import PastPrestigeRunsContainer from "../past-prestige-runs/PastPrestigeRunsContainer";
-
+import PastCompsContainer from "./PastCompsContainer";
+import NameInput from "./NameInput";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "CompletionsTab",
@@ -13,25 +14,26 @@ export default {
     OptionsButton,
     PrimaryToggleButton,
     SliderComponent,
-    PastPrestigeRunsContainer
+    PastCompsContainer,
+    NameInput,
+    PrimaryButton
   },
   data() {
     return {
+      gameCompletions: 0,
       completion: {
-        gameCompletions: new Decimal(),
+        name: 'Completion',
         hasBest: false,
         best: TimeSpan.zero,
         this: TimeSpan.zero,
         thisReal: TimeSpan.zero,
         bestReal: TimeSpan.zero,
       },
-      layers: {
-        completion: {
-          name: "Completion",
-          plural: "Completions",
-          condition: () => player.records.fullGameCompletions > 0,
-          getRuns: () => player.records.recentCompletions
-        }
+      Lcompletion: {
+        name: "Completion",
+        plural: "Completions",
+        condition: () => player.records.fullGameCompletions > 0,
+        getRuns: () => player.records.recentCompletions
       }
     };
   },
@@ -51,6 +53,9 @@ export default {
 
       this.gameCompletions = player.records.fullGameCompletions;
     },
+    start(){
+      Speedrun.prepareSave(player.speedrun.name);
+    }
   }
 };
 </script>
@@ -71,8 +76,17 @@ export default {
         You have spent {{ completion.this.toStringShort() }} in this full game run in game time.<br>
         You have spent {{ completion.thisReal.toStringShort() }} in this full game run in real time.
       </div>
-    (That's all you can see here, I have no idea what else to add here. {gci loops real})<br>
-    (this was supposed to be last 10 completions, but i cant get it to work, so rip i suppose)
+      Speedrun Name: <NameInput /><br>
+      <PrimaryButton
+      @click="start"
+      class="speedrun"
+      >
+        Start Speedrun
+      </PrimaryButton><br>
+      <PastCompsContainer
+      :key="Lcompletion.name"
+      :comp="Lcompletion"
+      />
   </div>
 </template>
 
@@ -91,5 +105,11 @@ export default {
 
 .c-best-runs-text, .c-this-runs-text {
   font-size: 1.5rem;
+}
+
+.speedrun {
+  width: 25rem;
+  height: 6rem;
+  font-size: 26px;
 }
 </style>

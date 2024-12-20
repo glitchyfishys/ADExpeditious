@@ -134,71 +134,71 @@ window.player = {
     },
     infinityDims: {
       all: Array.range(0, 8).map(() => ({
-        isActive: false,
+        isActive: true,
         lastTick: 0,
       })),
       isActive: true,
     },
     timeDims: {
       all: Array.range(0, 8).map(() => ({
-        isActive: false,
+        isActive: true,
         lastTick: 0,
       })),
       isActive: true,
     },
     replicantiGalaxies: {
-      isActive: false,
+      isActive: true,
     },
     replicantiUpgrades: {
       all: Array.range(0, 3).map(() => ({
-        isActive: false,
+        isActive: true,
         lastTick: 0,
       })),
       isActive: true,
     },
     timeTheorems: {
-      isActive: false,
+      isActive: true,
     },
     dilationUpgrades: {
       all: Array.range(0, 3).map(() => ({
-        isActive: false,
+        isActive: true,
         lastTick: 0,
       })),
       isActive: true,
     },
     blackHolePower: {
       all: Array.range(0, 2).map(() => ({
-        isActive: false,
+        isActive: true,
       })),
       isActive: true,
     },
     realityUpgrades: {
       all: Array.range(0, 5).map(() => ({
-        isActive: false,
+        isActive: true,
       })),
       isActive: true,
     },
     imaginaryUpgrades: {
       all: Array.range(0, 10).map(() => ({
-        isActive: false,
+        isActive: true,
       })),
       isActive: true,
     },
     darkMatterDims: {
-      isActive: false,
+      isActive: true,
       lastTick: 0,
     },
     ascension: {
-      isActive: false,
+      isActive: true,
       lastTick: 0,
     },
     annihilation: {
       isActive: false,
       multiplier: 1.05,
     },
-    singularity: { isActive: false },
-    ipMultBuyer: { isActive: false, },
-    epMultBuyer: { isActive: false, },
+    singularity: { isActive: true },
+    ipMultBuyer: { isActive: true, },
+    epMultBuyer: { isActive: true, },
   },
   infinityPoints: DC.D0,
   infinities: DC.D0,
@@ -235,7 +235,8 @@ window.player = {
   shownRuns: {
     Reality: true,
     Eternity: true,
-    Infinity: true
+    Infinity: true,
+    Completions: true,
   },
   requirementChecks: {
     infinity: {

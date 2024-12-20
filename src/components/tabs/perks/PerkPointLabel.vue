@@ -63,6 +63,9 @@ export default {
       PerkNetwork.currentLayout = PerkLayouts[this.treeLayout];
       PerkNetwork.setPhysics(player.options.perkPhysicsEnabled);
       PerkNetwork.moveToDefaultLayoutPositions(this.treeLayout);
+    },
+    buyall(){
+      dev.buyAllPerks()
     }
   }
 };
@@ -76,6 +79,12 @@ export default {
     <br>
     Diamond-shaped perks also give Automator Points.
     <br>
+    <PrimaryButton
+      class="o-primary-btn c-button-perk-layout"
+      @click="buyall"
+    >
+      Try buy all Perks
+    </PrimaryButton>
     <div class="perk-settings">
       <PrimaryButton
         class="o-primary-btn c-button-perk-layout"

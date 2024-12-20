@@ -106,7 +106,7 @@ export const dilationUpgrades = {
         effect above ${formatX(DC.E9000)}`;
     },
     effect: () => {
-      let rep10 = replicantiMult().pLog10() * 0.1;
+      let rep10 = replicantiMult().pLog10() * 0.12;
       rep10 = rep10 > 9000 ? 9000 + 0.5 * (rep10 - 9000) : rep10;
       return Decimal.pow10(rep10);
     },
@@ -116,14 +116,14 @@ export const dilationUpgrades = {
     id: 6,
     cost: 5e7,
     description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation",
-    effect: () => Currency.dilatedTime.value.pow(308).clampMin(1),
+    effect: () => Currency.dilatedTime.value.pow(325).clampMin(1),
     formatEffect: value => formatX(value, 2, 1)
   },
   ipMultDT: {
     id: 7,
     cost: 2e12,
     description: "Gain a multiplier to Infinity Points based on Dilated Time",
-    effect: () => Currency.dilatedTime.value.pow(1000).clampMin(1),
+    effect: () => Currency.dilatedTime.value.pow(1250).clampMin(1),
     formatEffect: value => formatX(value, 2, 1),
     cap: () => Effarig.eternityCap
   },
@@ -142,7 +142,7 @@ export const dilationUpgrades = {
     id: 10,
     cost: 1e15,
     description: "Generate Time Theorems based on Tachyon Particles",
-    effect: () => Currency.tachyonParticles.value.div(20000),
+    effect: () => Currency.tachyonParticles.value.div(5000),
     formatEffect: value => `${format(value, 2, 1)}/sec`
   },
   dtGainPelle: rebuyable({
@@ -173,8 +173,8 @@ export const dilationUpgrades = {
     increment: 1e4,
     pelleOnly: true,
     description: "Gain a power to Tickspeed",
-    effect: bought => 1 + bought * 0.03,
-    formatEffect: value => `${formatPow(value, 2, 2)} ➜ ${formatPow(value + 0.03, 2, 2)}`,
+    effect: bought => 1 + bought * 0.05,
+    formatEffect: value => `${formatPow(value, 2, 2)} ➜ ${formatPow(value + 0.05, 2, 2)}`,
     formatCost: value => format(value, 2),
     purchaseCap: Number.MAX_VALUE
   }),

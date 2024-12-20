@@ -89,6 +89,7 @@ export function breakInfinity() {
   Achievement(43).unlock();
   Achievement(108).unlock();
   Achievement(138).unlock();
+  Autobuyer.tickspeed.data.mode=100;
   // There's a potential migration edge case involving already-maxed autobuyers; this should give the achievement
   Achievement(61).tryUnlock();
   player.break = !player.break;
@@ -111,7 +112,7 @@ export function gainedInfinityPoints() {
   }
   let ip = player.break
     ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-    : new Decimal(308 / div);
+    : new Decimal(4);
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(DC.E200);
   }
@@ -276,11 +277,6 @@ export function addRealityTime(time, realTime, rm, level, realities, ampFactor, 
     realities, reality, level, shards * ampFactor, projIM]);
 }
 
-export function addCompletionTime(time, realTime) {
-  player.records.recentCompletions.pop();
-  player.records.recentCompletions.unshift[time / getGlobalSpeedFactor(), realTime]
-}
-
 export function gainedInfinities() {
   if (EternityChallenge(4).isRunning || Pelle.isDisabled("InfinitiedMults")) {
     return DC.D1;
@@ -301,6 +297,12 @@ export function gainedInfinities() {
   infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
   infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
   return infGain;
+}
+
+// eslint-disable-next-line max-params
+export function addCompletionTime(time, realTime) {
+  player.records.recentCompletions.pop();
+  player.records.recentCompletions.unshift([time / getGlobalSpeedFactor(), realTime]);
 }
 
 export function updateRefresh() {
@@ -576,6 +578,10 @@ export function gameLoop(passDiff, options = {}) {
   // IP generation is broken into a couple of places in gameLoop; changing that might change the
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
+
+  if (InfinityUpgrade.ipOffline.isBought) {
+    Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(diff * getGlobalSpeedFactor() / 2));
+  }
 
   if (!Pelle.isDoomed) {
     passivePrestigeGen();
@@ -970,10 +976,6 @@ export function simulateTime(seconds, real, fast) {
     Currency.infinities.add(infinitiedMilestone);
   } else {
     Currency.eternityPoints.add(getOfflineEPGain(seconds * 1000));
-  }
-
-  if (InfinityUpgrade.ipOffline.isBought && player.options.offlineProgress) {
-    Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
 
   EventHub.dispatch(GAME_EVENT.OFFLINE_CURRENCY_GAINED);

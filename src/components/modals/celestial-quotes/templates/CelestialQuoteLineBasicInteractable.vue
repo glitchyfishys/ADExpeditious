@@ -65,7 +65,7 @@ export default {
     this.$nextTick(() => {
       this.on$(GAME_EVENT.ARROW_KEY_PRESSED, arrow => this.progressIn(arrow[0]));
       this.on$(GAME_EVENT.ENTER_PRESSED, () => {
-        if (this.isQuoteEnd) this.close();
+        this.close();
       });
     });
   },
@@ -93,7 +93,7 @@ export default {
     :current-line="currentLine"
     :left-visible="!isQuoteStart && leftVisible"
     :right-visible="!isQuoteEnd && rightVisible"
-    :close-visible="isQuoteEnd && closeVisible"
+    :close-visible="closeVisible"
     primary
     @close="close"
     @progress-in="progressIn"

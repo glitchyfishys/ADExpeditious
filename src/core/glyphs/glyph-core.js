@@ -264,12 +264,13 @@ export const Glyphs = {
   },
   equip(glyph, targetSlot) {
     const forbiddenByPelle = Pelle.isDisabled("glyphs") || ["effarig", "reality", "cursed"].includes(glyph.type);
-    if (Pelle.isDoomed && forbiddenByPelle) return;
+    const hasInPelle = this.activeList.some(g => g?.type == glyph.type);
+    if (Pelle.isDoomed && (forbiddenByPelle || hasInPelle)) return;
     if (GameEnd.creditsEverClosed) return;
 
     if (glyph.type !== "companion") {
       if (RealityUpgrade(9).isLockingMechanics) {
-        if (this.activeWithoutCompanion.length > 0) {
+        if (this.activeWithoutCompanion.length > 1) {
           RealityUpgrade(9).tryShowWarningModal("equip another non-Companion Glyph");
           return;
         }

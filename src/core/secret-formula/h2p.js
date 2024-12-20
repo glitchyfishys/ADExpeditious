@@ -40,9 +40,80 @@ visible tab and subtab, if such an entry exists.
       tab: ""
     },
     {
+      name: 'Expeditious changes',
+      info: () => `
+      You should go play the original ADfaster <a href="https://WYXkk.github.io/ADfaster">here</a>.<br>
+      Or ADfasterer <a href="https://realjman.github.io/ADfasterer/">here</a>.<br>
+      <br>
+      Heres a list of the changes<br>
+      <br>
+      - Dimension 2-7 are 10 times faster.<br>
+      - Base Dimboost is 2.5x.<br>
+      - Most autobuyers are on by default.<br>
+      - Global Speed factor is effected by the achievement multiplier.<br>
+      - Achievement NiceNice (166) only requires a level 6969 or higher glyph.<br>
+      - Credits are faster.<br>
+      - Completion tab works.<br>
+      ${PlayerProgress.infinityUnlocked()||player.records.fullGameCompletions>0 ? `
+        - Quadruple pre-break IP.<br>
+        - Dimboost Infinity upgrade 2.5x => 5x.<br>
+        - The offline infnity upgrade works online.<br>
+        ` : ''}
+      ${player.break||player.records.fullGameCompletions>0 ? `
+        - post-Infinity AD cost scaling upgrades scales less.<br>
+        - IC1 reward 1.3 => 5.<br>
+        - IC7 boost Dim boost to x10.<br>
+          Tickspeed autobuyer get set to buy max on when you Break Infinity<br>
+        ` : ''}
+      ${PlayerProgress.eternityUnlocked()||player.records.fullGameCompletions>0 ? `
+        - Some Time Studies are buffed.<br>
+        - EP multiplier starts cheaper.<br>
+        - Some Eternity upgrades are better.<br>
+        `: ''}
+      ${PlayerProgress.dilationUnlocked()||player.records.fullGameCompletions>0 ? `
+        - Dilation is Slightly Weaker, 0.75 => 0.77.<br>
+        - Buy max rebuyable dilation upgrades.<br>
+        `: ''}
+
+      ${PlayerProgress.realityUnlocked()||player.records.fullGameCompletions>0 ? `
+        - Some Reality upgrades are easyer.<br>
+        - You simulate 14 extra realities insted of 49.<br>
+        - Blackholes become permanent at ${formatPercents(0.999, 2)}.<br>
+        `: ''}
+
+      ${Teresa.isUnlocked||player.records.fullGameCompletions>0 ? `
+        - All Cel Quotes are skipable.<br>
+        - RM poring is faster.<br>
+        `: ''}
+
+      ${Ra.isUnlocked||player.records.fullGameCompletions>0 ? `
+        - Reality Alchemy resource is effected by Synergism.<br>
+          `: ''}
+
+      ${Laitela.isUnlocked||player.records.fullGameCompletions>0 ? `
+        - Shift clicking Singularity cap Increases and Decreases the cap to when it would one second and 0 respectfully.<br>
+        - Singularity cap is incresaed to 60.<br>
+        - Laitela's Reality destabilizes faster.<br>
+        `: ''}
+
+      ${Pelle.isDoomed||player.records.fullGameCompletions>0 ? `
+        - Rift fill 10 times faster.<br>
+        - All Rifts can be active at time same time.<br>
+        - Pelle Glyph effects all work at once.<br>
+        - Only one of each Glyph type can be equiped while Doomed.<br>
+        - Pelle Dilation Tickspeed power is stronger.<br>
+        - Recursion rift end is higher.<br>
+        - The Galaxy Generator is Faster.<br>
+        `: ''}
+      `,
+      isUnlocked: () => true,
+      tags: ["mod", "speed", "change", 'Expeditious'],
+      tab: ""
+    },
+    {
       name: "What has changed",
       info: () => `
-As the mod name, almost all mechanics are speeded up by ${formatX(globalSpeedFactor)}. This is called the global speed factor.<br>
+As the mod name, almost all mechanics are speeded up by ${formatX(getGlobalSpeedFactor())}. This is called the global speed factor.<br>
 <br>
 To be separated from the in-game speed change mechanic, 'real/game real/game time' means
 this timer doesn't/does count speed up from this mod and doesn't/does count in-game speed change.<br>
@@ -70,20 +141,20 @@ ${PlayerProgress.eternityUnlocked()||player.records.fullGameCompletions>0?`
 - Time Study 141's multiplier's drop is not speeded up.<br>
 `:""}
 ${player.blackHole[0].unlocked||player.records.fullGameCompletions>0?`
-- Black Hole ticking is still speeded up, but only square-rooted as ${formatX(Math.pow(globalSpeedFactor,1/2))}. Notice that both inactive time and duration are speeded up.<br>
+- Black Hole ticking is still speeded up, but only square-rooted as ${formatX(getGlobalSpeedFactor() ** 0.5)}. Notice that both inactive time and duration are speeded up.<br>
 `:""}
 ${EffarigUnlock.eternity.isUnlocked||player.records.fullGameCompletions>0?`
-- Charging real time doesn't charge ${formatX(globalSpeedFactor)} time.<br>
+- Charging real time doesn't charge ${formatX(getGlobalSpeedFactor())} time.<br>
 `:""}
 ${VUnlocks.raUnlock.isUnlocked||player.records.fullGameCompletions>0?`
-- Memory Chunk and Memory production are still speeded up, but only square-rooted as ${formatX(Math.pow(globalSpeedFactor,1/2))}.<br>
+- Memory Chunk and Memory production are still speeded up, but only square-rooted as ${formatX(getGlobalSpeedFactor() ** 0.5)}.<br>
 `:""}
 ${Laitela.isUnlocked||player.records.fullGameCompletions>0?`
 - In Lai'tela's Reality, entropy production and game speed recovery are not speeded up.<br>
-- Dark Matter Dimensions are still speeded up, but only square-rooted as ${formatX(Math.pow(globalSpeedFactor,1/2))}.<br>
+- Dark Matter Dimensions are still speeded up, but only square-rooted as ${formatX(getGlobalSpeedFactor() ** 0.5)}.<br>
 `:""}
 ${Pelle.isDoomed||player.records.fullGameCompletions>0?`
-- In Doomed Reality, the global speed factor is square-rooted as ${formatX(Math.pow(globalSpeedFactor,1/2))}.<br>
+- In Doomed Reality, the global speed factor is square-rooted as ${formatX(getGlobalSpeedFactor() ** 0.5)}.<br>
 - Recursion max requirement is extended to ${format("1e8000")}<br>
 `:""}
 ${Achievement(188).isUnlocked||player.records.fullGameCompletions>0?`
@@ -104,7 +175,7 @@ ${PlayerProgress.eternityUnlocked()||player.records.fullGameCompletions>0?`
 - You instantly unlock all eternity milestones.<br>
 - Time Study 181 is moved up to row 3 and costs significantly cheaper and does a 100% generation.<br>
 - You don't have any penalties upon reaching the Active, Passive and Idle split tree.<br>
-- Some more TS buffs.<br>
+- Some Time Studies are buffed.<br>
 - Eternity Challenges are seperately instead of you having to do it to progress except for EC10.<br>
 - Instantly unlock bulk ECs.<br>
 - You can unlock EP gen on dilation.<br>

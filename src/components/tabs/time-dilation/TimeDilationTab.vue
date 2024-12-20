@@ -1,12 +1,14 @@
 <script>
 import DilationButton from "./DilationButton";
 import DilationUpgradeButton from "./DilationUpgradeButton";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "TimeDilationTab",
   components: {
     DilationButton,
-    DilationUpgradeButton
+    DilationUpgradeButton,
+    PrimaryButton
   },
   data() {
     return {
@@ -118,6 +120,17 @@ export default {
       const estimateText = getDilationTimeEstimate(this.maxDT);
       if (this.dilatedTimeIncome.lte(0)) this.toMaxTooltip = "No DT gain";
       else this.toMaxTooltip = estimateText.startsWith("<") ? "Currently Increasing" : estimateText;
+    },
+    bulk(){
+      DilationUpgrades.rebuyable[0].purchase(1e50);
+      if(!Pelle.isDoomed) DilationUpgrades.rebuyable[2].purchase(1e50);
+      if(PelleRifts.paradox.milestones[0].canBeApplied){
+        DilationUpgrade.dtGainPelle.purchase(1e50);
+        DilationUpgrade.galaxyMultiplier.purchase(1e50);
+        DilationUpgrade.tickspeedPower.purchase(1e50);
+      }
+      // do resetting one last
+      DilationUpgrades.rebuyable[1].purchase(1e50);
     }
   }
 };
@@ -164,6 +177,11 @@ export default {
         class="max-accent"
       >{{ format(maxDT, 2, 1) }}</span>.
     </span>
+    <PrimaryButton
+      class="o-primary-btn--subtab-option"
+      @click="bulk()">
+      max rebuyable
+    </PrimaryButton>
     <div class="l-dilation-upgrades-grid">
       <div
         v-for="(upgradeRow, row) in allRebuyables"

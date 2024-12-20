@@ -1226,8 +1226,9 @@ export const normalAchievements = [
   {
     id: 166,
     name: "Nicenice.",
-    get description() { return `Get a Glyph with level exactly ${formatInt(6969)}.`; },
-    checkRequirement: () => gainedGlyphLevel().actualLevel === 6969,
+    displayId: 6969,
+    get description() { return `Get a Glyph with level ${formatInt(6969)} or higher.`; },
+    checkRequirement: () => gainedGlyphLevel().actualLevel >= 6969,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     get reward() { return `+${formatInt(69)} to Glyph level.`; },
     effect: 69

@@ -206,7 +206,7 @@ export default {
         </span>
         <br>
         <div v-if="!isPermanent">
-          Black holes become permanently active when they are active for more than {{ formatPercents(0.9999, 2) }}
+          Black holes become permanently active when they are active for more than {{ formatPercents(0.999, 2) }}
           of the time.
           <br>
           Active time percent: {{ formatPercents(blackHoleUptime[0], 3) }}

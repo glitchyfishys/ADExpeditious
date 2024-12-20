@@ -205,8 +205,9 @@ export const Pelle = {
 
   get specialGlyphEffect() {
     const isUnlocked = this.isDoomed && PelleRifts.chaos.milestones[1].canBeApplied;
-    const description = this.getSpecialGlyphEffectDescription(this.activeGlyphType);
-    const isActive = type => isUnlocked && this.activeGlyphType === type;
+    var description = ''; ;
+    Glyphs.active.forEach(x => description += this.getSpecialGlyphEffectDescription(x?.type) + '\n');
+    const isActive = type => isUnlocked && Glyphs.active.some(x => x?.type === type);
     return {
       isUnlocked,
       description,
@@ -311,7 +312,7 @@ export const Pelle = {
 
   // Calculations assume this is in units of proportion per second (eg. 0.03 is 3% drain per second)
   get riftDrainPercent() {
-    return 0.03;
+    return 0.3;
   },
 
   get glyphMaxLevel() {

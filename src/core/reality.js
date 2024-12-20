@@ -125,8 +125,8 @@ export function isRealityAvailable() {
 export function simulatedRealityCount(advancePartSimCounters) {
   const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio - 1 : 0;
   const multiversalSim = AlchemyResource.multiversal.effectValue;
-  const simCount = (multiversalSim + 1) * (amplifiedSim + 1) + player.partSimulatedReality - 1 + 49;
-  // Simulate +49x realities.
+  const simCount = (multiversalSim + 1) * (amplifiedSim + 1) + player.partSimulatedReality - 1 + 14;
+  // Simulate +14x realities.
   if (advancePartSimCounters) {
     player.partSimulatedReality = simCount - Math.floor(simCount);
   }
@@ -168,7 +168,9 @@ export function processManualReality(sacrifice, glyphID) {
     // If this is our first Reality, lock in the initial seed and then give the companion and starting glyphs
     player.reality.seed = player.reality.initialSeed;
     Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
-    Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
+    if(player.reality.glyphs.active.concat(player.reality.glyphs.inventory).filter(g => g.type === "companion").length == 0)
+      Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
+
   } else if (Perk.firstPerk.isEffectActive) {
     // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
     GlyphSelection.generate(GlyphSelection.choiceCount);

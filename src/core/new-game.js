@@ -66,7 +66,12 @@ export const NG = {
     const hasSpeedrun = player.speedrun.isUnlocked;
     const presets = JSON.stringify(player.timestudy.presets);
     const companions = JSON.stringify(Glyphs.allGlyphs.filter(g => g.type === "companion"));
+
+
+    if(player.speedrun.hasStarted) addCompletionTime(player.records.totalTimePlayed, player.records.realTimePlayed);
     const bestTime = Math.min(player.records.bestCompletion.realTime, player.records.thisCompletion.realTime);
+    const lastcomps = JSON.stringify(player.records.recentCompletions);
+
     Modal.hideAll();
     Quote.clearAll();
     GameStorage.hardReset();
@@ -80,17 +85,20 @@ export const NG = {
     player.reality.automator.constantSortOrder = JSON.parse(automatorConstantSort);
     player.reality.automator.scripts = JSON.parse(automatorScripts);
     player.records.fullGameCompletions = fullCompletions;
-    player.records.bestCompletion.realTime = bestTime;
-    player.records.previousRunRealTime = fullTimePlayed;
+    player.speedrun.previousRuns = JSON.parse(speedrunRecords);
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
     player.reality.glyphs.cosmetics = JSON.parse(glyphCosmetics);
-    player.speedrun.previousRuns = JSON.parse(speedrunRecords);
     player.speedrun.isUnlocked = hasSpeedrun;
     player.timestudy.presets = JSON.parse(presets);
     JSON.parse(companions).forEach(g => {
       Glyphs.addToInventory(g);
     });
+    
+    player.records.previousRunRealTime = fullTimePlayed;
+    player.records.bestCompletion.realTime = bestTime;
+    player.records.recentCompletions = JSON.parse(lastcomps);
+
     Themes.find(Theme.currentName()).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.min = 10 ** player.options.notationDigits.comma;

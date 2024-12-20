@@ -119,7 +119,7 @@ export const infinityUpgrades = {
     effect: () => (Pelle.isDoomed ? 3 : 2),
     charged: {
       description: "All Galaxies are stronger based on Teresa level",
-      effect: () => 2 + Math.sqrt(Ra.pets.teresa.level) / 100,
+      effect: () => 2 + Math.sqrt(Ra.pets.teresa.level) / 80,
       formatEffect: value => `+${formatPercents(value - 1)}`
     }
   },
@@ -127,14 +127,14 @@ export const infinityUpgrades = {
     id: "timeMult2",
     cost: 3,
     description: "Antimatter Dimensions gain a multiplier based on time spent in current Infinity",
-    effect: () => Decimal.max(Math.pow(Time.thisInfinity.totalMinutes / 4, 0.25), 1),
+    effect: () => Decimal.max(Math.pow(Time.thisInfinity.totalMinutes / 3.33, 0.25), 1),
     formatEffect: value => formatX(value, 2, 2),
     charged: {
       description:
         "Antimatter Dimensions gain a power effect based on time spent in current Infinity and Teresa level",
       effect: () => 1 +
         Math.log10(Math.log10(Time.thisInfinity.totalMilliseconds + 100)) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+        Math.sqrt(Ra.pets.teresa.level) / 100,
       formatEffect: value => formatPow(value, 4, 4)
     }
   },
@@ -157,10 +157,10 @@ export const infinityUpgrades = {
     checkRequirement: () => InfinityUpgrade.unspentIPMult.isBought,
     description: "Increase Dimension Boost multiplier",
     effect: () => 5,
-    formatEffect: () => `${formatX(2, 0, 1)} ➜ ${formatX(5, 0, 1)}`,
+    formatEffect: () => `${formatX(2.5, 0, 1)} ➜ ${formatX(5, 0, 1)}`,
     charged: {
       description: "Dimension Boost multiplier gains a power effect based on Teresa level",
-      effect: () => 1 + Ra.pets.teresa.level / 200,
+      effect: () => 1 + Ra.pets.teresa.level / 150,
       formatEffect: value => formatPow(value, 3, 3)
     }
   },
@@ -218,9 +218,7 @@ export const infinityUpgrades = {
     id: "ipOffline",
     cost: 1000,
     checkRequirement: () => Achievement(41).isUnlocked,
-    description: () => (player.options.offlineProgress
-      ? `Only while offline, gain ${formatPercents(0.5)} of your best IP/min without using Max All`
-      : "This upgrade would give offline Infinity Point generation, but offline progress is currently disabled"),
+    description: () => `gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
     effect: () => (player.options.offlineProgress
       ? player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2)
       : DC.D0),

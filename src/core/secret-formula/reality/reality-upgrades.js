@@ -79,7 +79,7 @@ export const realityUpgrades = [
     canLock: true,
     lockEvent: "gain a Replicanti Galaxy",
     description: "Replicanti speed is multiplied based on Replicanti Galaxies",
-    effect: () => 1 + Replicanti.galaxies.total / 50,
+    effect: () => 1 + Replicanti.galaxies.total / 25,
     formatEffect: value => formatX(value, 2, 2)
   },
   {
@@ -107,7 +107,7 @@ export const realityUpgrades = [
     canLock: true,
     // We don't have lockEvent because the modal can never show up for this upgrade
     description: "Tachyon Particle gain is boosted based on Achievement multiplier",
-    effect: () => Math.sqrt(Achievements.power),
+    effect: () => (Achievements.power ** 0.75),
     formatEffect: value => formatX(value, 2, 2)
   },
   {
@@ -223,15 +223,15 @@ export const realityUpgrades = [
     name: "Disparity of Rarity",
     id: 16,
     cost: 1500,
-    requirement: () => `Reality with ${formatInt(4)} Glyphs or more equipped of uncommon or better rarity
+    requirement: () => `Reality with ${formatInt(3)} Glyphs or more equipped of uncommon or better rarity
       (${formatInt(Glyphs.activeWithoutCompanion.countWhere(g => g && g.strength >= 1.5))} equipped)`,
     hasFailed: () => {
       const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.strength >= 1.5);
       const equipped = Glyphs.activeWithoutCompanion.countWhere(g => g.strength >= 1.5);
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
-      return equipped + Math.min(availableGlyphs, availableSlots) < 4;
+      return equipped + Math.min(availableGlyphs, availableSlots) < 3;
     },
-    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.strength >= 1.5) >= 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.strength >= 1.5) >= 3,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Improve the Glyph rarity formula",
     effect: 1.3,
@@ -241,16 +241,16 @@ export const realityUpgrades = [
     name: "Duplicity of Potency",
     id: 17,
     cost: 1500,
-    requirement: () => `Reality with ${formatInt(4)} or more Glyphs equipped, each having at least ${formatInt(2)} effects
+    requirement: () => `Reality with ${formatInt(3)} or more Glyphs equipped, each having at least ${formatInt(2)} effects
       (${formatInt(Glyphs.activeWithoutCompanion.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2))}
       equipped)`,
     hasFailed: () => {
       const availableGlyphs = Glyphs.inventory.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2);
       const equipped = Glyphs.activeWithoutCompanion.countWhere(g => countValuesFromBitmask(g.effects) >= 2);
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
-      return equipped + Math.min(availableGlyphs, availableSlots) < 4;
+      return equipped + Math.min(availableGlyphs, availableSlots) < 3;
     },
-    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => countValuesFromBitmask(g.effects) >= 2) >= 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => countValuesFromBitmask(g.effects) >= 2) >= 3,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: () => `${formatPercents(0.5)} chance to get an additional effect on Glyphs`,
     effect: 0.5,
@@ -260,15 +260,15 @@ export const realityUpgrades = [
     name: "Measure of Forever",
     id: 18,
     cost: 1500,
-    requirement: () => `Reality with ${formatInt(4)} or more Glyphs equipped, each at level ${formatInt(10)} or higher
+    requirement: () => `Reality with ${formatInt(3)} or more Glyphs equipped, each at level ${formatInt(10)} or higher
       (${formatInt(Glyphs.activeWithoutCompanion.countWhere(g => g && g.level >= 10))} equipped)`,
     hasFailed: () => {
       const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.level >= 10);
       const equipped = Glyphs.activeWithoutCompanion.countWhere(g => g.level >= 10);
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
-      return equipped + Math.min(availableGlyphs, availableSlots) < 4;
+      return equipped + Math.min(availableGlyphs, availableSlots) < 3;
     },
-    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.level >= 10) >= 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.level >= 10) >= 3,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Eternity count boosts Glyph level",
     effect: () => Math.max(Math.sqrt(Currency.eternities.value.plus(1).log10()) * 0.45, 1),
@@ -278,10 +278,10 @@ export const realityUpgrades = [
     name: "Scour to Empower",
     id: 19,
     cost: 1500,
-    requirement: () => `Have a total of ${formatInt(30)} or more Glyphs at once
+    requirement: () => `Have a total of ${formatInt(20)} or more Glyphs at once
       (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g.type !== "companion"))})`,
-    hasFailed: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") < 30,
-    checkRequirement: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") >= 30,
+    hasFailed: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") < 20,
+    checkRequirement: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") >= 20,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "You can sacrifice Glyphs for permanent bonuses (Shift + click)",
     formatCost: value => format(value, 1, 0)
@@ -290,10 +290,10 @@ export const realityUpgrades = [
     name: "Parity of Singularity",
     id: 20,
     cost: 1500,
-    requirement: () => `${formatInt(100)} days total play time after unlocking the Black Hole
+    requirement: () => `${formatInt(50)} days total play time after unlocking the Black Hole
       (Currently: ${Time.timeSinceBlackHole.toStringShort(false)})`,
     hasFailed: () => !BlackHole(1).isUnlocked && Currency.realityMachines.lt(100),
-    checkRequirement: () => Time.timeSinceBlackHole.totalDays >= 100 && BlackHole(1).isUnlocked,
+    checkRequirement: () => Time.timeSinceBlackHole.totalDays >= 50 && BlackHole(1).isUnlocked,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Unlock another Black Hole",
     automatorPoints: 10,
@@ -305,9 +305,9 @@ export const realityUpgrades = [
     id: 21,
     cost: 100000,
     requirement: () => `${formatInt(Replicanti.galaxies.total + player.galaxies +
-      player.dilation.totalTachyonGalaxies)}/${formatInt(2800)} total Galaxies from all types`,
+      player.dilation.totalTachyonGalaxies)}/${formatInt(2750)} total Galaxies from all types`,
     checkRequirement: () =>
-      Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies >= 2800,
+      Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies >= 2750,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: () => `Remote Antimatter Galaxy scaling is moved to ${formatInt(1e5)} galaxies`,
     effect: 1e5

@@ -38,7 +38,6 @@ export default {
       return this.resource.isBaseResource;
     },
     reactionText() {
-      if (this.resource === AlchemyResource.reality) return this.realityReactionText;
       const reagents = this.reaction.reagents
         .map(r => `${format(r.cost)}${r.resource.symbol}`)
         .join(" + ");

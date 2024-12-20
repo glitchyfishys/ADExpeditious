@@ -342,10 +342,10 @@ class EPMultiplierState extends GameMechanicState {
     const costThresholds = EternityUpgrade.epMult.costIncreaseThresholds;
     const multPerUpgrade = [50, 100, 500, 1000];
     for (let i = 0; i < costThresholds.length; i++) {
-      const cost = Decimal.pow(multPerUpgrade[i], count).times(500);
+      const cost = Decimal.pow(multPerUpgrade[i], count).times(100);
       if (cost.lt(costThresholds[i])) return cost;
     }
-    return DC.E3.pow(count + Math.pow(Math.clampMin(count - 1334, 0), 1.2)).times(500);
+    return DC.E3.pow(count + Math.pow(Math.clampMin(count - 1334, 0), 1.2)).times(100);
   }
 }
 
