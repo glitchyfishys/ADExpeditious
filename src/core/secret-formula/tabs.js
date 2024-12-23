@@ -509,9 +509,17 @@ export const tabs = [
       {
         key: "gameCompletions",
         name: "Completions",
-        symbol: "∞",
+        symbol: "↺",
         component: "CompletionsTab",
         id: 0,
+        hidable: true
+      },
+      {
+        key: "mods",
+        name: "Modifiers",
+        symbol: "⇎",
+        component: "ModsTab",
+        id: 1,
         hidable: true
       }
     ]

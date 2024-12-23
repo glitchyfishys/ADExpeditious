@@ -128,6 +128,8 @@ export function timeDimensionCommonMultiplier() {
         4)
         .clampMin(1));
   }
+  mult = mult.mul(player.speedrun.mods.TDMul);
+
   return mult;
 }
 
@@ -218,6 +220,7 @@ class TimeDimensionState extends DimensionState {
     mult = mult.powEffectOf(AlchemyResource.time);
     mult = mult.pow(Ra.momentumValue);
     mult = mult.pow(ImaginaryUpgrade(11).effectOrDefault(1));
+    mult = mult.pow(player.speedrun.mods.TDPow);
     mult = mult.powEffectOf(PelleRifts.paradox);
 
     if (player.dilation.active || PelleStrikes.dilation.hasStrike) {

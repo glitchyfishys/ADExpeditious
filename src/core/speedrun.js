@@ -82,6 +82,7 @@ export const Speedrun = {
     // timewalls for particularly fast/optimized runs
     Achievement(22).unlock();
     Achievement(35).unlock();
+    Achievement(61).unlock();
     Achievement(76).unlock();
 
     // Some time elapses after the reset and before the UI is actually ready, which ends up getting "counted" as offline
@@ -122,6 +123,49 @@ export const Speedrun = {
     const newestTime = player.speedrun.records.max();
     if (newestTime === 0) return 0;
     return player.speedrun.records.indexOf(newestTime);
+  },
+  get pastRuns(){
+    return JSON.parse(JSON.stringify(player.speedrun.previousRuns));
+  },
+  get modifiers(){
+    return JSON.parse(JSON.stringify(player.speedrun.mods));
+  },
+  modifiersSet(value, key){
+    if(value instanceof Decimal) {
+      player.speedrun.mods[key] = new Decimal(value);
+    }
+    else{
+      player.speedrun.mods[key] = value;
+    }
+  },
+  get isRunning(){
+    return player.speedrun.hasStarted;
+  },
+  get defaultModifiers() {
+    return {
+      ADMul: new Decimal(1),
+      ADPow: 1,
+      IDMul: new Decimal(1),
+      IDPow: 1,
+      TDMul: new Decimal(1),
+      TDPow: 1,
+      chalAch: false,
+      realTimeSpeed: 1,
+      realTimeSpeedAutobuyers: true,
+    }
+  },
+  get modifierNames() {
+    return {
+      ADMul: 'AD Multiplier',
+      ADPow: 'AD Power',
+      IDMul: 'ID Multiplier',
+      IDPow: 'ID Power',
+      TDMul: 'TD Multiplier',
+      TDPow: 'TD Power',
+      chalAch: 'Challenge Achievements',
+      realTimeSpeed: 'Real Time Speed',
+      realTimeSpeedAutobuyers: "Delta Time Autobuyers"
+    }
   }
 };
 

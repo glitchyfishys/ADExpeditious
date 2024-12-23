@@ -1,4 +1,5 @@
 function isEND() {
+  if(GameEnd.additionalEnd > 15) return false;
   const threshold = GameEnd.endState > END_STATE_MARKERS.END_NUMBERS
     ? 1
     : (GameEnd.endState - END_STATE_MARKERS.FADE_AWAY) / 2;
@@ -214,4 +215,13 @@ window.makeEnumeration = function makeEnumeration(items) {
   const commaSeparated = items.slice(0, items.length - 1).join(", ");
   const last = items[items.length - 1];
   return `${commaSeparated}, and ${last}`;
+};
+
+window.makeEnumerationBreak = function makeEnumerationBreak(items) {
+  if (items.length === 0) return "";
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  const commaSeparated = items.slice(0, items.length - 1).join("<br> ");
+  const last = items[items.length - 1];
+  return `${commaSeparated}<br> and ${last}`;
 };

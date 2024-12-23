@@ -56,6 +56,7 @@ TimeStudy.allConnections = (function() {
     [TS(61), TS(71)],
     [TS(61), TS(72)],
     [TS(61), TS(73)],
+    [TS(61), EC(6)],
 
     [TS(71), TS(81)],
     [TS(72), TS(82)],
@@ -74,6 +75,7 @@ TimeStudy.allConnections = (function() {
     [TS(103), TS(111)],
 
     [TS(111), EC(7)],
+    [TS(111), EC(8)],
 
     [TS(111), TS(121)],
     [TS(111), TS(122)],
@@ -82,8 +84,6 @@ TimeStudy.allConnections = (function() {
     [TS(121), TS(131)],
     [TS(122), TS(132)],
     [TS(123), TS(133)],
-    [TS(121), EC(6)],
-    [TS(123), EC(8)],
 
     [TS(131), TS(141)],
     [TS(132), TS(142)],

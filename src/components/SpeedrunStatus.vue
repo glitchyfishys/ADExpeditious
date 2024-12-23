@@ -7,6 +7,7 @@ export default {
       isSegmented: false,
       usedSTD: false,
       hasStarted: false,
+      speedrunMods: {},
       startDate: 0,
       saveName: "",
       timePlayedStr: "",
@@ -46,6 +47,18 @@ export default {
       return this.isCollapsed
         ? "fas fa-expand-arrows-alt"
         : "fas fa-compress-arrows-alt";
+    },
+    mods(){
+      const defMods = Speedrun.defaultModifiers;
+      const k = Object.keys(defMods);
+      var modList = [];
+      k.forEach(x => ( typeof defMods[x] == 'boolean' ? (this.speedrunMods[x] != defMods[x] && this.speedrunMods[x] != undefined) :
+      Decimal.neq(this.speedrunMods[x], defMods[x]) && this.speedrunMods[x] != undefined) ?
+      modList.push(Speedrun.modifierNames[x] + (typeof defMods[x] == 'boolean' ? `: ${this.speedrunMods[x] ? 'Enabled' : 'Disabled'}` :
+      ` ${defMods[x]} → ` + this.speedrunMods[x].toString())) : undefined);
+
+      const hasMods = modList.length != 0;
+      return hasMods ? `Used Modifiers<br>${makeEnumerationBreak(modList)}` : "No Modifiers used";
     }
   },
   methods: {
@@ -55,6 +68,7 @@ export default {
       this.canModifySeed = Speedrun.canModifySeed();
       // Short-circuit if speedrun isn't active; updating some later stuff can cause vue errors outside of speedruns
       if (!this.isActive) return;
+      this.speedrunMods = Speedrun.modifiers;
       this.isSegmented = speedrun.isSegmented;
       this.usedSTD = speedrun.usedSTD;
       this.hasStarted = speedrun.hasStarted;
@@ -122,6 +136,8 @@ export default {
       Offline Progress: <span v-html="offlineText" />
       <br>
       Most Recent Milestone: {{ milestoneName(mostRecent) }} <span v-if="mostRecent">({{ timeSince }} ago)</span>
+      <br>
+      <div v-html="mods" />
       <br>
     </div>
     <div

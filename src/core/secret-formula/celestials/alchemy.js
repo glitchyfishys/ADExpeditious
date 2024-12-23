@@ -396,8 +396,7 @@ export const alchemyResources = {
     name: "Unpredictability",
     symbol: "Λ",
     isBaseResource: false,
-    // Somewhat ugly number to make this show 70.00% at cap
-    effect: amount => amount / (10714.28 + amount),
+    effect: amount => Math.min(amount ** 0.45 / 100, 0.95),
     tier: 4,
     uiOrder: 4,
     unlockedAt: 21,

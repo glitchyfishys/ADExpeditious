@@ -24,6 +24,7 @@ export function infinityDimensionCommonMultiplier() {
   if (Replicanti.areUnlocked && Replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
   }
+  mult = mult.mul(player.speedrun.mods.IDMul);
 
   return mult;
 }
@@ -161,6 +162,7 @@ class InfinityDimensionState extends DimensionState {
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
     mult = mult.powEffectOf(AlchemyResource.infinity);
     mult = mult.pow(Ra.momentumValue);
+    mult = mult.pow(player.speedrun.mods.IDPow);
     mult = mult.powEffectOf(PelleRifts.paradox);
 
     if (player.dilation.active || PelleStrikes.dilation.hasStrike) {

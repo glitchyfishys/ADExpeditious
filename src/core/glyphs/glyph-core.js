@@ -265,7 +265,11 @@ export const Glyphs = {
   equip(glyph, targetSlot) {
     const forbiddenByPelle = Pelle.isDisabled("glyphs") || ["effarig", "reality", "cursed"].includes(glyph.type);
     const hasInPelle = this.activeList.some(g => g?.type == glyph.type);
-    if (Pelle.isDoomed && (forbiddenByPelle || hasInPelle)) return;
+    if (Pelle.isDoomed && (forbiddenByPelle || hasInPelle)) {
+      if(hasInPelle) Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped!`,
+      { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
+      return;
+    }
     if (GameEnd.creditsEverClosed) return;
 
     if (glyph.type !== "companion") {
@@ -418,6 +422,7 @@ export const Glyphs = {
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
   addToInventory(glyph, requestedInventoryIndex, isExistingGlyph = false) {
+    if(glyph == undefined) glyph = GlyphGenerator.randomGlyph(gainedGlyphLevel());
     this.validate();
     if (!isExistingGlyph) glyph.id = GlyphGenerator.makeID();
     const isProtectedIndex = requestedInventoryIndex < this.protectedSlots;
@@ -499,7 +504,7 @@ export const Glyphs = {
         if (byType[t].padding > byType[biggestPadding].padding) biggestPadding = t;
       }
       // Try to remove padding 5 at a time if possible
-      const delta = byType[biggestPadding].padding > 5 ? 5 : 1;
+      const delta = byType[biggestPadding].padding > this.activeSlotCount ? this.activeSlotCount : 1;
       totalDesiredPadding -= delta;
       byType[biggestPadding].padding -= delta;
     }
@@ -551,7 +556,7 @@ export const Glyphs = {
         g.id !== glyph.id &&
         (g.level >= glyph.level || g.strength >= glyph.strength) &&
         ((g.effects & glyph.effects) === glyph.effects));
-    let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : this.activeSlotCount;
     compareThreshold = Math.clampMax(compareThreshold, threshold);
     if (toCompare.length < compareThreshold) return false;
     const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects).filter(x => x.id.startsWith(glyph.type));
@@ -562,8 +567,8 @@ export const Glyphs = {
   // If deleteGlyphs === false, we are running this from the modal and are doing so purely to *count* the number of
   // removed glyphs. In this case, we copy the inventory and run the purge on the copy - we need to be able to remove
   // glyphs as we go, or else the purge logic will be wrong (eg. 7 identical glyphs will all be "worse than 5 others")
-  autoClean(threshold = 5, deleteGlyphs = true) {
-    const isHarsh = threshold < 5;
+  autoClean(threshold = this.activeSlotCount, deleteGlyphs = true) {
+    const isHarsh = threshold < this.activeSlotCount;
     let toBeDeleted = 0;
     const inventoryCopy = deleteGlyphs ? undefined : this.fakePurgeInventory();
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
@@ -787,8 +792,8 @@ export const Glyphs = {
       return;
     }
     const cursedCount = this.allGlyphs.filter(g => g !== null && g.type === "cursed").length;
-    if (cursedCount >= 5) {
-      GameUI.notify.error(`You don't need more than ${format(5)} Cursed Glyphs!`);
+    if (cursedCount >= this.activeSlotCount) {
+      GameUI.notify.error(`You don't need more than ${format(this.activeSlotCount)} Cursed Glyphs!`);
     } else {
       this.addToInventory(GlyphGenerator.cursedGlyph());
       GameUI.notify.error("Created a Cursed Glyph");

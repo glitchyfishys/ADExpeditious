@@ -311,7 +311,7 @@ function giveRealityRewards(realityProps) {
     player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier, multiplier,
     MachineHandler.projectedIMCap);
-  Currency.realities.add(realityAndPPMultiplier);
+  Currency.realities.add(realityAndPPMultiplier + 35);
   Currency.perkPoints.add(realityAndPPMultiplier*Math.clamp(Math.pow(Currency.realities.value,1/3),1,20));
   if (TeresaUnlocks.effarig.canBeApplied) {
     Currency.relicShards.add(realityProps.gainedShards * multiplier);

@@ -63,7 +63,23 @@ export default {
       };
     },
     iconAttrs() {
-      return [this.offlineAttr, this.segmentAttr, this.stdAttr, this.seedAttr];
+      return [this.offlineAttr, this.segmentAttr, this.stdAttr, this.seedAttr, this.modAttr];
+    },
+    modAttr() {
+      const defMods = Speedrun.defaultModifiers;
+      const k = Object.keys(defMods);
+      var modList = [];
+      
+      k.forEach(x => (typeof defMods[x] == 'boolean' ? (this.prevRunInfo.mods[x] != defMods[x] && this.prevRunInfo.mods[x] != undefined) :
+      Decimal.neq(this.prevRunInfo.mods[x], defMods[x]) && this.prevRunInfo.mods[x] != undefined) ?
+      modList.push(Speedrun.modifierNames[x] + (typeof defMods[x] == 'boolean' ? `: ${this.prevRunInfo.mods[x] ? 'Enabled' : 'Disabled'}` :
+      ` ${defMods[x]} → ` + this.prevRunInfo.mods[x].toString())) : undefined);
+
+      const hasMods = modList.length != 0;
+      return {
+        icon: `fas fa-pen-ruler o-icon ${hasMods ? "l-icon-on" : "l-icon-off"}`,
+        text: hasMods ? `Used Modifiers<br>${makeEnumerationBreak(modList)}` : "No Modifiers used",
+      };
     },
     startDate() {
       return Time.toDateTimeString(this.prevRunInfo.startDate);
@@ -102,7 +118,7 @@ export default {
 <style scoped>
 .c-icon-container {
   display: grid;
-  grid-template-columns: 7rem 20rem 4rem 4rem 4rem 4rem 30rem 20rem;
+  grid-template-columns: 7rem 18rem 4rem 4rem 4rem 4rem 4rem 28rem 20rem;
   align-items: center;
   font-size: 1.3rem;
 }

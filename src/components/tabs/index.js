@@ -42,6 +42,7 @@ import TimeDilationTab from "./time-dilation/TimeDilationTab";
 import TimeDimensionsTab from "./time-dimensions/TimeDimensionsTab";
 import TimeStudiesTab from "./time-studies/TimeStudiesTab";
 import VTab from "./celestial-v/VTab";
+import ModsTab from "./modifiers/ModsTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -86,7 +87,8 @@ const TabComponents = {
   CelestialNavigationTab,
   ShopTab,
   MultiplierBreakdownTab,
-  CompletionsTab
+  CompletionsTab,
+  ModsTab
 };
 
 export default TabComponents;

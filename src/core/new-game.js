@@ -7,8 +7,8 @@ export const NG = {
     player.isGameEnd = false;
     // We set this ASAP so that the AD tab is immediately recreated without END formatting, and any lag which could
     // happen is instead hidden by the overlay from the credits rollback
-    player.celestials.pelle.doomed = false;
-
+    player.celestials.pelle.doomed = false; 
+    
     // This is where we "confirm" a speedrun as completed and store all its information into the previous run prop
     // before resetting everything.
     const speedrun = player.speedrun;
@@ -23,6 +23,7 @@ export const NG = {
         achievementTimes: JSON.parse(JSON.stringify(speedrun.achievementTimes)),
         seedSelection: speedrun.seedSelection,
         initialSeed: speedrun.initialSeed,
+        mods: speedrun.mods,
       };
 
       // For the sake of keeping a bounded savefile size, we only keep a queue of the last 100 full runs. The earliest
@@ -68,7 +69,7 @@ export const NG = {
     const companions = JSON.stringify(Glyphs.allGlyphs.filter(g => g.type === "companion"));
 
 
-    if(player.speedrun.hasStarted) addCompletionTime(player.records.totalTimePlayed, player.records.realTimePlayed);
+    if(Achievement(188).isUnlocked) addCompletionTime(player.records.totalTimePlayed, player.records.realTimePlayed);
     const bestTime = Math.min(player.records.bestCompletion.realTime, player.records.thisCompletion.realTime);
     const lastcomps = JSON.stringify(player.records.recentCompletions);
 

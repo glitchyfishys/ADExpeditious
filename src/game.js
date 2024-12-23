@@ -301,8 +301,17 @@ export function gainedInfinities() {
 
 // eslint-disable-next-line max-params
 export function addCompletionTime(time, realTime) {
+  const defMods = Speedrun.defaultModifiers;
+  const k = Object.keys(defMods);
+  var modList = [];
+  k.forEach(x => ( typeof defMods[x] == 'boolean' ? (player.speedrun.mods[x] != defMods[x] && player.speedrun.mods[x] != undefined) :
+  Decimal.neq(player.speedrun.mods[x], defMods[x]) && player.speedrun.mods[x] != undefined) ?
+      modList.push(Speedrun.modifierNames[x] + (typeof defMods[x] == 'boolean' ? `: ${player.speedrun.mods[x] ? 'Enabled' : 'Disabled'}` :
+      ` ${defMods[x]} → ` + player.speedrun.mods[x].toString())) : undefined);
+
+
   player.records.recentCompletions.pop();
-  player.records.recentCompletions.unshift([time / getGlobalSpeedFactor(), realTime]);
+  player.records.recentCompletions.unshift([time / getGlobalSpeedFactor(), realTime, makeEnumeration(modList)]);
 }
 
 export function updateRefresh() {
@@ -468,7 +477,7 @@ export function gameLoop(passDiff, options = {}) {
   const thisUpdate = Date.now();
   const realDiff = (diff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
-    : diff) * getGlobalSpeedFactor();
+    : diff) * getGlobalSpeedFactor() * player.speedrun.mods.realTimeSpeed;
   if (!GameStorage.ignoreBackupTimer) player.backupTimer += realDiff / getGlobalSpeedFactor();
 
   // For single ticks longer than a minute from the GameInterval loop, we assume that the device has gone to sleep or
@@ -501,7 +510,7 @@ export function gameLoop(passDiff, options = {}) {
   if (diff === undefined) {
     diff = Enslaved.nextTickDiff;
   }
-  else diff *= getGlobalSpeedFactor();
+  else diff *= getGlobalSpeedFactor() * player.speedrun.mods.realTimeSpeed;
 
   Autobuyers.tick();
   Tutorial.tutorialLoop();
@@ -655,10 +664,10 @@ export function gameLoop(passDiff, options = {}) {
   laitelaRealityTick(realDiff / getGlobalSpeedFactor());
   Achievements.autoAchieveUpdate(diff);
   V.checkForUnlocks();
-  AutomatorBackend.update(realDiff / getGlobalSpeedFactor());
+  AutomatorBackend.update(realDiff / getGlobalSpeedFactor() / (player.speedrun.mods.realTimeSpeedAutobuyers ? player.speedrun.mods.realTimeSpeed : 1));
   Pelle.gameLoop(realDiff);
-  GalaxyGenerator.loop(realDiff);
-  GameEnd.gameLoop(realDiff / getGlobalSpeedFactor());
+  GalaxyGenerator.loop(realDiff * (getGlobalSpeedFactor() ** 0.3));
+  GameEnd.gameLoop(realDiff / getGlobalSpeedFactor() / player.speedrun.mods.realTimeSpeed);
 
   if (!Enslaved.canAmplify) {
     Enslaved.boostReality = false;
@@ -765,7 +774,7 @@ function laitelaRealityTick(realDiff) {
   const laitelaInfo = player.celestials.laitela;
   if (!Laitela.isRunning) return;
   if (laitelaInfo.entropy >= 0) {
-    laitelaInfo.entropy += (realDiff / 1000) * Laitela.entropyGainPerSecond;
+    laitelaInfo.entropy += (realDiff / 1000) * Laitela.entropyGainPerSecond / Math.min(player.speedrun.mods.realTimeSpeed, 1);
   }
 
   // Setting entropy to -1 on completion prevents the modal from showing up repeatedly
@@ -938,7 +947,6 @@ function afterSimulation(seconds, playerBefore) {
 }
 
 export function simulateTime(seconds, real, fast) {
-  seconds *= getGlobalSpeedFactor();
   // The game is simulated at a base 50ms update rate, with a maximum tick count based on the values of real and fast
   // - Calling with real === true will always simulate at full accuracy with no tick count reduction unless it would
   //   otherwise simulate with more ticks than offline progress would allow
@@ -946,11 +954,11 @@ export function simulateTime(seconds, real, fast) {
   // - Otherwise, tick count will be limited to the offline tick count (which may be set externally during save import)
   // Tick count is never *increased*, and only ever decreased if needed.
   if (seconds < 0) return;
-  let ticks = Math.floor(seconds / getGlobalSpeedFactor() * 20);
+  let ticks = Math.floor(seconds * 20);
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
-  const maxTicks = GameStorage.maxOfflineTicks(1000 * seconds / getGlobalSpeedFactor(), GameStorage.offlineTicks ?? player.options.offlineTicks);
+  const maxTicks = GameStorage.maxOfflineTicks(1000 * seconds, GameStorage.offlineTicks ?? player.options.offlineTicks);
   if (ticks > maxTicks && !fast) {
     ticks = maxTicks;
   } else if (ticks > 50 && !real && fast) {
@@ -980,7 +988,7 @@ export function simulateTime(seconds, real, fast) {
 
   EventHub.dispatch(GAME_EVENT.OFFLINE_CURRENCY_GAINED);
 
-  let remainingRealSeconds = seconds / getGlobalSpeedFactor();
+  let remainingRealSeconds = seconds;
   // During async code the number of ticks remaining can go down suddenly
   // from "Speed up" which means tick length needs to go up, and thus
   // you can't just divide total time by total ticks to get tick length.

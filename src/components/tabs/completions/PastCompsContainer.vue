@@ -94,13 +94,12 @@ export default {
 
       const cells = [name, this.gameTime(run)];
       cells.push(this.realTime(run));
+      cells.push(this.mods(run));
 
       return cells;
     },
     infoCol() {
-      const cells = ["Run", this.hasRealTime ? "Game Time" : "Time in Run"];
-      cells.push("Real Time");
-
+      const cells = ["Run", "Game Time", "Real Time", "Modifiers"];
       return cells;
     },
     gameTime(run) {
@@ -108,6 +107,9 @@ export default {
     },
     realTime(run) {
       return timeDisplayShort(run[1]);
+    },
+    mods(run) {
+      return run[2];
     },
     toggleShown() {
       player.shownRuns[this.singular] = !player.shownRuns[this.singular];

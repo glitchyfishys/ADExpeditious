@@ -52,6 +52,19 @@ function giveEternityRewards(auto) {
     EffarigUnlock.eternity.unlock();
     beginProcessReality(getRealityProps(true));
   }
+  if(player.speedrun.mods.chalAch){
+    Achievement(56).unlock();
+    Achievement(57).unlock();
+    Achievement(58).unlock();
+    Achievement(64).unlock();
+    Achievement(65).unlock();
+    Achievement(68).unlock();
+    Achievement(71).unlock();
+    Achievement(74).unlock();
+    Achievement(81).unlock();
+    Achievement(111).unlock();
+  }
+
 }
 
 export function eternityAnimation() {

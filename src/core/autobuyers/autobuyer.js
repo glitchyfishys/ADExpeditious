@@ -97,6 +97,7 @@ export class IntervaledAutobuyerState extends AutobuyerState {
   }
 
   get timeSinceLastTick() {
+    if(player.speedrun.mods.realTimeSpeedAutobuyers) return (player.records.realTimePlayed - this.data.lastTick) / player.speedrun.mods.realTimeSpeed;
     return player.records.realTimePlayed - this.data.lastTick;
   }
 

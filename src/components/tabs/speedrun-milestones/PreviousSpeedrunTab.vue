@@ -21,10 +21,10 @@ export default {
   computed: {
     milestones: () => GameDatabase.speedrunMilestones,
     previousRuns() {
-      const keys = Object.keys(player.speedrun.previousRuns);
+      const keys = Object.keys(Speedrun.pastRuns);
       const allRuns = [];
       for (const key of keys) {
-        const run = player.speedrun.previousRuns[key];
+        const run = Speedrun.pastRuns[key];
         run.id = Number(key);
         allRuns.push(run);
       }
@@ -34,8 +34,8 @@ export default {
       const recLength = GameDatabase.speedrunMilestones.length + 1;
       const bestTimes = Array.repeat(0, recLength);
       const bestRunIndices = [...bestTimes];
-      for (const index of Object.keys(player.speedrun.previousRuns)) {
-        const run = player.speedrun.previousRuns[index].records;
+      for (const index of Object.keys(Speedrun.pastRuns)) {
+        const run = Speedrun.pastRuns[index].records;
         for (let rec = 0; rec < recLength; rec++) {
           if (run[rec] !== 0 && (run[rec] < bestTimes[rec] || bestTimes[rec] === 0)) {
             bestTimes[rec] = run[rec];

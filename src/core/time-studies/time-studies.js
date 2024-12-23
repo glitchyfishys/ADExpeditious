@@ -13,9 +13,11 @@ function showSecondPreferredWarning(currTree) {
 // This is only ever called from manual player actions, which means we can immediately commit them to the game state
 // eslint-disable-next-line complexity
 export function buyStudiesUntil(id, ec = -1) {
+  if(id == 181) id = 30;
   let studyArray = [];
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
   const requestedPath = TimeStudy(id).path;
+  if(id == 30) id = 181;
   const currTree = GameCache.currentStudyTree.value;
   // Makes an array [start, start+1, ... , end], empty if end < start
   const range = (start, end) => [...Array(Math.clampMin(end - start + 1, 0)).keys()].map(i => i + start);
@@ -28,6 +30,7 @@ export function buyStudiesUntil(id, ec = -1) {
   // Greddily buy all studies before the dimension split then try again; if the requested study was above the dimension
   // split, then we're done and don't need to attempt to buy any more
   studyArray.push(...range(11, Math.min(lastInPrevRow, 70)));
+  studyArray[studyArray.indexOf(30)] = 181;
   studyArray.push(id);
 
   if (id < 71) return studyArray;

@@ -69,6 +69,7 @@ visible tab and subtab, if such an entry exists.
         - Some Time Studies are buffed.<br>
         - EP multiplier starts cheaper.<br>
         - Some Eternity upgrades are better.<br>
+        - Time Studies 181 and 40 get brought when shift clicking.<br>
         `: ''}
       ${PlayerProgress.dilationUnlocked()||player.records.fullGameCompletions>0 ? `
         - Dilation is Slightly Weaker, 0.75 => 0.77.<br>
@@ -77,8 +78,9 @@ visible tab and subtab, if such an entry exists.
 
       ${PlayerProgress.realityUnlocked()||player.records.fullGameCompletions>0 ? `
         - Some Reality upgrades are easyer.<br>
-        - You simulate 14 extra realities insted of 49.<br>
+        - You simulate 14 extra Realities insted of 49, you still gain 49 more Realities.<br>
         - Blackholes become permanent at ${formatPercents(0.999, 2)}.<br>
+        - Blackholes notify less.<br>
         `: ''}
 
       ${Teresa.isUnlocked||player.records.fullGameCompletions>0 ? `
@@ -86,8 +88,14 @@ visible tab and subtab, if such an entry exists.
         - RM poring is faster.<br>
         `: ''}
 
+      ${V.isUnlocked||player.records.fullGameCompletions>0 ? `
+        - Auto Clean keeps a basic Glyph for each active slot.<br>
+          `: ''}
+
       ${Ra.isUnlocked||player.records.fullGameCompletions>0 ? `
         - Reality Alchemy resource is effected by Synergism.<br>
+        - Unpredictablility is better.<br>
+        - You can have ${format(8)} Cursed Glyphs.<br>
           `: ''}
 
       ${Laitela.isUnlocked||player.records.fullGameCompletions>0 ? `
@@ -103,7 +111,11 @@ visible tab and subtab, if such an entry exists.
         - Only one of each Glyph type can be equiped while Doomed.<br>
         - Pelle Dilation Tickspeed power is stronger.<br>
         - Recursion rift end is higher.<br>
-        - The Galaxy Generator is Faster.<br>
+        - The Galaxy Generator is ${formatX(getGlobalSpeedFactor() ** 0.3)} Faster.<br>
+        `: ''}
+
+      ${player.records.fullGameCompletions>0 ? `
+        - Modifiers.<br>
         `: ''}
       `,
       isUnlocked: () => true,

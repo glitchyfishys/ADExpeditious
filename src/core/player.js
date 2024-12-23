@@ -284,7 +284,7 @@ window.player = {
     recentRealities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, 1, "", 0, 0]),
     recentCompletions: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, Number.MAX_VALUE]),
+      [Number.MAX_VALUE, Number.MAX_VALUE], ""),
     thisInfinity: {
       time: 0,
       realTime: 0,
@@ -360,13 +360,24 @@ window.player = {
     hideInfo: false,
     displayAllMilestones: false,
     startDate: 0,
-    name: "",
+    name: "Yor'ue Name",
     offlineTimeUsed: 0,
     // One spot for every entry in GameDatabase.speedrunMilestones (note: 1-indexed)
     records: Array.repeat(0, 26),
     achievementTimes: {},
     seedSelection: SPEEDRUN_SEED_STATE.FIXED,
     initialSeed: 0,
+    mods: {
+      ADMul: DC.D1,
+      ADPow: 1,
+      IDMul: DC.D1,
+      IDPow: 1,
+      TDMul: DC.D1,
+      TDPow: 1,
+      chalAch: false,
+      realTimeSpeed: 1,
+      realTimeSpeedAutobuyers: true,
+    },
     previousRuns: {}
   },
   IPMultPurchases: 0,
@@ -514,9 +525,9 @@ window.player = {
     respec: false,
     showGlyphSacrifice: false,
     showSidebarPanel: GLYPH_SIDEBAR_MODE.INVENTORY_MANAGEMENT,
-    autoSort: 0,
+    autoSort: 2,
     autoCollapse: false,
-    autoAutoClean: false,
+    autoAutoClean: true,
     applyFilterToPurge: false,
     moveGlyphsOnProtection: false,
     perkPoints: 0,

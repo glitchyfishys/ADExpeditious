@@ -136,6 +136,8 @@ function applyNDMultipliers(mult, tier) {
     multiplier = multiplier.times(1 + tier / 100);
   }
 
+  multiplier = multiplier.mul(player.speedrun.mods.ADMul);
+
   multiplier = multiplier.clampMin(1);
 
   return multiplier;
@@ -164,6 +166,7 @@ function applyNDPowers(mult, tier) {
       Achievement(183),
       PelleRifts.paradox
     );
+  multiplier = multiplier.pow(player.speedrun.mods.ADPow);
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
 

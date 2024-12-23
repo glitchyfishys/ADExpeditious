@@ -219,10 +219,8 @@ export const infinityUpgrades = {
     cost: 1000,
     checkRequirement: () => Achievement(41).isUnlocked,
     description: () => `gain ${formatPercents(0.5)} of your best IP/min without using Max All`,
-    effect: () => (player.options.offlineProgress
-      ? player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2)
-      : DC.D0),
-    isDisabled: () => !player.options.offlineProgress,
+    effect: () => player.records.thisEternity.bestIPMsWithoutMaxAll.times(TimeSpan.fromMinutes(1).totalMilliseconds / 2),
+    isDisabled: () => false,
     formatEffect: value => `${format(value, 2, 2)} IP/min`,
   },
   ipMult: {

@@ -47,6 +47,11 @@ export function startDilatedEternity(auto) {
     eternity(false, auto, { switchingDilation: true });
     return false;
   }
+
+  if(player.speedrun.mods.chalAch){
+    Achievement(97).unlock();
+    Achievement(112).unlock();
+  }
   Achievement(114).unlock();
   Achievement(115).unlock();
   Achievement(136).unlock();
