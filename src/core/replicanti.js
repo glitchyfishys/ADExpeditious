@@ -158,6 +158,8 @@ export function totalReplicantiSpeedMult(overCap) {
   }
   totalMult = totalMult.timesEffectsOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
 
+  totalMult = totalMult.mul(player.speedrun.mods.RepMul).pow(player.speedrun.mods.RepPow);
+
   return totalMult;
 }
 

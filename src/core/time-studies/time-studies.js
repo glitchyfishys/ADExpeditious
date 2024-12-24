@@ -16,8 +16,8 @@ export function buyStudiesUntil(id, ec = -1) {
   if(id == 181) id = 30;
   let studyArray = [];
   const lastInPrevRow = Math.floor(id / 10) * 10 - 1;
-  const requestedPath = TimeStudy(id).path;
   if(id == 30) id = 181;
+  const requestedPath = TimeStudy(id).path;
   const currTree = GameCache.currentStudyTree.value;
   // Makes an array [start, start+1, ... , end], empty if end < start
   const range = (start, end) => [...Array(Math.clampMin(end - start + 1, 0)).keys()].map(i => i + start);

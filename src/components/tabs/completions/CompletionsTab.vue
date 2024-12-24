@@ -55,6 +55,9 @@ export default {
     },
     start(){
       Speedrun.prepareSave(player.speedrun.name);
+    },
+    clear(){
+      player.speedrun.isActive = false;
     }
   }
 };
@@ -81,7 +84,13 @@ export default {
       @click="start"
       class="speedrun"
       >
-        Start Speedrun
+      Prepare Speedrun
+      </PrimaryButton><br>
+      <PrimaryButton
+      @click="clear"
+      class="speedrun"
+      >
+      Leave Speedrun
       </PrimaryButton><br>
       <PastCompsContainer
       :key="Lcompletion.name"
@@ -108,7 +117,7 @@ export default {
 }
 
 .speedrun {
-  width: 25rem;
+  width: 27rem;
   height: 6rem;
   font-size: 26px;
 }

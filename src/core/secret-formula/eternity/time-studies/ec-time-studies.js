@@ -112,7 +112,7 @@ export const ecTimeStudies = [
   {
     id: 10,
     cost: 550,
-    requirement: [181],
+    requirement: [171],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
       resource: "Eternity Points",

@@ -84,11 +84,10 @@ export function breakInfinity() {
   Achievement(23).unlock();
   Achievement(28).unlock();
   Achievement(32).unlock();
-  Achievement(43).unlock();
+  Achievement(38).unlock();
 
   Achievement(43).unlock();
   Achievement(108).unlock();
-  Achievement(138).unlock();
   Autobuyer.tickspeed.data.mode=100;
   // There's a potential migration edge case involving already-maxed autobuyers; this should give the achievement
   Achievement(61).tryUnlock();
@@ -117,6 +116,8 @@ export function gainedInfinityPoints() {
     ip = ip.min(DC.E200);
   }
   ip = ip.times(GameCache.totalIPMult.value);
+  ip = ip.mul(Speedrun.modifiers.IPMul);
+
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
   } else if (V.isRunning) {
@@ -127,6 +128,7 @@ export function gainedInfinityPoints() {
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
+  ip = ip.pow(Speedrun.modifiers.IPPow);
 
   return ip.floor();
 }
@@ -151,6 +153,7 @@ export function gainedEternityPoints() {
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
     gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
+    ep = ep.mul(Speedrun.modifiers.EPMul);
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
   } else if (V.isRunning) {
@@ -161,6 +164,7 @@ export function gainedEternityPoints() {
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
+  ep = ep.pow(Speedrun.modifiers.EPPow);
 
   return ep.floor();
 }
@@ -295,7 +299,9 @@ export function gainedInfinities() {
     Ra.unlocks.continuousTTBoost.effects.infinity
   );
   infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
+  infGain = infGain.mul(Speedrun.modifiers.InfMul);
   infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
+  infGain = infGain.pow(Speedrun.modifiers.InfPow);
   return infGain;
 }
 

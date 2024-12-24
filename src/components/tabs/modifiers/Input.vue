@@ -94,10 +94,11 @@ export default {
 
 <template>
   <div>
-    <span style="font-size: 16px">
+    <div style="font-size: 16px">
       {{ name }}:
-    </span>
+    </div>
     <input
+    style="margin-left: 1rem; margin-right: 1rem;"
       :value="displayValue"
       :class="validityClass"
       :type="inputType"

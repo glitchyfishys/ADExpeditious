@@ -45,65 +45,187 @@ export default {
     <div class="c-stats-tab-title c-stats-tab-general">
       Modifiers
     </div>
-    <div class="text-big">Antimatter Dimensions</div>
-    <Input
+    don't go crazy with this, your save might break
+    <div class="o-subsect">
+      <div style="border: solid var(--color-antimatter) 2px">
+        <div class="text-big">Antimatter Dimensions</div>
+        <Input
     :modKey="'ADMul'"
-    :name="'AD Multiplier'"
     :type="'decimal'"
-    />
-    <Input
+        />
+        <Input
     :modKey="'ADPow'"
-    :name="'AD Power'"
     :type="'float'"
-    /><br>
-    <div class="text-big">Infinity Dimensions</div>
-    <Input
+        /><br>
+      </div>
+      <div style="border: solid var(--color-infinity) 2px">
+        <div class="text-big">Infinity Dimensions</div>
+        <Input
     :modKey="'IDMul'"
-    :name="'ID Multiplier'"
     :type="'decimal'"
-    />
-    <Input
+        />
+        <Input
     :modKey="'IDPow'"
-    :name="'ID Power'"
     :type="'float'"
-    /><br>
-    <div class="text-big">Time Dimensions</div>
-    <Input
-    :modKey="'TDMul'"
-    :name="'TD Multiplier'"
-    :type="'decimal'"
-    />
-    <Input
-    :modKey="'TDPow'"
-    :name="'TD Power'"
-    :type="'float'"
-    /><br>
+        /><br>
+      </div>
+      <div style="border: solid var(--color-eternity) 2px">
+        <div class="text-big">Time Dimensions</div>
+        <Input
+        :modKey="'TDMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'TDPow'"
+        :type="'float'"
+        /><br>
+      </div>
+    </div>
 
-    <div class="text-big"> Achievements </div>
-    <PrimaryToggleButton
-    v-model="chalAch"
-    :on="'Easy Challenge Achievements Enabled'"
-    :off="'Easy Challenge Achievements Disabled'"
-    :disabled="speedrun.isRunning"
-    :class="speedrun.isRunning ? 'disabled c-button' : 'c-button'"
-    /><br>
-    <div class="text-big"> Game Speed </div>
-    <Input
-    :modKey="'realTimeSpeed'"
-    :name="'Real Time Speed'"
-    :type="'float'"
-    /><br>
-    <PrimaryToggleButton
-    v-model="DTAuto"
-    :on="'Delta Time Autobuyers Enabled'"
-    :off="'Delta Time Autobuyers Disabled'"
-    :disabled="speedrun.isRunning"
-    :class="speedrun.isRunning ? 'disabled c-button' : 'c-button'"
-    /><br>
+    <div class="o-subsect">
+      <div style="border: solid var(--color-infinity) 2px">
+        <div class="text-big">Infinity</div>
+        <Input
+        :modKey="'IPMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'IPPow'"
+        :type="'float'"
+        /><br>
+
+        <Input
+        :modKey="'InfMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'InfPow'"
+        :type="'float'"
+        /><br>
+        <Input
+        :modKey="'RepMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'RepPow'"
+        :type="'float'"
+        /><br>
+      </div>
+
+      <div style="border: solid var(--color-eternity) 2px">
+        <div class="text-big">Eternity</div>
+        <Input
+        :modKey="'EPMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'EPPow'"
+        :type="'float'"
+        /><br>
+
+        <Input
+        :modKey="'EtrMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'EtrPow'"
+        :type="'float'"
+        /><br>
+        <Input
+        :modKey="'TPMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'TPPow'"
+        :type="'float'"
+        /><br>
+        <Input
+        :modKey="'DTMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'DTPow'"
+        :type="'float'"
+        /><br>
+      </div>
+
+      <div style="border: solid var(--color-reality) 2px">
+        <div class="text-big">Reality</div>
+        <Input
+        :modKey="'RMMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'RMPow'"
+        :type="'float'"
+        /><br>
+
+        <Input
+        :modKey="'RealCapMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'RealCapPow'"
+        :type="'float'"
+        /><br>
+
+        <Input
+        :modKey="'IMCapMul'"
+        :type="'float'"
+        />
+        <Input
+        :modKey="'IMCapPow'"
+        :type="'float'"
+        /><br>
+
+        <Input
+        :modKey="'RealMul'"
+        :type="'float'"
+        />
+        <Input
+        :modKey="'RealPow'"
+        :type="'float'"
+        /><br>
+      </div>
+    </div>
+
+    <div class="o-subsect">
+      <div style="border: solid var(--color-reality-light) 2px; width: 100%">
+        <div class="text-big"> Game Speed </div>
+        <Input
+        :modKey="'realTimeSpeed'"
+        :type="'float'"
+        /><br>
+        <div>
+          <PrimaryToggleButton
+          v-model="DTAuto"
+          :on="'Delta Time Autobuyers Enabled'"
+          :off="'Delta Time Autobuyers Disabled'"
+          :disabled="speedrun.isRunning"
+          :class="speedrun.isRunning ? 'disabled c-button' : 'c-button'"
+          />
+        </div><br>
+      </div>
+    </div>
+    <div class="o-subsect">
+      <div style="border: solid #ffee58 2px; width: 100%">
+        <div class="text-big"> Achievements </div>
+        <div>
+          <PrimaryToggleButton
+          v-model="chalAch"
+          :on="'Easy Challenge Achievements Enabled'"
+          :off="'Easy Challenge Achievements Disabled'"
+          :disabled="speedrun.isRunning"
+          :class="speedrun.isRunning ? 'disabled c-button' : 'c-button'"
+          />
+        </div><br>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
+
 .l-toggle-button {
   font-size: 12px;
 }
@@ -126,17 +248,25 @@ export default {
 }
 
 .l-mods-tab {
-  width: 40rem;
+  padding-bottom: 15rem;
   align-content: stretch;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   align-self: center;
 }
 
 .text-big {
   font-size: 18px;
   align-self: center;
+}
+
+.o-subsect {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: stretch;
+  border: solid #555555 8px;
+  width: 100%;
 }
 
 .disabled {

@@ -74,14 +74,6 @@ export const normalTimeStudies = [
     effect: 1
   },
   {
-    id: 30,
-    cost: 0,
-    requirement: [21],
-    reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => `placeholder for moved 181`,
-    effect: 0
-  },
-  {
     id: 31,
     cost: 3,
     requirement: [21],

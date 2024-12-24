@@ -143,10 +143,10 @@ export function getDilationGainPerSecond() {
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
   dtRate = dtRate.times(ShopPurchase.dilatedTimePurchases.currentMult);
   dtRate = dtRate.times(
-    Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
+    Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1)).mul(player.speedrun.mods.DTMul);
   if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   if (V.isRunning) dtRate = dtRate.pow(0.5);
-  return dtRate;
+  return dtRate.pow(player.speedrun.mods.DTPow);
 }
 
 export function tachyonGainMultiplier() {
@@ -159,7 +159,7 @@ export function tachyonGainMultiplier() {
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
-  ).pow(pow);
+  ).mul(player.speedrun.mods.TPMul).pow(pow).pow(player.speedrun.mods.TPPow);
 }
 
 export function rewardTP() {

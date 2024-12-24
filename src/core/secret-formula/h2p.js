@@ -57,7 +57,7 @@ visible tab and subtab, if such an entry exists.
       ${PlayerProgress.infinityUnlocked()||player.records.fullGameCompletions>0 ? `
         - Quadruple pre-break IP.<br>
         - Dimboost Infinity upgrade 2.5x => 5x.<br>
-        - The offline infnity upgrade works online.<br>
+        - The offline infinity upgrade now works online.<br>
         ` : ''}
       ${player.break||player.records.fullGameCompletions>0 ? `
         - post-Infinity AD cost scaling upgrades scales less.<br>
