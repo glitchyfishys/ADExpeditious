@@ -19,7 +19,8 @@ export class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
 
   tick() {
     const upg = ImaginaryUpgrade(this.id);
-    while (Currency.imaginaryMachines.gte(upg.cost)) upg.purchase();
+    let limit = 0;
+    while (Currency.imaginaryMachines.gte(upg.cost)&& limit < 150) {upg.purchase(); limit++;};
   }
 
   static get entryCount() { return 10; }

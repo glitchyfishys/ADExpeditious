@@ -77,23 +77,31 @@ class VRunUnlockState extends GameMechanicState {
       playerData.runRecords[this.id] = value;
       playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
-
-    while (this.completions < this.config.values.length &&
-    Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
-      if (!V.isFlipped && this.config.isHard) continue;
-      this.completions++;
-      GameUI.notify.success(`You have unlocked V-Achievement
-        '${this.config.name}' tier ${formatInt(this.completions)}`);
-
+    if (Speedrun.modifiers.vAchAreEasy){
+      if (!V.isFlipped && this.config.isHard) return;
+        this.completions = this.config.values.length;
       V.updateTotalRunUnlocks();
-
-      for (const quote of V.quotes.all) {
-        // Quotes without requirements will be shown in other ways
-        if (quote.requirement) {
-          quote.show();
+    }
+    else {
+      while (this.completions < this.config.values.length &&
+      Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
+        if (!V.isFlipped && this.config.isHard) continue;
+        this.completions++;
+        GameUI.notify.success(`You have unlocked V-Achievement
+          '${this.config.name}' tier ${formatInt(this.completions)}`);
+  
+        V.updateTotalRunUnlocks();
+  
+        for (const quote of V.quotes.all) {
+          // Quotes without requirements will be shown in other ways
+          if (quote.requirement) {
+            quote.show();
+          }
         }
       }
+
     }
+
   }
 }
 

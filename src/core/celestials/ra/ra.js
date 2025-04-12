@@ -127,7 +127,7 @@ class RaPetState extends GameMechanicState {
       Effects.product(Ra.unlocks.continuousTTBoost.effects.memoryChunks, GlyphSacrifice.reality);
     if (this.hasRemembrance) res *= Ra.remembrance.multiplier;
     else if (Ra.petWithRemembrance) res *= Ra.remembrance.nerf;
-    return res;
+    return res * Speedrun.modifiers.raChunkMul;
   }
 
   get canGetMemoryChunks() {
@@ -257,7 +257,7 @@ export const Ra = {
     for (const pet of Ra.pets.all) {
       if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
     }
-    return res;
+    return res * Speedrun.modifiers.raMemoryMul;
   },
   get memoryBoostResources() {
     const boostList = [];
@@ -373,7 +373,7 @@ export const Ra = {
     this.updateAlchemyFlow(realityRealTime);
   },
   get alchemyResourceCap() {
-    return 25000;
+    return 25000 * Speedrun.modifiers.glyphAlcCap;
   },
   get momentumValue() {
     const hoursFromUnlock = TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;

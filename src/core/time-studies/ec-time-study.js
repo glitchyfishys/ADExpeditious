@@ -49,7 +49,7 @@ export class ECTimeStudyState extends TimeStudyState {
       171, 171, 171,
       151, 42, 61,
       111, 111, 151,
-      171, 181, 181
+      171, 171, 171
     ];
     // If the player shift clicks an EC study that is immediately buyable, we try to
     // buy it first - in case buying studies up to that point renders it unaffordable.

@@ -17,36 +17,49 @@ dev.giveAllAchievements = function() {
   for (const achievement of allAchievements) achievement.unlock();
 };
 
-// Know that both dev.doubleEverything and dev.tripleEverything are both broken
-// with this error https://i.imgur.com/ZMEBNTv.png
-
-dev.doubleEverything = function() {
-  Object.keys(player).forEach(key => {
-    if (typeof player[key] === "number") player[key] *= 2;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(2);
-    if (typeof player[key] === "object" && !isFinite(player[key])) {
-      Object.keys(player[key]).forEach(key2 => {
-        if (typeof player[key][key2] === "number") player[key][key2] *= 2;
-        if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
-          player[key][key2] = player[key][key2].times(2);
-      });
-    }
-  });
+dev.giveAllNormalAchievements = function() {
+  for (const achievement of Achievements.all) achievement.unlock();
 };
 
-dev.tripleEverything = function() {
-  Object.keys(player).forEach(key => {
-    if (typeof player[key] === "number") player[key] *= 3;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(3);
-    if (typeof player[key] === "object" && !isFinite(player[key])) {
-      Object.keys(player[key]).forEach(key3 => {
-        if (typeof player[key][key3] === "number") player[key][key3] *= 3;
-        if (typeof player[key][key3] === "object" && player[key][key3].constructor !== Object)
-          player[key][key3] = player[key][key3].times(3);
+dev.doubleEverything = function(value = 2) {
+  player = dev.multiplyEverything(player, value);
+};
+
+dev.multiplyEverything = (source, multi = 2, blackList = []) => {
+  const destination = {};
+  blackList.push('speedrun', 'options', 'achievementBits', 'secretAchievementBits', 'completedBits',
+    'upgradeBits', 'imaginaryUpgradeBits', 'upgReqs', 'imaginaryUpgReqs', 'quoteBits', 'unlockBits',
+    'progressBits', 'hintBits', 'triggeredTabNotificationBits', 'hiddenTabBits', 'hiddenSubtabBits',
+    'IAP', 'news', 'studies', 'presets', 'preferredPaths', 'version', 'challenge', 'filter', 'protectedRows',
+    'showSidebarPanel', 'autoSort', 'unlockedEC', 'automator', 'records', 'auto', 'phase', 'tutorialState',
+    'infinityRebuyables', 'id', 'idx', 'rifts', 'eternityChalls', 'pets', 'glyphs', 'blackHole'
+  );
+
+  Object.keys(source).forEach(key => {
+     // we don't or never want to edit these values
+    if(blackList.includes(key)) destination[key] = source[key];
+    else if(typeof source[key] == 'number') destination[key] = Decimal.mul(source[key], multi).clamp(0, 1e300).toNumber();
+    else if (typeof source[key] == 'boolean') destination[key] = source[key]; // can not multiply
+    else if (typeof source[key] == 'string') destination[key] = source[key]; // can not multiply
+    else if (source[key] instanceof Set) destination[key] = source[key]; // can not multiply
+    else if (source[key] instanceof Decimal) destination[key] = Decimal.mul(source[key], multi).clamp(new Decimal('-1e9E15'), Decimal.MAX_VALUE);
+    else if(Array.isArray(source[key])) {
+      destination[key] = [];
+      source[key].forEach((v, id) => {
+        if(typeof v == 'number') destination[key][id] = Decimal.mul(v, multi).clamp(0, 1e300).toNumber();
+        else if (v instanceof Decimal) destination[key][id] = Decimal.mul(v, multi).clamp(new Decimal('-1e9E15'), Decimal.MAX_VALUE);
+        else if(typeof v == 'object') destination[key][id] = dev.multiplyEverything(v, multi);
+        else destination[key][id] = v;
       });
     }
+    else if(typeof source[key] == 'object'){
+      destination[key] = dev.multiplyEverything(source[key], multi)
+    }
+
   });
-};
+
+  return destination;
+}
 
 dev.barrelRoll = function() {
   FullScreenAnimationHandler.display("a-barrel-roll", 5);

@@ -61,7 +61,7 @@ visible tab and subtab, if such an entry exists.
         ` : ''}
       ${player.break||player.records.fullGameCompletions>0 ? `
         - post-Infinity AD cost scaling upgrades scales less.<br>
-        - IC1 reward 1.3 => 5.<br>
+        - IC1 reward x1.3 => x5.<br>
         - IC7 boost Dim boost to x10.<br>
           Tickspeed autobuyer get set to buy max on when you Break Infinity<br>
         ` : ''}

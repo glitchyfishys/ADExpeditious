@@ -65,8 +65,8 @@ export class DarkMatterDimensionState extends DimensionState {
       SingularityMilestone.darkFromTheorems,
       SingularityMilestone.darkFromDM4,
       SingularityMilestone.darkFromGamespeed,
-      SingularityMilestone.darkFromDilatedTime
-    );
+      SingularityMilestone.darkFromDilatedTime,
+    ).mul(Speedrun.modifiers.laitelaDMDMul);
   }
 
   get powerDMPerAscension() {
@@ -81,6 +81,7 @@ export class DarkMatterDimensionState extends DimensionState {
       .times(this.commonDarkMult)
       .times(Math.pow(this.powerDMPerAscension, this.ascensions))
       .timesEffectsOf(SingularityMilestone.darkMatterMult, SingularityMilestone.multFromInfinitied)
+      .mul(Speedrun.modifiers.laitelaDMMul)
       .dividedBy(Math.pow(1e4, Math.pow(this.tier - 1, 0.5)));
   }
 
@@ -96,7 +97,7 @@ export class DarkMatterDimensionState extends DimensionState {
         SingularityMilestone.darkEnergyMult,
         SingularityMilestone.realityDEMultiplier,
         SingularityMilestone.multFromInfinitied
-      ).toNumber() * destabilizeBoost;
+      ).mul(Speedrun.modifiers.laitelaDEMul).min(1e200).toNumber() * destabilizeBoost;
   }
 
   get intervalAfterAscension() {

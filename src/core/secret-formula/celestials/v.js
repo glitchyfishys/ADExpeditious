@@ -149,7 +149,7 @@ export const v = {
       description: value => `Unlock Reality with at most ${formatInt(-value)} Glyphs equipped for the entire Reality.`,
       // This achievement has internally negated values since the check is always greater than
       values: [1, 4, 7, 10, 13],
-      condition: () => V.isRunning && TimeStudy.reality.isBought,
+      condition: () => V.isRunning && V.isFlipped && TimeStudy.reality.isBought,
       currentValue: () => -player.requirementChecks.reality.maxGlyphs,
       formatRecord: x => formatInt(-x),
       shardReduction: () => 0,
@@ -163,7 +163,7 @@ export const v = {
       description: value => `Get ${formatInt(400000)} Time Theorems with a /${format(Decimal.pow10(value), 2, 2)}
         Black Hole or slower, without discharging or entering EC12.`,
       values: [100, 150, 200, 250, 300],
-      condition: () => V.isRunning,
+      condition: () => V.isRunning && V.isFlipped,
       currentValue: () => (
         // Dirty hack I know lmao
         Currency.timeTheorems.gte(400000)
@@ -182,7 +182,7 @@ export const v = {
       name: "Shutter Glyph",
       description: value => `Reach a Glyph of level ${formatInt(value)}.`,
       values: [6500, 7000, 7500, 8000, 8500],
-      condition: () => V.isRunning,
+      condition: () => V.isRunning && V.isFlipped,
       currentValue: () => gainedGlyphLevel().actualLevel,
       formatRecord: x => formatInt(x),
       shardReduction: tiers => Math.floor(500 * tiers),
