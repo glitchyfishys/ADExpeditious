@@ -234,7 +234,7 @@ export const Speedrun = {
       realTimeSpeed: 'Real Time Speed',
       realTimeSpeedAutobuyers: "Delta Time Autobuyers",
       gameSpeed: "Game Speed",
-      gameSpeedAch: "Achievements Effect Game Speed",
+      gameSpeedAch: "Achievements Affect Game Speed",
       glyphsHaveFourEffects: 'Glyphs Always Have Four Effects',
       effarigGlyphsHaveAllEffects: 'Effarig Glyphs Can Have Up To Seven Effects',
       glyphsHaveMaxRarity: 'Glyphs Always Have Max Rarity',
@@ -253,7 +253,7 @@ export const Speedrun = {
       laitelaSingularityMul: 'Singularity Multiplier',
       laitelaDEMul: 'Dark Energy Multiplier',
       laitelaDMMul: 'Dark Matter Multiplier',
-      laitelaAnnilationMul: 'Annilation Multiplier',
+      laitelaAnnilationMul: 'Annihilation Multiplier',
       pelleRemnantMul: 'Remanant Multiplier',
       pelleRealityShardMul: 'Reality Shard Multiplier',
     }
