@@ -164,7 +164,7 @@ export function gainedEternityPoints() {
   if (GlyphAlteration.isAdded("time")) {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
-  ep = ep.mul(Speedrun.modifiers.EPPow);
+  ep = ep.pow(Speedrun.modifiers.EPPow);
 
   return ep.floor().min(Decimal.MAX_VALUE);
 }
