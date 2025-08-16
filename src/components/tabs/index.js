@@ -7,7 +7,6 @@ import BlackHoleTab from "./black-hole/BlackHoleTab";
 import BreakInfinityTab from "./break-infinity/BreakInfinityTab";
 import CelestialNavigationTab from "./celestial-navigation/CelestialNavigationTab";
 import ChallengeRecordsTab from "./challenge-records/ChallengeRecordsTab";
-import CompletionsTab from "./completions/CompletionsTab";
 import EffarigTab from "./celestial-effarig/EffarigTab";
 import EnslavedTab from "./celestial-enslaved/EnslavedTab";
 import EternityChallengesTab from "./eternity-challenges/EternityChallengesTab";
@@ -42,7 +41,10 @@ import TimeDilationTab from "./time-dilation/TimeDilationTab";
 import TimeDimensionsTab from "./time-dimensions/TimeDimensionsTab";
 import TimeStudiesTab from "./time-studies/TimeStudiesTab";
 import VTab from "./celestial-v/VTab";
+
+import CompletionsTab from "./completions/CompletionsTab";
 import ModsTab from "./modifiers/ModsTab";
+import TASAutomatorTab from "./tas-automator/TASAutomatorTab";
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -88,7 +90,8 @@ const TabComponents = {
   ShopTab,
   MultiplierBreakdownTab,
   CompletionsTab,
-  ModsTab
+  ModsTab,
+  TASAutomatorTab
 };
 
 export default TabComponents;

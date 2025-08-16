@@ -288,15 +288,15 @@ export function maxAll() {
 
 export function buyMaxDimension(tier, bulk = Infinity) {
   const dimension = AntimatterDimension(tier);
-  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
+  if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
   let bulkLeft = bulk;
   const goal = Player.infinityGoal;
-  if (dimension.cost.gt(goal) && Player.isInAntimatterChallenge) return;
+  if (dimension.cost.gt(goal) && Player.isInAntimatterChallenge) return false;
 
   if (tier === 8 && Enslaved.isRunning) {
     buyOneDimension(8);
-    return;
+    return true;
   }
 
   // Buy any remaining until 10 before attempting to bulk-buy
@@ -306,7 +306,7 @@ export function buyMaxDimension(tier, bulk = Infinity) {
     bulkLeft--;
   }
 
-  if (bulkLeft <= 0) return;
+  if (bulkLeft <= 0) return true;
 
   // Buy in a while loop in order to properly trigger abnormal price increases
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
@@ -317,7 +317,7 @@ export function buyMaxDimension(tier, bulk = Infinity) {
       buyUntilTen(tier);
       bulkLeft--;
     }
-    return;
+    return true;
   }
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
@@ -325,13 +325,14 @@ export function buyMaxDimension(tier, bulk = Infinity) {
     Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount, 10
   );
   if (maxBought === null) {
-    return;
+    return false;
   }
   let buying = maxBought.quantity;
   if (buying > bulkLeft) buying = bulkLeft;
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
+  return true;
 }
 
 class AntimatterDimensionState extends DimensionState {

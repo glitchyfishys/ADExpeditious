@@ -488,6 +488,7 @@ export const GameStorage = {
 
     EventHub.dispatch(GAME_EVENT.GAME_LOAD);
     AutomatorBackend.initializeFromSave();
+    TASAutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 
     const rawDiff = Date.now() - player.lastUpdate;

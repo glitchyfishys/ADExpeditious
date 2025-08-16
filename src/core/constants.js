@@ -356,7 +356,7 @@ window.CANCER_GLYPH_SYMBOLS = {
   effarig: "🦒",
   reality: "⛧",
   cursed: "☠",
-  companion: "³"
+  companion: ":3"
 };
 
 window.ALTERATION_TYPE = {

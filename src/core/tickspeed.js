@@ -83,7 +83,7 @@ export function buyTickSpeed() {
 }
 
 export function buyMaxTickSpeed() {
-  if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
+  if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return false;
   let boughtTickspeed = false;
 
   Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
@@ -100,7 +100,7 @@ export function buyMaxTickSpeed() {
   } else {
     const purchases = Tickspeed.costScale.getMaxBought(player.totalTickBought, Currency.antimatter.value, 1);
     if (purchases === null) {
-      return;
+      return false;
     }
     Currency.antimatter.subtract(Decimal.pow10(purchases.logPrice));
     player.totalTickBought += purchases.quantity;
@@ -110,7 +110,9 @@ export function buyMaxTickSpeed() {
   if (boughtTickspeed) {
     player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
     if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
+    return true;
   }
+  return false;
 }
 
 export function resetTickspeed() {

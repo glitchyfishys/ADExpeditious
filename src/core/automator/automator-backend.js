@@ -9,12 +9,14 @@ export const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   SKIP_INSTRUCTION: 4,
   HALT: 5,
   RESTART: 6,
+  TIME_OUT: 7,
 });
 
 export const AUTOMATOR_MODE = Object.freeze({
   PAUSE: 1,
   RUN: 2,
   SINGLE_STEP: 3,
+  TIME_OUT: 4,
 });
 
 

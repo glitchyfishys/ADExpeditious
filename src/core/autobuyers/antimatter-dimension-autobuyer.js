@@ -124,17 +124,19 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
   }
 
   upgradeBulk() {
-    if (this.hasMaxedBulk) return;
-    if (!Currency.infinityPoints.purchase(this.cost)) return;
+    if (this.hasMaxedBulk || !this.hasMaxedInterval) return false;
+    if (!Currency.infinityPoints.purchase(this.cost)) return false;
     this.data.bulk = Math.clampMax(this.bulk * 2, this.bulkCap);
     this.data.cost = Math.ceil(2.4 * this.cost);
     Achievement(61).tryUnlock();
     GameUI.update();
+    return true;
   }
 
   purchase() {
-    if (!this.canUnlockSlowVersion) return;
+    if (!this.canUnlockSlowVersion || this.isBought) return false;
     this.data.isBought = true;
+    return true;
   }
 
   get resetTickOn() {

@@ -48,7 +48,7 @@ export function toggleAllTimeDims() {
   }
 }
 
-export function buyMaxTimeDimension(tier, portionToSpend = 1, isMaxAll = false) {
+export function buyMaxTimeDimension(tier, portionToSpend = 1, isMaxAll = false, auto = false) {
   const canSpend = Currency.eternityPoints.value.times(portionToSpend);
   const dim = TimeDimension(tier);
   if (canSpend.lt(dim.cost)) return false;
@@ -60,7 +60,7 @@ export function buyMaxTimeDimension(tier, portionToSpend = 1, isMaxAll = false) 
     }
   }
   if (ImaginaryUpgrade(15).isLockingMechanics && EternityChallenge(7).completions > 0) {
-    if (!isMaxAll) {
+    if (!isMaxAll && !auto) {
       ImaginaryUpgrade(15).tryShowWarningModal(`purchase a Time Dimension,
         which will produce Infinity Dimensions through EC7`);
     }
@@ -302,8 +302,8 @@ class TimeDimensionState extends DimensionState {
   }
 
   tryUnlock() {
-    if (this.isUnlocked) return;
-    TimeStudy.timeDimension(this._tier).purchase();
+    if (this.isUnlocked) return false;
+    return TimeStudy.timeDimension(this._tier).purchase();
   }
 }
 

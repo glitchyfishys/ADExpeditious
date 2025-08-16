@@ -177,7 +177,7 @@ export class DimBoost {
 
 // eslint-disable-next-line max-params
 export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false, enteringAntimatterChallenge = false) {
-  if (Currency.antimatter.gt(Player.infinityLimit)) return;
+  if (Currency.antimatter.gt(Player.infinityLimit)) return false;
   const bulk = Math.min(tempBulk, DimBoost.maxBoosts - player.dimensionBoosts);
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
@@ -200,6 +200,7 @@ export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false
     Currency.antimatter.reset();
   }
   EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
+  return true;
 }
 
 export function skipResetsIfPossible(enteringAntimatterChallenge) {
@@ -225,25 +226,26 @@ export function manualRequestDimensionBoost(bulk) {
 }
 
 export function requestDimensionBoost(bulk) {
-  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
-  if (!DimBoost.canBeBought) return;
+  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return false;
+  if (!DimBoost.canBeBought) return false;
   Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
   if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) maxBuyDimBoosts();
   else softReset(1);
+  return true
 }
 
 function maxBuyDimBoosts() {
   // Boosts that unlock new dims are bought one at a time, unlocking the next dimension
   if (DimBoost.canUnlockNewDimension) {
-    if (DimBoost.requirement.isSatisfied) softReset(1);
-    return;
+    if (DimBoost.requirement.isSatisfied) {softReset(1); return true};
+    return false;
   }
   const req1 = DimBoost.bulkRequirement(1);
-  if (!req1.isSatisfied) return;
+  if (!req1.isSatisfied) return false;
   const req2 = DimBoost.bulkRequirement(2);
   if (!req2.isSatisfied) {
     softReset(1);
-    return;
+    return true;
   }
   // Linearly extrapolate dimboost costs. req1 = a * 1 + b, req2 = a * 2 + b
   // so a = req2 - req1, b = req1 - a = 2 req1 - req2, num = (dims - b) / a
@@ -253,7 +255,7 @@ function maxBuyDimBoosts() {
     1 + Math.floor((dim.totalAmount.toNumber() - req1.amount) / increase));
   if (DimBoost.bulkRequirement(maxBoosts).isSatisfied) {
     softReset(maxBoosts);
-    return;
+    return true;
   }
   // But in case of EC5 it's not, so do binary search for appropriate boost amount
   let minBoosts = 2;
@@ -263,4 +265,5 @@ function maxBuyDimBoosts() {
     else maxBoosts = middle;
   }
   softReset(minBoosts);
+  return true;
 }

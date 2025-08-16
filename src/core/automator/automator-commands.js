@@ -399,7 +399,7 @@ export const AutomatorCommands = [
           S.commandState = { timeMs: 0 };
           AutomatorData.logCommandEvent(`Pause started (waiting ${timeString})`, ctx.startLine);
         } else {
-          S.commandState.timeMs += Math.max(Time.unscaledDeltaTime.totalMilliseconds / getGlobalSpeedFactor() / player.speedrun.mods.realTimeSpeed, AutomatorBackend.currentInterval);
+          S.commandState.timeMs += Math.max(Time.unscaledDeltaTime.totalMilliseconds / player.speedrun.mods.realTimeSpeed / player.speedrun.mods.realTimeSpeed, AutomatorBackend.currentInterval);
         }
         const finishPause = S.commandState.timeMs >= duration;
         if (finishPause) {

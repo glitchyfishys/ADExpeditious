@@ -220,13 +220,13 @@ export const GlyphGenerator = {
   randomStrength(rng) {
     // Technically getting this upgrade really changes glyph gen but at this point almost all
     // the RNG is gone anyway.
-    if (Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.canBeApplied || Speedrun.modifiers.glyphsHaveMaxRarity) return rarityToStrength(100);
+    if (Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.canBeApplied || player.speedrun.mods.glyphsHaveMaxRarity) return rarityToStrength(100);
     let result = GlyphGenerator.gaussianBellCurve(rng) * GlyphGenerator.strengthMultiplier;
     const relicShardFactor = Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied ? 1 : rng.uniform();
     const increasedRarity = relicShardFactor * Effarig.maxRarityBoost +
       Effects.sum(Achievement(146), GlyphSacrifice.effarig);
     // Each rarity% is 0.025 strength.
-    result += (increasedRarity / 40) * Speedrun.modifiers.glyphRarity;
+    result += (increasedRarity / 40) * player.speedrun.mods.glyphRarity;
     // Raise the result to the next-highest 0.1% rarity.
     result = Math.ceil(result * 400) / 400;
     return Math.min(result, rarityToStrength(100));
@@ -239,8 +239,8 @@ export const GlyphGenerator = {
     // as preventing all of the glyphs changing drastically when RU17 is purchased.
     const random1 = rng.uniform();
     const random2 = rng.uniform();
-    if (type !== "effarig" && (Ra.unlocks.glyphEffectCount.canBeApplied || Speedrun.modifiers.glyphsHaveFourEffects)) return 4;
-    if(Speedrun.modifiers.effarigGlyphsHaveAllEffects) return 7;
+    if (type !== "effarig" && (Ra.unlocks.glyphEffectCount.canBeApplied || player.speedrun.mods.glyphsHaveFourEffects)) return 4;
+    if(player.speedrun.mods.effarigGlyphsHaveAllEffects) return 7;
     const maxEffects = Ra.unlocks.glyphEffectCount.canBeApplied ? 7 : 4;
     let num = Math.min(
       maxEffects,

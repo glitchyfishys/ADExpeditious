@@ -4,7 +4,7 @@ export const MachineHandler = {
   get baseRMCap() { return DC.E1000; },
 
   get hardcapRM() {
-    return this.baseRMCap.times(ImaginaryUpgrade(6).effectOrDefault(1)).mul(Speedrun.modifiers.RealCapMul).pow(Speedrun.modifiers.RealCapPow);
+    return this.baseRMCap.times(ImaginaryUpgrade(6).effectOrDefault(1)).mul(player.speedrun.mods.RealCapMul).pow(player.speedrun.mods.RealCapPow);
   },
 
   get distanceToRMCap() {
@@ -26,7 +26,7 @@ export const MachineHandler = {
     // Increase base RM gain if <10 RM
     if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
     rmGain = rmGain.times(this.realityMachineMultiplier);
-    rmGain = rmGain.mul(Speedrun.modifiers.RMMul).pow(Speedrun.modifiers.RMPow);
+    rmGain = rmGain.mul(player.speedrun.mods.RMMul).pow(player.speedrun.mods.RMPow);
     return rmGain.floor();
   },
 
@@ -40,7 +40,7 @@ export const MachineHandler = {
 
   get baseIMCap() {
     return Math.min(((Math.pow(Math.clampMin(this.uncappedRM.log10() - 1000, 0), 2)) *
-      (Math.pow(Math.clampMin(this.uncappedRM.log10() - 100000, 1), 0.2)) * Speedrun.modifiers.IMCapMul) ** Speedrun.modifiers.IMCapPow, 1e300);
+      (Math.pow(Math.clampMin(this.uncappedRM.log10() - 100000, 1), 0.2)) * player.speedrun.mods.IMCapMul) ** player.speedrun.mods.IMCapPow, 1e300);
   },
 
   get currentIMCap() {

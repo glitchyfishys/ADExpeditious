@@ -81,8 +81,9 @@ export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   purchase() {
-    if (!this.canUnlockSlowVersion) return;
+    if (!this.canUnlockSlowVersion || this.isBought) return false;
     this.data.isBought = true;
+    return true;
   }
 
   get resetTickOn() {

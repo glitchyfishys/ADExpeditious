@@ -25,6 +25,28 @@ CodeMirror.registerHelper("lint", "automato", (contents, _, editor) => {
 });
 
 CodeMirror.registerHelper("hint", "anyword", editor => {
+
+  if (editor.options.mode == "TAS") { // i think this has to be done in here
+    const cursor = editor.getDoc().getCursor();
+
+    const line = editor.getLine(cursor.line);
+    let lineLex = [];
+    TASAutomatorCommands.some(c => {
+      const v = c.nextString(line);
+      if(v.string != null) {
+        lineLex.push(v.string);
+      }
+      if(v.end) return true;
+    });
+    let start = cursor.ch;
+    while (start && /\w/u.test(line.charAt(start - 1))) --start;
+    return {
+      list: lineLex.flat(2),
+      from: CodeMirror.Pos(cursor.line, start),
+      to: CodeMirror.Pos(cursor.line, cursor.ch)
+    };
+  }
+
   const cursor = editor.getDoc().getCursor();
   let start = cursor.ch;
   const end = cursor.ch;

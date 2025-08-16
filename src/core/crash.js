@@ -1,4 +1,3 @@
-import { DEV } from "@/env";
 
 window.NotImplementedError = class NotImplementedError extends Error {
   constructor() {

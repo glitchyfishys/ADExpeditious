@@ -33,6 +33,9 @@ mergeIntoGlobal(AutomatorBlocks);
 import * as AutomatorTextEditor from "@/components/tabs/automator/AutomatorTextEditor";
 mergeIntoGlobal(AutomatorTextEditor);
 
+import * as TASAutomatorTextEditor from "@/components/tabs/tas-automator/TASAutomatorTextEditor";
+mergeIntoGlobal(TASAutomatorTextEditor);
+
 import * as PerksTab from "@/components/tabs/perks/PerksTab";
 mergeIntoGlobal(PerksTab);
 

@@ -48,7 +48,7 @@ class InfinityChallengeState extends GameMechanicState {
   }
 
   start() {
-    if (!this.isUnlocked || this.isRunning) return;
+    if (!this.isUnlocked || this.isRunning) return false;
     // Forces big crunch reset but ensures IP gain, if any.
     bigCrunchReset(true, true);
     player.challenge.normal.current = 0;
@@ -56,6 +56,7 @@ class InfinityChallengeState extends GameMechanicState {
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
     player.break = true;
     if (EternityChallenge.isRunning) Achievement(115).unlock();
+    return true;
   }
 
   get isCompleted() {
@@ -88,10 +89,10 @@ class InfinityChallengeState extends GameMechanicState {
 
   updateChallengeTime() {
     const bestTimes = player.challenge.infinity.bestTimes;
-    if (bestTimes[this.id - 1] <= player.records.thisInfinity.time  / getGlobalSpeedFactor()) {
+    if (bestTimes[this.id - 1] <= player.records.thisInfinity.time) {
       return;
     }
-    player.challenge.infinity.bestTimes[this.id - 1] = player.records.thisInfinity.time  / getGlobalSpeedFactor();
+    player.challenge.infinity.bestTimes[this.id - 1] = player.records.thisInfinity.time;
     GameCache.infinityChallengeTimeSum.invalidate();
   }
 

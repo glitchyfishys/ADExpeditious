@@ -35,6 +35,11 @@ export const state = {
           lines: []
         }
       },
+      TASAutomator: {
+          fullScreen: false,
+          editorScriptID: "",
+          lines: []
+        }
     },
     shiftDown: false,
     theme: "Normal",

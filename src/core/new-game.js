@@ -68,6 +68,8 @@ export const NG = {
     const presets = JSON.stringify(player.timestudy.presets);
     const companions = JSON.stringify(Glyphs.allGlyphs.filter(g => g.type === "companion"));
 
+    const TASScripts = JSON.stringify(player.speedrun.TASAutomator.scripts);
+
 
     if(Achievement(188).isUnlocked) addCompletionTime(player.records.totalTimePlayed, player.records.realTimePlayed);
     const bestTime = Math.min(player.records.bestCompletion.realTime, player.records.thisCompletion.realTime);
@@ -96,6 +98,8 @@ export const NG = {
       Glyphs.addToInventory(g);
     });
     
+    player.speedrun.TASAutomator.scripts = JSON.parse(TASScripts);
+
     player.records.previousRunRealTime = fullTimePlayed;
     player.records.bestCompletion.realTime = bestTime;
     player.records.recentCompletions = JSON.parse(lastcomps);

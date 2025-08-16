@@ -70,6 +70,9 @@ export default {
     doubleEverything(value){
       dev.doubleEverything(value);
     },
+    gameloopTick(ticks){
+      gameLoop(ticks, {singleTick: ""});
+    },
     giveAllAchievements(){
       dev.giveAllNormalAchievements();
     }
@@ -84,6 +87,71 @@ export default {
       Modifiers
     </div>
     don't go crazy with this, your save might break
+    
+    <div class="o-subsect">  <!-- TAS  -->
+      <div style="border: solid cyan 2px; width: 100%">
+        <div class="text-big">TAS</div>
+          <PrimaryButton
+          @click="gameloopTick(25)"
+          class="c-button"
+          >Single 25ms Tick</PrimaryButton>
+
+          <PrimaryButton
+          @click="gameloopTick(33)"
+          class="c-button"
+          >Single 33ms Tick</PrimaryButton>
+          
+          <PrimaryButton
+          @click="gameloopTick(50)"
+          class="c-button"
+          >Single 50ms Tick</PrimaryButton>
+          
+          <PrimaryButton
+          @click="gameloopTick(100)"
+          class="c-button"
+          >Single 100ms Tick</PrimaryButton>
+
+          <PrimaryButton
+          @click="gameloopTick(1000)"
+          class="c-button"
+          >Single 1s Tick</PrimaryButton>
+
+          <PrimaryButton
+          @click="gameloopTick(1e4)"
+          class="c-button"
+          >Single 10s Tick</PrimaryButton>
+
+          <PrimaryButton
+          @click="gameloopTick(6e4)"
+          class="c-button"
+          >Single 1m Tick</PrimaryButton>
+
+          <PrimaryButton
+          @click="gameloopTick(6e5)"
+          class="c-button"
+          >Single 10m Tick</PrimaryButton>
+
+          <PrimaryButton
+          @click="gameloopTick(36e5)"
+          class="c-button"
+          >Single 1h Tick</PrimaryButton>
+
+          <PrimaryButton
+          @click="gameloopTick(864e5)"
+          class="c-button"
+          >Single 1d Tick</PrimaryButton>
+
+          <div style="height: 1rem"></div>
+
+          <div class="text-big">TAS Commands</div>
+          <Input
+            :modKey="'TASCommandsPerTick'"
+            :type="'float'"
+          /><br>
+
+      </div>
+    </div>
+
     <div class="o-subsect">  <!-- Dimensions  -->
       <div style="border: solid var(--color-antimatter) 2px">
         <div class="text-big">Antimatter Dimensions</div>
@@ -230,6 +298,7 @@ export default {
     <div class="o-subsect">  <!-- GameSpeed  -->
       <div style="border: solid var(--color-reality-light) 2px; width: 100%">
         <div class="text-big"> Game Speed </div>
+        Note that these effect records and anything based on both real and game time to be unlocked and/or effects
         <Input
         :modKey="'realTimeSpeed'"
         :type="'float'"
@@ -407,9 +476,9 @@ export default {
         <PrimaryButton
           @click="giveAllAchievements()"
           :disabled="speedrun.isRunning"
-          :class="speedrun.isPausedAtStart() ? 'disabled c-button' : 'c-button'"
+          :class="speedrun.isRunning ? 'disabled c-button' : 'c-button'"
           >Give all Achivements</PrimaryButton>
-          <br>
+          <div style="height: 1rem"></div>
       </div>
     </div>
     <div class="o-subsect">  <!-- Jokes  -->
@@ -447,7 +516,8 @@ export default {
           :disabled="speedrun.isRunning"
           :class="speedrun.isRunning ? 'disabled c-button' : 'c-button'"
           >Quintuple Everything</PrimaryButton>
-          <br>
+          <div style="height: 1rem"></div>
+
       </div>
     </div>
   </div>

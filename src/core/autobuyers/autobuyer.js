@@ -141,19 +141,21 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
     return this.data.interval <= 100;
   }
 
-  upgradeInterval(free) {
-    if (this.hasMaxedInterval) return;
-    if (!free && !Currency.infinityPoints.purchase(this.cost)) return;
+  upgradeInterval(free, forced = false) {
+    if (!forced && (this.hasMaxedInterval || !this.isUnlocked || this.isBought == false || !this.canBeUpgraded)) return false;
+    if (!free && !Currency.infinityPoints.purchase(this.cost)) return false;
     this.data.cost *= 2;
     this.data.interval = Math.clampMin(this.data.interval * 0.6, 100);
     Achievement(52).tryUnlock();
     Achievement(53).tryUnlock();
     GameUI.update();
+    return true;
   }
 
   maxIntervalForFree() {
     while (!this.hasMaxedInterval) {
-      this.upgradeInterval(true);
+      this.upgradeInterval(true, true);
+      Achievement(53).tryUnlock();
     }
   }
 

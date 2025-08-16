@@ -226,7 +226,7 @@ export const Singularity = {
   get singularitiesGained() {
     return Math.floor(Math.pow(this.gainPerCapIncrease, player.celestials.laitela.singularityCapIncreases) *
       SingularityMilestone.singularityMult.effectOrDefault(1) *
-      (1 + ImaginaryUpgrade(10).effectOrDefault(0))) * Speedrun.modifiers.laitelaSingularityMul;
+      (1 + ImaginaryUpgrade(10).effectOrDefault(0))) * player.speedrun.mods.laitelaSingularityMul;
   },
 
   // Time (in seconds) to go from 0 DE to the condensing requirement
@@ -252,7 +252,7 @@ export const Singularity = {
     const cap = 60;
     if (player.celestials.laitela.singularityCapIncreases >= cap ) return;
       if(t){
-        player.celestials.laitela.singularityCapIncreases = Math.min(Math.floor(Math.log10(Currency.darkEnergy.productionPerSecond / 200 * getGlobalSpeedFactor() ** 0.5 * player.speedrun.mods.realTimeSpeed)), cap);
+        player.celestials.laitela.singularityCapIncreases = Math.min(Math.floor(Math.log10(Currency.darkEnergy.productionPerSecond / 200 * player.speedrun.mods.realTimeSpeed)), cap);
       }
       else{
         player.celestials.laitela.singularityCapIncreases++;

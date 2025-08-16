@@ -294,7 +294,7 @@ function updateRealityRecords(realityProps) {
     player.records.bestReality.glyphLevel = realityProps.gainedGlyphLevel.actualLevel;
     player.records.bestReality.glyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  player.records.bestReality.time = Math.min(player.records.thisReality.time / getGlobalSpeedFactor(), player.records.bestReality.time);
+  player.records.bestReality.time = Math.min(player.records.thisReality.time, player.records.bestReality.time);
   if (player.records.thisReality.realTime < player.records.bestReality.realTime) {
     player.records.bestReality.realTime = player.records.thisReality.realTime;
     player.records.bestReality.speedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
@@ -311,7 +311,7 @@ function giveRealityRewards(realityProps) {
     player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier, multiplier,
     MachineHandler.projectedIMCap);
-  Currency.realities.add(((realityAndPPMultiplier + 35) * Speedrun.modifiers.RealMul) ** Speedrun.modifiers.RealPow);
+  Currency.realities.add(((realityAndPPMultiplier + 35) * player.speedrun.mods.RealMul) ** player.speedrun.mods.RealPow);
   Currency.perkPoints.add(realityAndPPMultiplier*Math.clamp(Math.pow(Currency.realities.value,1/3),1,20));
   if (TeresaUnlocks.effarig.canBeApplied) {
     Currency.relicShards.add(realityProps.gainedShards * multiplier);

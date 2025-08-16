@@ -502,7 +502,6 @@ export const tabs = [
     name: "Completions",
     UIClass: "o-tab-btn--completions",
     hideAt: 3,
-    condition: () => player.records.fullGameCompletions > 0,
     id: 11,
     hidable: true,
     subtabs: [
@@ -520,6 +519,14 @@ export const tabs = [
         symbol: "⇎",
         component: "ModsTab",
         id: 1,
+        hidable: true
+      },
+      {
+        key: "tas",
+        name: "TAS",
+        symbol: "<i class='fas fa-wrench'></i>",
+        component: "TASAutomatorTab",
+        id: 2,
         hidable: true
       }
     ]

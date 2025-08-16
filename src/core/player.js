@@ -367,6 +367,22 @@ window.player = {
     achievementTimes: {},
     seedSelection: SPEEDRUN_SEED_STATE.FIXED,
     initialSeed: 0,
+    TASAutomator: {
+      state: {
+        mode: AUTOMATOR_MODE.STOP,
+        topLevelScript: 0,
+        editorScript: 0,
+        repeat: true,
+        forceRestart: true,
+        followExecution: true,
+        stack: [],
+      },
+      scripts: {
+      },
+      constantSortOrder: [],
+      execTimer: 0,
+      currentInfoPane: AutomatorPanels.INTRO_PAGE,
+    },
     mods: {
       ADMul: DC.D1,
       ADPow: 1,
@@ -411,6 +427,11 @@ window.player = {
       glyphAlcCap: 1,
       glyphAlcMul: 1,
 
+      galaxyStrength: 1,
+      AMGalaxyStrength: 1,
+      RepGalaxyStrength: 1,
+      TacGalaxyStrength: 1,
+
       teresaSacMul: 1,
       effarigRelicMul: 1,
       namelessRealTimeMul: 1,
@@ -424,6 +445,8 @@ window.player = {
       laitelaAnnilationMul: 1,
       pelleRemnantMul: 1,
       pelleRealityShardMul: 1,
+
+      TASCommandsPerTick: 10,
     },
     previousRuns: {}
   },

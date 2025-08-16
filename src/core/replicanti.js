@@ -34,16 +34,17 @@ function addReplicantiGalaxies(newGalaxies) {
 export function replicantiGalaxy(auto) {
   if (RealityUpgrade(6).isLockingMechanics) {
     if (!auto) RealityUpgrade(6).tryShowWarningModal();
-    return;
+    return false;
   }
-  if (!Replicanti.galaxies.canBuyMore) return;
+  if (!Replicanti.galaxies.canBuyMore) return false;
   const galaxyGain = Replicanti.galaxies.gain;
-  if (galaxyGain < 1) return;
+  if (galaxyGain < 1) return false;
   player.replicanti.timer = 0;
   Replicanti.amount = Achievement(126).isUnlocked && !Pelle.isDoomed
     ? Decimal.pow10(Replicanti.amount.log10() - LOG10_MAX_VALUE * galaxyGain)
     : DC.D1;
   addReplicantiGalaxies(galaxyGain);
+  return true;
 }
 
 // Only called on manual RG requests
@@ -309,12 +310,13 @@ class ReplicantiUpgradeState {
   }
 
   purchase() {
-    if (!this.canBeBought) return;
+    if (!this.canBeBought) return false;
     Currency.infinityPoints.subtract(this.cost);
     this.baseCost = Decimal.times(this.baseCost, this.costIncrease);
     this.value = this.nextValue;
     if (EternityChallenge(8).isRunning) player.eterc8repl--;
     GameUI.update();
+    return true;
   }
 
   autobuyerTick() {
@@ -518,13 +520,15 @@ export const Replicanti = {
   },
   unlock(freeUnlock = false) {
     const cost = DC.E140.dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
-    if (player.replicanti.unl) return;
+    if (player.replicanti.unl) return false;
     if (freeUnlock || Currency.infinityPoints.gte(cost)) {
       if (!freeUnlock) Currency.infinityPoints.subtract(cost);
       player.replicanti.unl = true;
       player.replicanti.timer = 0;
       Replicanti.amount = DC.D1;
+      return true;
     }
+    return false;
   },
   get amount() {
     return player.replicanti.amount;

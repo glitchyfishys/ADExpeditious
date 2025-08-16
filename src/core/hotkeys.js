@@ -22,7 +22,7 @@ import { GameKeyboard } from "./keyboard";
 // for the other modifier keys (#3093).
 
 // Free keys:
-// i, j, k, l, n, o, p, q, v, w, x
+// j, k, n, o, q, v, w, x
 
 
 export const shortcuts = [
@@ -138,22 +138,34 @@ export const shortcuts = [
     function: () => keyboardAutomatorToggle(),
     visible: () => Player.automatorUnlocked
   }, {
+    name: "Start/Pause TAS Automator",
+    keys: ["i"],
+    type: "bindHotkey",
+    function: () => keyboardTASAutomatorToggle(),
+    visible: () => true
+  }, {
     name: "Restart Automator",
     keys: ["shift", "u"],
     type: "bindHotkey",
     function: () => keyboardAutomatorRestart(),
     visible: () => Player.automatorUnlocked
   }, {
-    name: "Undo Edit (Automator)",
+    name: "Undo Edit (Automator & TAS)",
     keys: ["mod", "z"],
     type: "bind",
-    function: () => AutomatorData.undoScriptEdit(),
+    function: () => {
+      AutomatorData.undoScriptEdit();
+      TASAutomatorData.undoScriptEdit();
+    },
     visible: () => Player.automatorUnlocked
   }, {
-    name: "Redo Edit (Automator)",
+    name: "Redo Edit (Automator  & TAS)",
     keys: ["mod", "y"],
     type: "bind",
-    function: () => AutomatorData.redoScriptEdit(),
+    function: () => {
+      AutomatorData.redoScriptEdit();
+      TASAutomatorData.redoScriptEdit();
+    },
     visible: () => Player.automatorUnlocked
   }, {
     name: "Toggle Black Hole",
@@ -466,6 +478,29 @@ function keyboardAutomatorToggle() {
     const linenum = AutomatorBackend.currentLineNumber;
     GameUI.notify.automator(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
   }
+}
+
+function keyboardTASAutomatorToggle() {
+
+  if (TASAutomatorBackend.isRunning) {
+    TASAutomatorBackend.pause();
+  } else if (TASAutomatorBackend.isOn) {
+    TASAutomatorBackend.mode = AUTOMATOR_MODE.RUN;
+  } else {
+    // Only attempt to start the visible script instead of the existing script if it isn't already running
+    const visibleIndex = player.speedrun.TASAutomator.state.editorScript;
+    TASAutomatorBackend.restart();
+    TASAutomatorBackend.start(visibleIndex);
+    if (TASAutomatorData.cachedErrors === 0) {
+      GameUI.notify.automator(`Starting script "${TASAutomatorBackend.scriptName}"`);
+    } else {
+      GameUI.notify.error(`Cannot start script "${TASAutomatorBackend.scriptName}" (has errors)`);
+    }
+    return;
+  }
+  const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
+  const linenum = AutomatorBackend.currentLineNumber;
+  GameUI.notify.automator(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
 }
 
 function keyboardAutomatorRestart() {

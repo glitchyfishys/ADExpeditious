@@ -74,7 +74,7 @@ export const Enslaved = {
     return this.canModifyRealTimeStorage && player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
-    return 0.7 * Speedrun.modifiers.namelessRealTimeMul;
+    return 0.7 * player.speedrun.mods.namelessRealTimeMul;
   },
   get storedRealTimeCap() {
     const addedCap = Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0);

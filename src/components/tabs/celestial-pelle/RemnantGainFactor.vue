@@ -22,7 +22,8 @@ export default {
       },
       dilationMult: [1, 1, 1],
       remnants: 0,
-      remnantsGain: 0
+      remnantsGain: 0,
+      modifier: 1
     };
   },
   computed: {
@@ -38,6 +39,7 @@ export default {
       this.dilationMult = PelleStrikes.dilation.hasStrike ? [500, 10, 5] : [1, 1, 1];
       this.remnants = Pelle.cel.remnants;
       this.remnantsGain = Pelle.remnantsGain;
+      this.modifier = SSpeedrun.modifiers.pelleRemnantMul;
     }
   }
 };
@@ -73,6 +75,9 @@ export default {
                 Static power
               </div>
               <div class="l-remnant-factors-item">
+                Modifier muliplier
+              </div>
+              <div class="l-remnant-factors-item">
                 Existing Remnants
               </div>
               <div class="l-remnant-factors-item">
@@ -94,6 +99,9 @@ export default {
                 ^
               </div>
               <div class="l-remnant-factors-item">
+                *
+              </div>
+              <div class="l-remnant-factors-item">
                 -
               </div>
             </div>
@@ -112,6 +120,9 @@ export default {
               </div>
               <div class="l-remnant-factors-item">
                 {{ format(7.5, 2, 2) }}
+              </div>
+              <div class="l-remnant-factors-item">
+                {{ format(modifier, 2, 0) }}
               </div>
               <div class="l-remnant-factors-item">
                 {{ format(remnants, 2, 0) }}

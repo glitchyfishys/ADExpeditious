@@ -77,7 +77,7 @@ class VRunUnlockState extends GameMechanicState {
       playerData.runRecords[this.id] = value;
       playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
-    if (Speedrun.modifiers.vAchAreEasy){
+    if (player.speedrun.mods.vAchAreEasy){
       if (!V.isFlipped && this.config.isHard) return;
         this.completions = this.config.values.length;
       V.updateTotalRunUnlocks();

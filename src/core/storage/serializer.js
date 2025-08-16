@@ -42,6 +42,7 @@ export const GameSaveSerializer = {
   startingString: {
     savefile: "AntimatterDimensionsExpeditiousSavefileFormat",
     "automator script": "AntimatterDimensionsAutomatorScriptFormat",
+    "TASAutomator script": "AntimatterDimensionsExpeditiousTASScriptFormat",
     "automator data": "AntimatterDimensionsAutomatorDataFormat",
     "glyph filter": "AntimatterDimensionsGlyphFilterFormat",
   },
@@ -49,6 +50,7 @@ export const GameSaveSerializer = {
   endingString: {
     savefile: "EndOfSavefile",
     "automator script": "EndOfAutomatorScript",
+    "TASAutomator script": "EndOfTASAutomatorScript",
     "automator data": "EndOfAutomatorData",
     "glyph filter": "EndOfGlyphFilter",
   },

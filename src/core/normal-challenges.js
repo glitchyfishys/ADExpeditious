@@ -8,7 +8,7 @@ export function updateNormalAndInfinityChallenges(diff) {
       // These caps are values which occur at approximately e308 IP
       const cappedBase = 1.03 + Math.clampMax(DimBoost.totalBoosts, 400) / 200 +
         Math.clampMax(player.galaxies, 100) / 100;
-      Currency.matter.multiply(Decimal.pow(cappedBase, diff / getGlobalSpeedFactor() / 20));
+      Currency.matter.multiply(Decimal.pow(cappedBase, diff / 20));
     }
     if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
       const values = [Currency.antimatter.value, Currency.matter.value];
@@ -79,8 +79,8 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   start() {
-    if (this.id === 1 || this.isOnlyActiveChallenge) return;
-    if (!Tab.challenges.isUnlocked) return;
+    if (this.id === 1 || this.isOnlyActiveChallenge) return false;
+    if (!Tab.challenges.isUnlocked) return false;
     // Forces big crunch reset but ensures IP gain, if any.
     bigCrunchReset(true, true);
     player.challenge.normal.current = this.id;
@@ -90,6 +90,7 @@ class NormalChallengeState extends GameMechanicState {
       Enslaved.quotes.ec6C10.show();
     }
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
+    return true;
   }
 
   get isCompleted() {
@@ -120,10 +121,10 @@ class NormalChallengeState extends GameMechanicState {
 
   updateChallengeTime() {
     const bestTimes = player.challenge.normal.bestTimes;
-    if (bestTimes[this.id - 2] <= player.records.thisInfinity.time / getGlobalSpeedFactor()) {
+    if (bestTimes[this.id - 2] <= player.records.thisInfinity.time) {
       return;
     }
-    player.challenge.normal.bestTimes[this.id - 2] = player.records.thisInfinity.time / getGlobalSpeedFactor();
+    player.challenge.normal.bestTimes[this.id - 2] = player.records.thisInfinity.time;
     GameCache.challengeTimeSum.invalidate();
     GameCache.worstChallengeTime.invalidate();
   }

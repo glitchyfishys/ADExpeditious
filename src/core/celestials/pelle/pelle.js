@@ -205,8 +205,8 @@ export const Pelle = {
 
   get specialGlyphEffect() {
     const isUnlocked = this.isDoomed && PelleRifts.chaos.milestones[1].canBeApplied;
-    var description = ''; ;
-    Glyphs.active.forEach(x => description += this.getSpecialGlyphEffectDescription(x?.type) + '\n');
+    var description = '';
+    Glyphs.active.forEach(x => description += `${this.getSpecialGlyphEffectDescription(x?.type)} <br>`);
     const isActive = type => isUnlocked && Glyphs.active.some(x => x?.type === type);
     return {
       isUnlocked,
@@ -293,13 +293,13 @@ export const Pelle = {
 
     const gain = (
       (Math.log10(am + 2) + Math.log10(ip + 2) + Math.log10(ep + 2)) / 1.64
-    ) ** 7.5 * Speedrun.modifiers.pelleRemnantMul;;
+    ) ** 7.5 * player.speedrun.mods.pelleRemnantMul;;
 
     return gain < 1 ? gain : Math.floor(gain - this.cel.remnants);
   },
 
   realityShardGain(remnants) {
-    return Decimal.pow(10, remnants ** (1 / 7.5) * 4).minus(1).div(1e3).mul(Speedrun.modifiers.pelleRealityShardMul);
+    return Decimal.pow(10, remnants ** (1 / 7.5) * 4).minus(1).div(1e3).mul(player.speedrun.mods.pelleRealityShardMul);
   },
 
   get realityShardGainPerSecond() {

@@ -58,6 +58,7 @@ export default {
     },
     clear(){
       player.speedrun.isActive = false;
+      player.speedrun.hasStarted = false;
     }
   }
 };

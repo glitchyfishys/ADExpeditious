@@ -294,7 +294,7 @@ export default {
       // \uE019 = :blobheart:
       if (this.isBlobHeart) return "\uE019";
       if (symbol) return symbol;
-      return (this.$viewModel.theme === "S4" && !this.glyph.cosmetic)
+      return ((this.$viewModel.theme === "S4" || player.secretUnlocks.cancerAchievements) && !this.glyph.cosmetic)
         ? CANCER_GLYPH_SYMBOLS[this.glyph.type]
         : this.cosmeticConfig.currentSymbol.symbol;
     },

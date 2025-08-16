@@ -78,7 +78,7 @@ visible tab and subtab, if such an entry exists.
 
       ${PlayerProgress.realityUnlocked()||player.records.fullGameCompletions>0 ? `
         - Some Reality upgrades are easyer.<br>
-        - You simulate 14 extra Realities insted of 49, you still gain 49 more Realities.<br>
+        - Reality simulates 14 extra Realities instead of 49, you still gain 35 additional Realities.<br>
         - Blackholes become permanent at ${formatPercents(0.999, 2)}.<br>
         - Blackholes notify less.<br>
         `: ''}
@@ -111,11 +111,11 @@ visible tab and subtab, if such an entry exists.
         - Only one of each Glyph type can be equiped while Doomed.<br>
         - Pelle Dilation Tickspeed power is stronger.<br>
         - Recursion rift end is higher.<br>
-        - The Galaxy Generator is ${formatX(getGlobalSpeedFactor() ** 0.3)} Faster.<br>
         `: ''}
 
       ${player.records.fullGameCompletions>0 ? `
         - Modifiers.<br>
+        - TAS Automator.<br>
         `: ''}
       `,
       isUnlocked: () => true,
@@ -125,7 +125,7 @@ visible tab and subtab, if such an entry exists.
     {
       name: "What has changed",
       info: () => `
-As the mod name, almost all mechanics are speeded up by ${formatX(getGlobalSpeedFactor())}. This is called the global speed factor.<br>
+As the mod name, almost all mechanics are speeded up by ${formatX(player.speedrun.mods.realTimeSpeed)}. This is called the global speed factor.<br>
 <br>
 To be separated from the in-game speed change mechanic, 'real/game real/game time' means
 this timer doesn't/does count speed up from this mod and doesn't/does count in-game speed change.<br>
@@ -153,20 +153,20 @@ ${PlayerProgress.eternityUnlocked()||player.records.fullGameCompletions>0?`
 - Time Study 141's multiplier's drop is not speeded up.<br>
 `:""}
 ${player.blackHole[0].unlocked||player.records.fullGameCompletions>0?`
-- Black Hole ticking is still speeded up, but only square-rooted as ${formatX(getGlobalSpeedFactor() ** 0.5)}. Notice that both inactive time and duration are speeded up.<br>
+- Black Hole ticking is still speeded up, but only square-rooted as ${formatX(player.speedrun.mods.realTimeSpeed ** 0.5)}. Notice that both inactive time and duration are speeded up.<br>
 `:""}
 ${EffarigUnlock.eternity.isUnlocked||player.records.fullGameCompletions>0?`
-- Charging real time doesn't charge ${formatX(getGlobalSpeedFactor())} time.<br>
+- Charging real time doesn't charge ${formatX(player.speedrun.mods.realTimeSpeed)} time.<br>
 `:""}
 ${VUnlocks.raUnlock.isUnlocked||player.records.fullGameCompletions>0?`
-- Memory Chunk and Memory production are still speeded up, but only square-rooted as ${formatX(getGlobalSpeedFactor() ** 0.5)}.<br>
+- Memory Chunk and Memory production are still speeded up, but only square-rooted as ${formatX(player.speedrun.mods.realTimeSpeed ** 0.5)}.<br>
 `:""}
 ${Laitela.isUnlocked||player.records.fullGameCompletions>0?`
 - In Lai'tela's Reality, entropy production and game speed recovery are not speeded up.<br>
-- Dark Matter Dimensions are still speeded up, but only square-rooted as ${formatX(getGlobalSpeedFactor() ** 0.5)}.<br>
+- Dark Matter Dimensions are still speeded up, but only square-rooted as ${formatX(player.speedrun.mods.realTimeSpeed ** 0.5)}.<br>
 `:""}
 ${Pelle.isDoomed||player.records.fullGameCompletions>0?`
-- In Doomed Reality, the global speed factor is square-rooted as ${formatX(getGlobalSpeedFactor() ** 0.5)}.<br>
+- In Doomed Reality, the global speed factor is square-rooted as ${formatX(player.speedrun.mods.realTimeSpeed ** 0.5)}.<br>
 - Recursion max requirement is extended to ${format("1e8000")}<br>
 `:""}
 ${Achievement(188).isUnlocked||player.records.fullGameCompletions>0?`

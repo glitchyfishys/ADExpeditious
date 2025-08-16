@@ -243,7 +243,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   unlock() {
-    if (this.isUnlocked) return true;
+    if (this.isUnlocked) return false;
     if (!this.canUnlock) return false;
     this.isUnlocked = true;
     EventHub.dispatch(GAME_EVENT.INFINITY_DIMENSION_UNLOCKED, this.tier);
@@ -254,8 +254,8 @@ class InfinityDimensionState extends DimensionState {
   }
 
   // Only ever called from manual actions
-  buySingle() {
-    if (!this.isUnlocked) return this.unlock();
+  buySingle(auto) {
+    if (!this.isUnlocked) return auto ? this.unlock() : false;
     if (!this.isAvailableForPurchase) return false;
     if (ImaginaryUpgrade(15).isLockingMechanics) {
       const lockString = this.tier === 1
@@ -279,6 +279,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   buyMax(auto) {
+    if (!this.isUnlocked) this.unlock();
     if (!this.isAvailableForPurchase) return false;
     if (ImaginaryUpgrade(15).isLockingMechanics) {
       const lockString = this.tier === 1
@@ -399,7 +400,7 @@ export const InfinityDimensions = {
   // Called from "Max All" UI buttons and nowhere else
   buyMax() {
     // Try to unlock dimensions
-    const unlockedDimensions = this.all.filter(dimension => dimension.unlock());
+    const unlockedDimensions = this.all.filter(dimension => dimension.unlock() || dimension.isUnlocked);
 
     // Try to buy single from the highest affordable new dimensions
     unlockedDimensions.slice().reverse().forEach(dimension => {
