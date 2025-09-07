@@ -61,6 +61,7 @@ export default {
     Contains, Variables, Scroll to line are NYI. <br>
     Changing scripts stops TAS. <br>
     Errors are undetailed. <br>
+    The TAS Automator also runs when the Game is Paused. <br>
     Some Errors are listed in recently executed commands. <br>
     The "🐟" command is suppose to crash the game.
   </div>

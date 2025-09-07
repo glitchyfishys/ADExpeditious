@@ -56,8 +56,7 @@ export default {
       this.isAffordable = upgrade.isAffordable;
     },
     purchaseUpgrade() {
-      if (RealityUpgrade(15).isLockingMechanics) RealityUpgrade(15).tryShowWarningModal();
-      else this.upgrade.purchase();
+      this.upgrade.purchase(false);
     }
   }
 };

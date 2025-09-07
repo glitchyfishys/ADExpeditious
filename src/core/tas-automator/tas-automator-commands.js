@@ -5,21 +5,33 @@ const Red = { // what is ^ for? it for the start of the line
     /^".*"/,
     /^'.*'/,
   ],
-  Number: /^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/,
+  Number: /^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui,
+  StudyList: /^([0-9]+,)*[0-9]+(\|(1[0-2]|[1-9])!)?/ui,
+  Load_Id: /^Load_Id/ui,
   Ping: /^Ping/ui,
   Infinity: /^Infinity/ui,
   Eternity: /^Eternity/ui,
+  Dilation: /^Dilation/ui,
   Reality: /^Reality/ui,
+  Armageddon: /^Armageddon/ui,
   NoWait: /^NoWait/ui,
+  Respec: /^Respec/ui,
+  Purchase: /^Purchase/ui,
+  Single: /^Single/ui,
+  Max: /^Max/ui,
   Space: /^[ \t]+/,
-  Any: /.*/,
+  Any: /^.*/,
   Comment: /^\/\/|#/ui,
   Fish: /^🐟/ui,
   BrInfUG: /^BreakInfinityUpgrade/ui,
   IPMult: /^IPMult/ui,
+  EPMult: /^EPMult/ui,
   InfUG: /^InfinityUpgrade/ui,
+  EteUG: /^EternityUpgrade/ui,
+  DilUG: /^DilationUpgrade/ui,
   RepUG: /^ReplicantiUpgrade/ui,
   UnlockReplicanti: /^UnlockReplicanti/ui,
+  UnlockDilation: /^UnlockDilation/ui,
   UGAuto: /^UpgradeAutobuyer/ui,
   AD: /^AntimatterDimension/ui,
   ID: /^InfinityDimension/ui,
@@ -35,20 +47,94 @@ const Red = { // what is ^ for? it for the start of the line
   EC: /^EC(1[0-2]|[1-9])/ui,
   StartChallenge: /^StartChallenge/ui,
   TimeOut: /^TimeOut/ui,
+  While: /^While/ui,
+  Until: /^Until/ui,
+  If: /^If/ui,
+  Else: /^Else/ui,
+  StartBlock: /^\{/ui,
+  EndBlock: /^\}/ui,
+  Boolean: /^(True|False)/ui,
+  True: /^True/ui,
+  False: /^False/ui,
+  Currency: /^(TotalCompletions|PendingCompletions|EC1?[0-9]Completions|FilterScore|TimeShards|Singularities|Realities|Eternities|InfinityPower|TotalInfinities|BankedInfinities|Infinities|Replicanti|Reminants|RealityShards|BaseTG|Matter|TotalTT|TotalST|Pending(IP|EP|RM|TP)|AM|IP|EP|RM|IM|AG|RG|TG|TP|DT|TT|RS|DB|DM|DE|PP|ST)/ui,
+  Operator: /^!?(>=|<=|>|<|==)/ui,
+  TimeStudies: /^TimeStudies/ui,
 }
+
+Red.Value = [
+  Red.Boolean,
+  Red.Currency,
+  Red.Number,
+]
+
+Red.PrestigeEvent = [
+  Red.DimensionBoost,
+  Red.AntimatterGalaxy,
+  Red.Infinity,
+  Red.Eternity,
+  Red.Reality,
+  Red.Armageddon,
+]
+
+const Currencys = {
+  AM: /AM/ui,
+  IP: /IP/ui,
+  EP: /EP/ui,
+  RM: /RM/ui,
+  IM: /IM/ui,
+  TT: /TT/ui,
+  TP: /TP/ui,
+  DT: /DT/ui,
+  AG: /AG/ui,
+  RG: /RG/ui,
+  RS: /RS/ui,
+  BaseTG: /BaseTG/ui,
+  TG: /TG/ui,
+  DB: /DB/ui,
+  Replicanti: /Replicanti/ui,
+  Infinities: /Infinities/ui,
+  TotalInfinities: /TotalInfinities/ui,
+  BankedInfinities: /BankedInfinities/ui,
+  Eternities: /Eternities/ui,
+  Realities: /Realities/ui,
+  DM: /DM/ui,
+  DE: /DE/ui,
+  PP: /PP/ui,
+  InfinityPower: /InfinityPower/ui,
+  Reminants: /Reminants/ui,
+  Singularities: /Singularities/ui,
+  TimeShards: /TimeShards/ui,
+  Matter: /Matter/ui,
+  RealityShards: /RealityShards/ui,
+
+  TotalCompletions: /TotalCompletions/ui,
+  PendingCompletions: /PendingCompletions/ui,
+  ECCompletions: /EC1?[0-9]Completions/ui,
+  TotalTT: /TotalTT/ui,
+  PendingIP: /PendingIP/ui,
+  PendingEP: /PendingEP/ui,
+  PendingTP: /PendingTP/ui,
+  PendingRM: /PendingRM/ui,
+  PendingGlyphLevel: /PendingGlyphLevel/ui,
+  FilterScore: /FilterScore/ui,
+  ST: /ST/ui,
+  TotalST: /TotalST/ui,
+
+}
+
+const ValueStrings = ["number", "true", "false", "am", "ip","ep", "rm", "im", "tt", "tp", "dt", "ag", "rg", "rs", "basetg", "tg", "db", "dm", "de", "pp", "st",
+  "replicanti", "infinities", "bankedinfinities", "totalinfinities", "eternities", "realities", "infinitypower", "Reminants", "TotalST",
+  "singularities", "timeshards", "realityshards", "totalcompletions", "pendingcompletions", "ec1completions", "totaltt", "matter",
+  "pendingip", "pendingep", "pendingtp", "pendingrm", "pendingglyphlevel", "FilterScore"
+]
 
 class TASAutomatorCommand {
   constructor(commandInfo) {
     this.rule = commandInfo.rule;
     this.string = commandInfo.string;
     this.command = commandInfo.command;
-    this.validation = commandInfo.validate;
     this.id = commandInfo.id;
     this.key = commandInfo.key;
-  }
-
-  validate(inlineInfo){
-    this.validation(inlineInfo);
   }
 
   run(commandLine, line) {
@@ -67,6 +153,17 @@ class TASAutomatorCommand {
       if (Array.isArray(r)) {
         r.some(v => {
           commandLine = commandLine.replace(Red.Space, "");
+          if (Array.isArray(v)) {
+            return v.some(z => {
+              if (z.test(commandLine)) {
+              inline.push(z.exec(commandLine)[0]);
+              commandLine = commandLine.replace(z, "");
+              return true;
+            }
+              return false;
+            })
+          }
+
           if (v.test(commandLine)) {
             inline.push(v.exec(commandLine)[0]);
             commandLine = commandLine.replace(v, "");
@@ -79,9 +176,21 @@ class TASAutomatorCommand {
         commandLine = commandLine.replace(r, "");
       }
       else if (typeof r == 'object') {
-        if (r.optional && r.optional.test(commandLine)) {
-          inline.push(r.optional.exec(commandLine)[0]);
-          commandLine = commandLine.replace(r.optional, "");
+        if (r.optional) {
+          if (Array.isArray(r.optional)) {
+            return r.optional.some(v => {
+              if (v.test(commandLine)) {
+                inline.push(v.exec(commandLine)[0]);
+                commandLine = commandLine.replace(v, "");
+                return true;
+              }
+              return false;
+            })
+          }
+          if (r.optional.test(commandLine)) {
+            inline.push(r.optional.exec(commandLine)[0]);
+            commandLine = commandLine.replace(r.optional, "");
+          }
         }
       }
       
@@ -89,20 +198,31 @@ class TASAutomatorCommand {
     return inline;
   }
 
-  checkRule(commandLine) {
+  checkRule(commandLine) { // I should make this better...
     let c = 0;
     this.rule.forEach(r => {
       commandLine = commandLine.replace(Red.Space, "");
       if (Array.isArray(r)) {
-        let cc = 0;
-        r.forEach(v => {
-          commandLine = commandLine.replace(Red.Space, "");
+        commandLine = commandLine.replace(Red.Space, "");
+        r.some(v => {
+          if (Array.isArray(v)) {
+            return v.some(z => {
+              if (z.test(commandLine)) {
+                commandLine = commandLine.replace(z, "");
+                c++;
+                return true;
+              }
+              return false;
+            })
+          }
+
           if (v.test(commandLine)) {
             commandLine = commandLine.replace(v, "");
-            cc++;
+            c++;
+            return true;
           }
+          return false;
         })
-        if (cc > 0) c++;
       }
       else if (r instanceof RegExp) {
         if (r.test(commandLine)) {
@@ -112,13 +232,20 @@ class TASAutomatorCommand {
       }
       else if (typeof r == 'object') {
         if (r.optional) {
-          commandLine = commandLine.replace(r.optional, "");
           c++;
+          if (Array.isArray(r.optional)) {
+            return r.optional.some(v => {
+              if (v.test(commandLine)) {
+                commandLine = commandLine.replace(v, "");
+                return true;
+              }
+              return false;
+            })
+          }
+          commandLine = commandLine.replace(r.optional, "");
         }
       }
-      
     });
-    
     return c == this.rule.length;
   }
 
@@ -179,7 +306,25 @@ class TASAutomatorCommand {
       else if (typeof r == 'object') {
         if (r.optional) {
           c++;
-          if (commandLine.startsWith(r.optional)) {
+
+          if (Array.isArray(r.optional)) {
+            c--;
+            return r.optional.some(v => {
+              if ((v == 'number' || v == 'amount') && Red.Number.test(commandLine)) {
+                commandLine = commandLine.replace(Red.Number, "");
+                PervCommand = v;
+                return false;
+              }
+              if (commandLine.startsWith(v)) {
+                commandLine = commandLine.replace(v, "");
+                PervCommand = v;
+                return false;
+              }
+
+            });
+
+          }
+          else if (commandLine.startsWith(r.optional)) {
             PervCommand = r;
             commandLine = commandLine.replace(r.optional, "");
           }
@@ -204,9 +349,107 @@ class TASAutomatorCommand {
   }
 }
 
-function NoWait(Str){
+function NoWait(Str) {
   return Red.NoWait.test(Str) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION :
   AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+}
+
+function getCurrencyValue(Str){
+  if (Red.Number.test(Str)) return new Decimal(Str);
+  else if (Currencys.AM.test(Str)) return Currency.antimatter.value;
+  else if (Currencys.IP.test(Str)) return Currency.infinityPoints.value;
+  else if (Currencys.EP.test(Str)) return Currency.eternityPoints.value;
+  else if (Currencys.RM.test(Str)) return Currency.realityMachines.value;
+  else if (Currencys.IM.test(Str)) return Currency.imaginaryMachines.value;
+  else if (Currencys.TT.test(Str)) return Currency.timeTheorems.value;
+  else if (Currencys.TP.test(Str)) return Currency.tachyonParticles.value;
+  else if (Currencys.DT.test(Str)) return Currency.dilatedTime.value;
+  else if (Currencys.DM.test(Str)) return Currency.darkMatter.value;
+  else if (Currencys.DE.test(Str)) return Currency.darkEnergy.value;
+  else if (Currencys.RS.test(Str)) return Currency.relicShards.value;
+  else if (Currencys.Infinities.test(Str)) return Currency.infinities.value;
+  else if (Currencys.BankedInfinities.test(Str)) return Currency.infinitiesBanked.value;
+  else if (Currencys.TotalInfinities.test(Str)) return Currency.infinitiesTotal.value;
+  else if (Currencys.Eternities.test(Str)) return Currency.eternities.value;
+  else if (Currencys.Realities.test(Str)) return Currency.realities.value;
+  else if (Currencys.Replicanti.test(Str)) return Currency.replicanti.value;
+  else if (Currencys.InfinityPower.test(Str)) return Currency.infinityPower.value;
+  else if (Currencys.TimeShards.test(Str)) return Currency.timeShards.value;
+  else if (Currencys.Reminants.test(Str)) return Currency.reminants.value;
+  else if (Currencys.RealityShards.test(Str)) return Currency.realityShards.value;
+  else if (Currencys.Singularities.test(Str)) return Currency.singularities.value;
+  else if (Currencys.Matter.test(Str)) return Currency.matter.value;
+  else if (Currencys.TotalCompletions.test(Str)) return EternityChallenges.completions;
+  else if (Currencys.PendingCompletions.test(Str)) {
+    if (!EternityChallenge.isRunning) return 0;
+    return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
+  }
+  else if (Currencys.FilterScore.test(Str)) {
+    // If the filter isn't unlocked somehow, return the most negative number in order to ensure it's nonblocking
+    if (!EffarigUnlock.glyphFilter.isUnlocked) return -Number.MAX_VALUE;
+    const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(),
+      { isChoosingGlyph: false });
+    const bestGlyph = AutoGlyphProcessor.pick(choices);
+    return AutoGlyphProcessor.filterValue(bestGlyph);
+  }
+  else if (Currencys.TotalTT.test(Str)) return player.timestudy.theorem.plus(TimeTheorems.calculateTimeStudiesCost());
+  else if (Currencys.PendingGlyphLevel.test(Str)) return isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0;
+  else if (Currencys.PendingIP.test(Str)) return Player.canCrunch ? gainedInfinityPoints() : 0;
+  else if (Currencys.PendingEP.test(Str)) return Player.canEternity ? gainedEternityPoints() : 0;
+  else if (Currencys.PendingTP.test(Str)) return player.dilation.active ? getTachyonGain() : 0;
+  else if (Currencys.PendingRM.test(Str)) return isRealityAvailable() ? MachineHandler.gainedRealityMachines : 0;
+  else if (Currencys.ST.test(Str)) return V.availableST;
+  else if (Currencys.TotalST.test(Str)) return V.spaceTheorems;
+  else if (Currencys.ECCompletions.test(Str)) {
+    const id = Number.parseInt(Str.replace(/ec/ui, ""));
+    if (id < 1 || id > 12)
+      return TASAutomatorData.logCommandEvent("Invalid Eternity Challenge", TASAutomatorBackend.stack.top.line);
+    return EternityChallenge(id).completions;
+  }
+  else if (Currencys.TotalCompletions.test(Str)) return EternityChallenges.completions;
+  else if (Currencys.TotalCompletions.test(Str)) return EternityChallenges.completions;
+  else if (Currencys.AG.test(Str)) return player.galaxies;
+  else if (Currencys.RG.test(Str)) return player.replicanti.galaxies;
+  else if (Currencys.BaseTG.test(Str)) return player.dilation.baseTachyonGalaxies;
+  else if (Currencys.TG.test(Str)) return player.dilation.totalTachyonGalaxies;
+  else if (Currencys.DB.test(Str)) return player.dimensionBoosts;
+  else return new Decimal(0);
+}
+
+function checkValue(Value1, Operator, Value2) {
+  if  (Red.Boolean.test(Value1)) {
+    if (Red.True.test(Value1)) {
+      return true;
+    }
+    return false;
+  }
+  else if (Red.Operator.test(Operator)) {
+    const V1 = getCurrencyValue(Value1);
+    const V2 = getCurrencyValue(Value2);
+    
+    let com = false;
+    if (Operator.includes("==")){
+      com = Decimal.eq(V1, V2);
+    }
+    else if (Operator.includes(">")){
+      com = Decimal.gt(V1, V2);
+    }
+    else if (Operator.includes("<")){
+      com = Decimal.lt(V1, V2);
+    }
+
+    if (Operator.includes("=")){
+      com = com || Decimal.eq(V1, V2);
+    }
+    
+    if (Operator.includes("!")){
+      com = !com;
+    }
+
+    return com;
+  }
+  
+  return false;
 }
 
 // command priority is important.
@@ -224,10 +467,6 @@ export const TASAutomatorCommands = [
         "//",
         "any thing",
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       },
@@ -244,13 +483,202 @@ export const TASAutomatorCommands = [
         "notify",
         ["'text'", '"text"'],
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         GameUI.notify.automator(ctx[1].replaceAll("'", "").replaceAll('"', ""), 4000);
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "TimeStudies",
+      key: Red.TimeStudies,
+      rule: [
+        Red.TimeStudies,
+        {optional: Red.NoWait},
+        [Red.Purchase, Red.Load_Id],
+        [Red.StudyList, Red.Number]
+      ],
+      string: [
+        "timestudies",
+        {optional: "nowait"},
+        ["purchase", "load_id"],
+        ["studylist", "number"],
+      ],
+      command: ctx => {
+        let noWait = true; // inverse it here
+        if (Red.NoWait.test(ctx[1])) noWait = false;
+        const V = Math.clamp(Number.parseInt(noWait ? ctx[2] : ctx[3]) - 1, 1, 6);
+        let Value = "";
+
+        if (isNaN(V)) {
+          Value = noWait ? ctx[2] : ctx[3];
+        } else {
+          Value = player.timestudy.presets[V].studies;
+        }
+
+        const combinedTree = new TimeStudyTree();
+        combinedTree.attemptBuyArray(TimeStudyTree.currentStudies, false);
+        combinedTree.attemptBuyArray(combinedTree.parseStudyImport(Value), true);
+        const beforeCount = GameCache.currentStudyTree.value.purchasedStudies.length;
+        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies, true, combinedTree.startEC);
+        const afterCount = GameCache.currentStudyTree.value.purchasedStudies.length;
+
+        if (Enslaved.isRunning && !player.celestials.enslaved.hasSecretStudy && Value.split(",").includes('12')) {
+          player.celestials.enslaved.hasSecretStudy = true;
+          EnslavedProgress.secretStudy.giveProgress();
+          Currency.timeTheorems.add(this.enslavedTT);
+          TASAutomatorData.logCommandEvent("Purchased Namless Time Study", line);
+        }
+
+        if (beforeCount == afterCount && noWait && NormalTimeStudyState.studies.countWhere(s => s && s.canBeBought && !s.isBought) != 0) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "WhileBlock",
+      key: Red.While,
+      rule: [
+        Red.While,
+        Red.Value,
+        {optional: Red.Operator}, // too lazy to make it the optional arrays from the normal Automator
+        {optional: Red.Value},
+        Red.StartBlock
+      ],
+      string: [
+        "while",
+        ValueStrings,
+        {optional: ["!=", ">", "==", "<="]}, 
+        {optional: ValueStrings},
+        "{"
+      ],
+      command: ctx => {
+        const Enter = checkValue(ctx[1], ctx[2], ctx[3]);
+
+        if (Enter) return AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK;
+        else return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "UntilBlock",
+      key: Red.Until,
+      rule: [
+        Red.Until,
+        Red.PrestigeEvent,
+        Red.StartBlock
+      ],
+      string: [
+        "until",
+        ["dimensionboost", "antimattergalaxy", "infinity", "eternity", "reality", "armageddon"],
+        "{"
+      ],
+      command: ctx => {
+        const E = ctx[1];
+        const B = TASAutomatorBackend.latestPrestige;
+        let Enter = false;
+        if (B == -1) Enter = false;
+        else if (B == PRESTIGE_EVENT.DIMENSION_BOOST && Red.DimensionBoost.test(E)) Enter = true;
+        else if (B == PRESTIGE_EVENT.ANTIMATTER_GALAXY && Red.AntimatterGalaxy.test(E)) Enter = true;
+        else if (B == PRESTIGE_EVENT.INFINITY && Red.Infinity.test(E)) Enter = true;
+        else if (B == PRESTIGE_EVENT.ETERNITY && Red.Eternity.test(E)) Enter = true;
+        else if (B == PRESTIGE_EVENT.REALITY && Red.Reality.test(E)) Enter = true;
+        else if (B == PRESTIGE_EVENT.REALITY && Red.Armageddon.test(E)) Enter = true;
+        if (!Enter) return AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK;
+        else return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "IfBlock",
+      key: Red.If,
+      rule: [
+        Red.If,
+        Red.Value,
+        {optional: Red.Operator}, // too lazy to make it the optional arrays from the normal Automator
+        {optional: Red.Value},
+        Red.StartBlock
+      ],
+      string: [
+        "if",
+        ValueStrings,
+        {optional: ["!=", ">", "==", "<="]}, 
+        {optional: ValueStrings},
+        "{"
+      ],
+      command: ctx => {
+        const Enter = checkValue(ctx[1], ctx[2], ctx[3]);
+
+        if (Enter) return AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK;
+        else return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "ElseIfBlock",
+      key: Red.EndBlock,
+      rule: [
+        Red.EndBlock,
+        Red.Else,
+        Red.If,
+        Red.Value,
+        {optional: Red.Operator},
+        {optional: Red.Value},
+        Red.StartBlock
+      ],
+      string: [
+        "}",
+        "else",
+        "if",
+        ValueStrings,
+        {optional: ["!=", ">", "==", "<="]},
+        {optional: ValueStrings},
+        "{"
+      ],
+      command: ctx => {
+        if (TASAutomatorBackend.TopBlockEntered) return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
+        const Enter = checkValue(ctx[3], ctx[4], ctx[5]);
+
+        if (Enter) return AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK;
+        else return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
+        
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "ElseBlock",
+      key: Red.EndBlock,
+      rule: [
+        Red.EndBlock,
+        Red.Else,
+        Red.StartBlock
+      ],
+      string: [
+        "}",
+        "else",
+        "{"
+      ],
+      command: ctx => {
+        if (TASAutomatorBackend.TopBlockEntered) {
+          return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
+        }
+        else{
+          return AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK;
+        }
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "EndBlock",
+      key: Red.EndBlock,
+      rule: [
+        Red.EndBlock,
+      ],
+      string: [
+        "}",
+      ],
+      command: ctx => {
+        return AUTOMATOR_COMMAND_STATUS.EXIT_BLOCK;
       },
     }),
   new TASAutomatorCommand (
@@ -269,10 +697,6 @@ export const TASAutomatorCommands = [
         "number",
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         let id = Number.parseInt(ctx[1]);
         if (isNaN(id)) id = Number.parseInt(ctx[2]);
@@ -289,7 +713,7 @@ export const TASAutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -308,10 +732,6 @@ export const TASAutomatorCommands = [
         "number",
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         let id = Number.parseInt(ctx[1]);
         if (isNaN(id)) id = Number.parseInt(ctx[2]);
@@ -328,7 +748,84 @@ export const TASAutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "BuyEternityUpgrade",
+      key: Red.EteUG,
+      rule: [
+        Red.EteUG,
+        {optional: Red.NoWait},
+        Red.Number,
+        {optional: Red.Ping},
+      ],
+      string: [
+        "eternityupgrade",
+        {optional: "nowait"},
+        "number",
+        {optional: "ping"},
+      ],
+      command: (ctx, line) => {
+        let id = Number.parseInt(ctx[1]);
+        if (isNaN(id)) id = Number.parseInt(ctx[2]);
+
+        let ping = Red.Ping.test(ctx[2]) || ctx[3];
+        if (id < 1 || id > 6) {
+          TASAutomatorData.logCommandEvent("Invalid Eternity Upgrade", line);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
+        }
+
+        const Bought = EternityUpgrade.all[id -1].purchase();
+        if (Bought) {
+          if (ping) GameUI.notify.automator(`Bought Eternity Upgrade ${id}`, 4000);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        }
+
+        return NoWait(ctx[1]);
+      },
+    }),
+    new TASAutomatorCommand (
+    {
+      id: "DilationUpgrade",
+      key: Red.DilUG,
+      rule: [
+        Red.DilUG,
+        {optional: Red.NoWait},
+        Red.Number,
+        Red.Number,
+        {optional: Red.Ping},
+      ],
+      string: [
+        "dilationupgrade",
+        {optional: "nowait"},
+        "id",
+        "amount",
+        {optional: "ping"},
+      ],
+      command: (ctx, line) => {
+        let id = Number.parseInt(ctx[1]);
+        if (isNaN(id)) id = Number.parseInt(ctx[2]);
+
+        
+        if (id < 1 || id > 16) {
+          TASAutomatorData.logCommandEvent("Invalid Dilation Upgrade", line);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        }
+
+        let amount = Number.parseInt(ctx[2]);
+        if (isNaN(amount) || amount === id) amount = Number.parseInt(ctx[3]);
+
+        const Worked = DilationUpgrade.all[id - 1].purchase(amount < 1000 ? amount : 1e25);
+
+        let ping = Red.Ping.test(ctx[2]) || ctx[3];
+        if (Worked) {
+          if (ping) GameUI.notify.automator(`Bought Dilation Upgrade ${id}`, 4000);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        }
+
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -347,10 +844,6 @@ export const TASAutomatorCommands = [
         "number",
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         let id = Number.parseInt(ctx[1]);
         if (isNaN(id)) id = Number.parseInt(ctx[2]);
@@ -371,7 +864,7 @@ export const TASAutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -388,17 +881,13 @@ export const TASAutomatorCommands = [
         {optional: "nowait"},
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         if (Replicanti.unlock(false)) {
           if (Red.Ping.test(ctx[2])) GameUI.notify.automator(`Unlocked Replicanti`, 4000);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -417,16 +906,12 @@ export const TASAutomatorCommands = [
         "amount",
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         let count = Number.parseInt(ctx[1]);
         if (isNaN(count)) count = Number.parseInt(ctx[2]);
 
         if (count < 0) {
-          TASAutomatorData.logCommandEvent("Invalid Can not buy less than 0 IP Multiplier upgrades", line);
+          TASAutomatorData.logCommandEvent("Can not buy less than 0 IP Multiplier upgrades", line);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
         }
         let ping = Red.Ping.test(ctx[2]) || ctx[3];
@@ -451,7 +936,46 @@ export const TASAutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "EPMult",
+      key: Red.EPMult,
+      rule: [
+        Red.EPMult,
+        {optional: Red.NoWait},
+        [Red.Single, Red.Max],
+        {optional: Red.Ping},
+      ],
+      string: [
+        "epmult",
+        {optional: "nowait"},
+        ["single", "max"],
+        {optional: "ping"},
+      ],
+      command: (ctx, line) => {
+        let count = Red.NoWait.test(ctx[1]);
+        if (count) count = ctx[2];
+        else count = ctx[1];
+
+        const amo = player.epmultUpgrades;
+
+        const ug = EternityUpgrade.epMult;
+        if (Red.Max.test(count)) {
+          ug.buyMax(true);
+        } else {
+          ug.purchase(true);
+        }
+
+        let ping = Red.Ping.test(ctx[2]) || ctx[3];
+        if (amo < player.IPMultPurchases) {
+          if (ping) GameUI.notify.automator(`Bought EP Multiplier ${player.epmultUpgrades - amo} times`, 4000);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        }
+
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -470,15 +994,11 @@ export const TASAutomatorCommands = [
         "number",
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         let id = Number.parseInt(ctx[1]);
         if (isNaN(id)) id = Number.parseInt(ctx[2]);
 
-        if (id < 0 || id > 12) {
+        if (id < 1 || id > 12) {
           TASAutomatorData.logCommandEvent("Invalid Autobuyer", line);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
         }
@@ -510,7 +1030,7 @@ export const TASAutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -520,25 +1040,21 @@ export const TASAutomatorCommands = [
       rule: [
         Red.StartChallenge,
         {optional: Red.NoWait},
-        [Red.NC, Red.IC, Red.EC],
+        [Red.NC, Red.IC, Red.EC, Red.Dilation],
         {optional: Red.Ping},
       ],
       string: [
         "startchallenge",
         {optional: "nowait"},
-        ['nc2', 'nc3', 'ic1', 'ic2', 'ec1', 'ec2'],
+        ['nc2', 'nc3', 'ic1', 'ic2', 'ec1', 'ec2', "dilation"],
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         let Challenge = ctx[1];
         if (Red.NoWait.test(Challenge)) Challenge = ctx[2];
         let ping = ctx[2] == 'ping' | ctx[3];
 
-        if (Challenge.startsWith('nc')) {
+        if (Red.NC.test(Challenge)) {
           const ChalID = Number.parseInt(Challenge.replace('nc', ''));
           if (isNaN(ChalID)) return NoWait(ctx[1]);
           if (ChalID < 1 || ChalID > 12) {
@@ -549,7 +1065,7 @@ export const TASAutomatorCommands = [
           if(ping) GameUI.notify.automator(`Started NC${ChalID}`, 4000);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
-        else if (Challenge.startsWith('ic')) {
+        else if (Red.IC.test(Challenge)) {
           const ChalID = Number.parseInt(Challenge.replace('ic', ''));
           if (isNaN(ChalID)) return NoWait(ctx[1]);
           if (ChalID < 1 || ChalID > 8) {
@@ -560,7 +1076,7 @@ export const TASAutomatorCommands = [
           if(ping) GameUI.notify.automator(`Started IC${ChalID}`, 4000);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
-        else if (Challenge.startsWith('ec')) {
+        else if (Red.EC.test(Challenge)) {
           const ChalID = Number.parseInt(Challenge.replace('ec', ''));
           if (isNaN(ChalID)) return NoWait(ctx[1]);
           if (ChalID < 1 || ChalID > 12) {
@@ -571,10 +1087,46 @@ export const TASAutomatorCommands = [
           if(ping) GameUI.notify.automator(`Started EC${ChalID}`, 4000);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
+        else if (Red.Dilation.test(Challenge)) {
+          startDilatedEternity(true);
+          if(ping) GameUI.notify.automator(`Started Dilation`, 4000);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        }
         
         TASAutomatorData.logCommandEvent("Invalid Challenge", line);
 
         return NoWait(ctx[1]);
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "UnlockDilation",
+      key: Red.UnlockDilation,
+      rule: [
+        Red.UnlockDilation,
+        {optional: Red.NoWait}
+      ],
+      string: [
+        "unlockdilation",
+        {optional: "nowait"}
+      ],
+      command: ctx => {
+        const nowait = Red.NoWait.test(ctx[1]);
+        if (PlayerProgress.dilationUnlocked()) {
+          TASAutomatorData.logCommandEvent(`Skipped dilation unlock due to being already unlocked`, ctx.startLine);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        }
+        const unlockedThisTick = TimeStudy.dilation.purchase(true);
+        if (unlockedThisTick) {
+          TASAutomatorData.logCommandEvent(`Unlocked Dilation`, ctx.startLine);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        }
+        if (nowait) {
+          TASAutomatorData.logCommandEvent(`Skipped dilation unlock due to lack of requirements (NOWAIT)`,
+            ctx.startLine);
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        }
+        return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       },
     }),
   new TASAutomatorCommand (
@@ -595,16 +1147,12 @@ export const TASAutomatorCommands = [
         "amount",
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         let id = Number.parseInt(ctx[1]);
         if (isNaN(id)) id = Number.parseInt(ctx[2]);
 
         
-        if (id < 0 || id > 8) {
+        if (id < 1 || id > 8) {
           TASAutomatorData.logCommandEvent("Invalid Antimatter Dimension", line);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
         }
@@ -628,7 +1176,7 @@ export const TASAutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -649,16 +1197,12 @@ export const TASAutomatorCommands = [
         ["amount", "unlock"],
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         let id = Number.parseInt(ctx[1]);
         if (isNaN(id)) id = Number.parseInt(ctx[2]);
 
         
-        if (id < 0 || id > 8) {
+        if (id < 1 || id > 8) {
           TASAutomatorData.logCommandEvent("Invalid Infinity Dimension", line);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
         }
@@ -688,7 +1232,7 @@ export const TASAutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -709,16 +1253,12 @@ export const TASAutomatorCommands = [
         ["amount", "unlock"],
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx, line) => {
         let id = Number.parseInt(ctx[1]);
         if (isNaN(id)) id = Number.parseInt(ctx[2]);
 
         
-        if (id < 0 || id > 8) {
+        if (id < 1 || id > 8) {
           TASAutomatorData.logCommandEvent("Invalid Time Dimension", line);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION
         }
@@ -771,10 +1311,6 @@ export const TASAutomatorCommands = [
         "amount",
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: (ctx) => {
 
         let amount = Number.parseInt(ctx[1]);
@@ -796,7 +1332,7 @@ export const TASAutomatorCommands = [
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
 
-        return Red.NoWait.test(ctx[1]) ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+        return NoWait(ctx[1]);
       },
     }),
   new TASAutomatorCommand (
@@ -813,10 +1349,6 @@ export const TASAutomatorCommands = [
         {optional: "nowait"},
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         if(breakInfinity()) {
           if (Red.Ping.test(ctx[1]) || ctx[2]) GameUI.notify.automator("Infinity has been broken", 4000);
@@ -840,10 +1372,6 @@ export const TASAutomatorCommands = [
         {optional: "nowait"},
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         if(requestDimensionBoost(true)) {
           if (Red.Ping.test(ctx[1]) || ctx[2]) GameUI.notify.automator("Preformed Dimension Boost Reset", 4000);
@@ -867,10 +1395,6 @@ export const TASAutomatorCommands = [
         {optional: "nowait"},
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         if(requestGalaxyReset()) {
           if (Red.Ping.test(ctx[1]) || ctx[2]) GameUI.notify.automator("Preformed Antimatter Galaxy Reset", 4000);
@@ -894,10 +1418,6 @@ export const TASAutomatorCommands = [
         {optional: "nowait"},
         {optional: "ping"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         if(replicantiGalaxy(true)) {
           if (Red.Ping.test(ctx[1]) || ctx[2]) GameUI.notify.automator("Preformed Replicanti Galaxy Reset", 4000);
@@ -919,10 +1439,6 @@ export const TASAutomatorCommands = [
         "infinity",
         {optional: "nowait"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         if(Player.canCrunch) {
           GameUI.notify.automator("Preformed Big Crunch", 4000);
@@ -939,19 +1455,19 @@ export const TASAutomatorCommands = [
       key: Red.Eternity,
       rule: [
         Red.Eternity,
-        {optional: Red.NoWait}
+        {optional: Red.NoWait},
+        {optional: Red.Respec}
       ],
       string: [
         "eternity",
         {optional: "nowait"},
+        {optional: "respec"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
+        const respec = Red.Respec.test(ctx[1]) || Red.Respec.test(ctx[2]);
+        if (respec) player.respec = true;
         if(Player.canEternity) {
-          GameUI.notify.automator("Preformed Eternity", 4000);
+          GameUI.notify.automator(`Preformed Eternity ${respec ? "(Respeced Time Studies)" : ""}`, 4000);
           eternity();
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
@@ -965,20 +1481,46 @@ export const TASAutomatorCommands = [
       key: Red.Reality,
       rule: [
         Red.Reality,
-        {optional: Red.NoWait}
+        {optional: Red.NoWait},
+        {optional: Red.Respec},
       ],
       string: [
         "reality",
         {optional: "nowait"},
+        {optional: "respec"},
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
+        const respec = Red.Respec.test(ctx[1]) || Red.Respec.test(ctx[2]);
+        if (respec) player.reality.respec = true;
         if(isRealityAvailable()) {
-          GameUI.notify.automator("Preformed Reality", 4000);
+          GameUI.notify.automator(`Preformed Reality ${respec ? "(Respeced Glyphs)" : ""}`, 4000);
           autoReality();
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        }
+        return ctx[1] ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "armageddon",
+      key: Red.Armageddon,
+      rule: [
+        Red.Armageddon,
+        {optional: Red.NoWait},
+        {optional: Red.Respec},
+      ],
+      string: [
+        "armageddon",
+        {optional: "nowait"},
+        {optional: "respec"},
+      ],
+      command: ctx => {
+        const respec = Red.Respec.test(ctx[1]) || Red.Respec.test(ctx[2]);
+        if (respec) player.reality.respec = true;
+        if(Pelle.remnantsGain > 0) {
+          GameUI.notify.automator(`Preformed Armageddon ${respec ? "(Respeced Glyphs)" : ""}`, 4000);
+          Pelle.armageddon(true);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
         return ctx[1] ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
@@ -995,10 +1537,6 @@ export const TASAutomatorCommands = [
       string: [
         "🐟",
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         GameUI.notify.automator("Why?", 4000);
         GlobalErrorHandler.stopGame();
@@ -1018,10 +1556,6 @@ export const TASAutomatorCommands = [
         "timeout",
         "number",
       ],
-      validate: (ctx) => {
-        
-        return true;
-      },
       command: ctx => {
         TASAutomatorBackend.timeOut = Number.parseInt(ctx[1]);
         return AUTOMATOR_COMMAND_STATUS.TIME_OUT;
@@ -1039,12 +1573,13 @@ CodeMirror.defineSimpleMode("TAS", {
     commentRule,
     { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },
     { regex: /blob\s\s/ui, token: "blob" },
-    { regex: /StartChallenge|AntimatterGalaxy|ReplicantiGalaxy|Galaxy|DimensionBoost/ui, token: "keyword", next: "commandArgs" },
+    { regex: /\}/ui, dedent: true, next: "codeBlock" },
+    { regex: /StartChallenge|AntimatterGalaxy|ReplicantiGalaxy|DimensionBoost/ui, token: "keyword", next: "commandArgs" },
     { regex: /AntimatterDimension|InfinityDimension|TimeDimension/ui, token: "keyword", next: "commandArgs" },
-    { regex: /Tickspeed|UnlockReplicanti|ReplicantiUpgrade|UpgradeAutobuyer|IPmult|BreakInfinityUpgrade|InfinityUpgrade|BreakInfinity/ui, token: "keyword", next: "commandArgs" },
+    { regex: /Tickspeed|UnlockReplicanti|ReplicantiUpgrade|UpgradeAutobuyer|EPmult|IPmult|DilationUpgrade|EternityUpgrade|BreakInfinityUpgrade|InfinityUpgrade|BreakInfinity|UnlockDilation/ui, token: "keyword", next: "commandArgs" },
     {
       // eslint-disable-next-line max-len
-      regex: /(TimeOut|auto|if|pause|studies|time[ \t]+theorems?|space[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
+      regex: /(TimeOut|auto|if|else|pause|timestudies|time[ \t]+theorems?|space[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
       token: "keyword",
       next: "commandArgs"
     },
@@ -1059,9 +1594,8 @@ CodeMirror.defineSimpleMode("TAS", {
       next: "startUnlock"
     },
     { regex: /infinity\S+|eternity\S+|reality\S+|pause\S+|restart\S+/ui, token: "error", next: "commandDone" },
-    { regex: /infinity|eternity|reality/ui, token: "keyword", next: "prestige" },
+    { regex: /infinity|eternity|reality|armageddon/ui, token: "keyword", next: "prestige" },
     { regex: /pause|restart/ui, token: "keyword", next: "commandDone" },
-    { regex: /\}/ui, dedent: true },
     { regex: /\S+\s/ui, token: "error", next: "commandDone" },
   ],
   studiesArgs: [
@@ -1109,8 +1643,6 @@ CodeMirror.defineSimpleMode("TAS", {
   commandDone: [
     commentRule,
     { sol: true, next: "start" },
-    // This seems necessary to have a closing curly brace de-indent automatically in some cases
-    { regex: /\}/ui, dedent: true },
     { regex: /\S+/ui, token: "error" },
   ],
   startUnlock: [
@@ -1122,6 +1654,29 @@ CodeMirror.defineSimpleMode("TAS", {
       next: "commandDone",
     },
     { regex: /nowait(\s|$)/ui, token: "property" },
+  ],
+  codeBlock: [
+    commentRule,
+    { sol: true, next: "start" },
+    { regex: /Else/ui, token: "keyword", },
+    { regex: /If/ui, token: "keyword", },
+    { regex: /<=|>=|<|>/ui, token: "operator" },
+    { regex: /".*"/ui, token: "string" },
+    { regex: /'.*'/ui, token: "string" },
+    { regex: /x[\t ]+highest(\s|$)/ui, token: "variable-2" },
+    { regex: /pending[\t ]+(completions|ip|ep|tp|rm|glyph[\t ]+level)(\s|$)/ui, token: "variable-2" },
+    { regex: /total[\t ]+(completions|tt|space theorems)(\s|$)/ui, token: "variable-2" },
+    { regex: /filter[ \t]+score/ui, token: "variable-2" },
+    { regex: /ec(1[0-2]|[1-9])[\t ]+completions(\s|$)/ui, token: "variable-2" },
+    { regex: /(am|ip|ep|all)(\s|$)/ui, token: "variable-2" },
+    {
+      regex: /(rm|rg|dt|tp|tt|space theorems|(banked )?infinities|eternities|realities|rep(licanti)?)(\s|$)/ui,
+      token: "variable-2",
+    },
+    { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9]|t[1-4])/ui, token: "number" },
+    { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
+    { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable" },
+    { regex: /\{/ui, indent: true, next: "commandDone" },
   ],
   commandArgs: [
     commentRule,
@@ -1150,8 +1705,6 @@ CodeMirror.defineSimpleMode("TAS", {
     { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
     { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable" },
     { regex: /\{/ui, indent: true, next: "commandDone" },
-    // This seems necessary to have a closing curly brace de-indent automatically in some cases
-    { regex: /\}/ui, dedent: true },
   ],
 
   // The meta property contains global information about the mode. It
@@ -1160,6 +1713,6 @@ CodeMirror.defineSimpleMode("TAS", {
   // specific to simple modes.
   meta: {
     lineComment: "//",
-    electricChars: "}",
+    electricChars: "}{",
   }
 });

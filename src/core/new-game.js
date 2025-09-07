@@ -99,6 +99,7 @@ export const NG = {
     });
     
     player.speedrun.TASAutomator.scripts = JSON.parse(TASScripts);
+    TASAutomatorBackend.initializeFromSave();
 
     player.records.previousRunRealTime = fullTimePlayed;
     player.records.bestCompletion.realTime = bestTime;

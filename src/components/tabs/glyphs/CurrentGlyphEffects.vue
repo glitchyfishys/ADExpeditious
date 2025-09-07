@@ -121,9 +121,8 @@ export default {
     <div
       v-if="showChaosText"
       class="pelle-current-glyph-effects"
-    >
-      {{ chaosEffect }}
-    </div>
+      v-html="chaosEffect"
+    />
   </div>
 </template>
 

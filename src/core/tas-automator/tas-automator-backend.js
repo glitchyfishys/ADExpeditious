@@ -1,4 +1,5 @@
 
+
 export class TASAutomatorScript {
   constructor(id) {
     this._id = id;
@@ -51,20 +52,47 @@ export class TASAutomatorScript {
   compile() {
     TASAutomatorData.cachedErrors = 0;
     TASAutomatorData.errorLog = [];
+    let blockCount = 0;
     this.commands.forEach((command, _) => {
-      if (command == '' || TASAutomatorCommands[0].key.test(command)) return false;
+      if (command.replace(/^[ \t]+/, "") == "" || TASAutomatorCommands[0].key.test(command)) return false;
       
       TASAutomatorCommands.some((com, __) => {
         if (com.key.test(command.replace(/^[ \t]+/, ''))) {
           if(!com.checkRule(command)) return false;
-          TASAutomatorBackend.stack.push({run: () => com.run(command, _+1), line: _+1});
+          let isBlock = com.string[0] === "if";
+          const IFBlockType = com.string[0] === "if" ? "if" : "";
+          const IFELSEBlockType = (com.string[1] == "else" && com.string[2] == "if") ? "else ifF" : "";
+          const ELSEBlockType = com.string[1] === "else" ? "else" : "";
+          const WhileBlockType = com.string[0] === "while" ? "while" : "";
+          const UntilBlockType = com.string[0] === "until" ? "until" : "";
+
+          if (IFBlockType || WhileBlockType || UntilBlockType) {
+            blockCount++;
+          }
+
+          TASAutomatorBackend.stack.push({
+            run: () => com.run(command, _+1),
+            line: _+1,
+            codeBlock: isBlock,
+            endBlock: command.includes("}"),
+            blockDepth: blockCount,
+            BlockType: IFBlockType || IFELSEBlockType || ELSEBlockType || WhileBlockType || UntilBlockType,
+            command
+          });
+
+          if (command.includes("}") && !(IFELSEBlockType || ELSEBlockType)) {
+            blockCount--;
+          }
+
           return true;
         }
         else if (__ == TASAutomatorCommands.length-1)  {
-          TASAutomatorData.addError({line: _+1, command: command, info: "Not a Command"});
+          TASAutomatorData.addError({line: _+1, command: command, info: "Not a Valid Command"});
         }
       })
     });
+
+    if (blockCount != 0) TASAutomatorData.addError({line: 0, command: "", info: "Uneven code Blocks"});
 
   }
 }
@@ -457,17 +485,39 @@ export const TASAutomatorBackend = {
       case AUTOMATOR_MODE.SINGLE_STEP:
         this.step();
         this.state.mode = AUTOMATOR_MODE.PAUSE;
+        this.latestPrestige = -1;
         return;
       case AUTOMATOR_MODE.RUN:
         for (let C=0; C < this.comandsPerUpdate && this.isRunning; C++) {
           this.step();
           if (this.timeOut > 0) break;
         }
+        this.latestPrestige = -1;
         break;
       default:
         this.stop();
         return;
     }
+  },
+
+  latestPrestige: -1,
+  BlockEntered: [],
+  get TopBlockEntered() {
+    if (this.BlockEntered[this.stack.top.blockDepth] == undefined) this.BlockEntered[this.stack.top.blockDepth] = {Entered: false, Type: "", Start: 0};
+    return this.BlockEntered[this.stack.top.blockDepth].Entered;
+  },
+
+  set TopBlockEntered(v) {
+    if (this.BlockEntered[this.stack.top.blockDepth] == undefined) {
+      this.BlockEntered[this.stack.top.blockDepth] = {Entered: v, Type: "", Start: 0};
+      return;
+    }
+    this.BlockEntered[this.stack.top.blockDepth].Entered = v;
+  },
+
+  get TopBlock() {
+    if (this.BlockEntered[this.stack.top.blockDepth] == undefined) this.BlockEntered[this.stack.top.blockDepth] = {Entered: false, Type: "", Start: 0};
+    return this.BlockEntered[this.stack.top.blockDepth];
   },
 
   step() {
@@ -481,7 +531,7 @@ export const TASAutomatorBackend = {
       }
     }
     let keepGoing = true;
-    for (let steps = 0; steps < 250 && keepGoing; steps++) {
+    for (let steps = 0; steps < 50 && keepGoing; steps++) {
       switch (this.runCurrentCommand()) {
         case AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION:
           return true;
@@ -501,6 +551,15 @@ export const TASAutomatorBackend = {
         case AUTOMATOR_COMMAND_STATUS.TIME_OUT:
           this.nextCommand();
           return true;
+        case AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK:
+          this.enterBlock();
+          return true;
+        case AUTOMATOR_COMMAND_STATUS.EXIT_BLOCK:
+          this.exitBlock();
+          break;
+        case AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK:
+          this.skipBlock();
+          return false;
         case AUTOMATOR_COMMAND_STATUS.RESTART:
           this.restart();
           return false;
@@ -525,6 +584,48 @@ export const TASAutomatorBackend = {
     return cmdState;
   },
 
+  enterBlock() {
+    this.TopBlockEntered = true;
+    this.TopBlock.Start = this.stack.top.line;
+    this.TopBlock.Type = this.stack.top.BlockType;
+    this.stack.blockDepth++;
+    this.nextCommand();
+    return true;
+  },
+
+  exitBlock() {
+    if (this.TopBlock.Type == "while" || this.TopBlock.Type == "until") {
+      const V = this.stack._data[this.TopBlock.Start -1].run();
+      
+      if (V == AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK) {
+        this.stack.blockDepth--;
+        this.TopBlockEntered = false;
+        this.nextCommand();
+        return false;
+      }
+      this.stack.line = this.TopBlock.Start;
+      return true;
+    }
+
+    this.stack.blockDepth--;
+    this.TopBlockEntered = false;
+    this.nextCommand();
+    return true;
+  },
+
+  skipBlock() {
+    let StartBlock = this.stack.top.blockDepth;
+    while (this.stack.top != undefined) {
+      this.stack.line++;
+      if (this.stack.top == undefined) break; // this shouldn't happen but just too be safe
+      if (this.stack.top.endBlock && this.stack.top.blockDepth == StartBlock) {
+        break;
+      }
+    }
+
+    return true;
+  },
+  
   nextCommand() {
     this.stack.line++
     if (this.stack.top == undefined) {
@@ -645,6 +746,7 @@ export const TASAutomatorBackend = {
   stop() {
     this.stack.clear();
     this.state.mode = AUTOMATOR_MODE.PAUSE;
+    this.latestPrestige = -1;
     this.hasJustCompleted = true;
     TASAutomatorHighlighter.clearAllHighlightedLines();
   },
@@ -674,13 +776,15 @@ export const TASAutomatorBackend = {
 
   restart() {
     this.stack.line = 0;
-    // this.stack.clear();
-    // this.findScript(this.state.topLevelScript).compile();
+    this.blockDepth = 0;
+    this.latestPrestige = -1;
+    TASAutomatorBackend.BlockEntered = [];
   },
 
   stack: {
     _data: [],
     line: 0,
+    blockDepth: 0,
     get commandLine() {
       return this._data[this.line]?.line || 0;
     },
@@ -697,8 +801,10 @@ export const TASAutomatorBackend = {
       this._data = [];
       player.speedrun.TASAutomator.state.stack = [];
       this.line = 0;
+      this.blockDepth = 0;
       TASAutomatorData.errorLog = [];
       TASAutomatorData.cachedErrors = 0;
+      TASAutomatorBackend.BlockEntered = [];
     },
     initializeFromSave(commands) { // maybe later
       this._data = [];
@@ -718,3 +824,9 @@ export const TASAutomatorBackend = {
     }
   },
 };
+
+EventHub.logic.on(GAME_EVENT.DIMBOOST_AFTER, () => TASAutomatorBackend.latestPrestige = PRESTIGE_EVENT.DIMENSION_BOOST);
+EventHub.logic.on(GAME_EVENT.GALAXY_RESET_AFTER, () => TASAutomatorBackend.latestPrestige = PRESTIGE_EVENT.ANTIMATTER_GALAXY);
+EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_AFTER, () => TASAutomatorBackend.latestPrestige = PRESTIGE_EVENT.INFINITY);
+EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => TASAutomatorBackend.latestPrestige = PRESTIGE_EVENT.ETERNITY);
+EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => TASAutomatorBackend.latestPrestige = PRESTIGE_EVENT.REALITY);

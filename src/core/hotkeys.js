@@ -498,9 +498,9 @@ function keyboardTASAutomatorToggle() {
     }
     return;
   }
-  const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
-  const linenum = AutomatorBackend.currentLineNumber;
-  GameUI.notify.automator(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
+  const action = TASAutomatorBackend.isRunning ? "Resuming" : "Pausing";
+  const linenum = TASAutomatorBackend.currentLineNumber;
+  GameUI.notify.automator(`${action} script "${TASAutomatorBackend.scriptName}" at line ${linenum}`);
 }
 
 function keyboardAutomatorRestart() {

@@ -71,6 +71,8 @@ export function buyDilationUpgrade(id, bulk = 1) {
   if (GameEnd.creditsEverClosed) return false;
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
+  if (upgrade.config.pelleOnly && !PelleRifts.paradox.milestones[2].isEffectActive) return false;
+
   if (id > 3 && id < 11) {
     if (player.dilation.upgrades.has(id)) return false;
     if (!Currency.dilatedTime.purchase(upgrade.cost)) return false;
@@ -233,6 +235,16 @@ class DilationUpgradeState extends SetPurchasableMechanicState {
 
   get set() {
     return player.dilation.upgrades;
+  }
+
+  purchase() {
+    if (this.config.pelleOnly && !PelleRifts.paradox.milestones[2].isEffectActive) return false;
+    if (!this.canBeBought) return false;
+    this.currency.subtract(this.cost);
+    this.isBought = true;
+    this.onPurchased();
+    GameUI.update();
+    return true;
   }
 
   onPurchased() {

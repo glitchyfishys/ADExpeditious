@@ -39,7 +39,7 @@ export default {
       this.dilationMult = PelleStrikes.dilation.hasStrike ? [500, 10, 5] : [1, 1, 1];
       this.remnants = Pelle.cel.remnants;
       this.remnantsGain = Pelle.remnantsGain;
-      this.modifier = SSpeedrun.modifiers.pelleRemnantMul;
+      this.modifier = Speedrun.modifiers.pelleRemnantMul;
     }
   }
 };
@@ -122,7 +122,7 @@ export default {
                 {{ format(7.5, 2, 2) }}
               </div>
               <div class="l-remnant-factors-item">
-                {{ format(modifier, 2, 0) }}
+                {{ format(modifier, 2, 2) }}
               </div>
               <div class="l-remnant-factors-item">
                 {{ format(remnants, 2, 0) }}

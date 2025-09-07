@@ -867,15 +867,15 @@ function laitelaBeatText(disabledDim) {
 function applyAutoprestige(diff) {
   Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
 
-  if (!TeresaUnlocks.epGen.canBeApplied && DilationUpgrade.epGen.isBought) {
-    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D1).timesEffectOf(DilationUpgrade.epGen)
-      .times(getGameSpeedupFactor() * diff / 1000).timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige));
-  }
-
-  if (TeresaUnlocks.epGen.canBeApplied && DilationUpgrade.epGen.isBought) {
+  if (TeresaUnlocks.epGen.canBeApplied) {
     Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_1)
       .times(getGameSpeedupFactor() * diff / 1000).timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige));
   }
+  else if (DilationUpgrade.epGen.isBought) {
+    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D1).timesEffectOf(DilationUpgrade.epGen)
+      .times(getGameSpeedupFactor() * diff / 1000));
+  }
+
 
   if (InfinityUpgrade.ipGen.isCharged) {
     const addedRM = MachineHandler.gainedRealityMachines

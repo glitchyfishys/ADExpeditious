@@ -664,10 +664,9 @@ export const TASAutomator = {
     {
       id: 1,
       isUnlocked: () => true,
-      keyword: "STUDIES LOAD (NYI)",
+      keyword: "STUDIES LOAD",
       category: 0,
-      syntax: `<b>studies</b> [nowait] <b>load id</b> <u>selector</u><br>
-        <b>studies</b> [nowait] <b>load name</b> <u>name</u>`,
+      syntax: `<b>studies</b> [nowait] <b>load_id</b> <u>id</u><br>`,
       description: `Loads a Time Study preset, as if you had clicked on the button in the Time Study tab.`,
       sections: [
         {
@@ -676,36 +675,25 @@ export const TASAutomator = {
             {
               header: "<i>nowait</i>",
               description: `
-                If present, the Automator will purchase as many studies as possible before continuing onward. By default
+                If present, the TAS Automator will purchase as many studies as possible before continuing onward. By default
                 (ie. without "nowait") this command will repeat this line indefinitely until all of the studies in the
-                preset are bought; this may cause the Automator to get stuck indefinitely if you are not careful.
+                preset are bought; this may cause the TAS Automator to get stuck indefinitely if you are not careful.
               `
-            },
-            {
-              header: "<i>selector</i>",
-              description: `
-                Finds and loads the specified Time Study preset by its slot number. This is numbered one through six,
-                ordered from left to right.`
-            },
-            {
-              header: "<i>name</i>",
-              description: "Finds and loads the specified Time Study preset by its given name. This is case-sensitive."
             },
           ]
         }
       ],
       examples: [
-        `studies load id 2`,
-        `studies load name ANTI`,
-        `studies nowait load name dil`,
+        `studies load_id 2`,
+        `studies nowait load_id 6`,
       ]
     },
     {
       id: 2,
       isUnlocked: () => true,
-      keyword: "STUDIES PURCHASE (NYI)",
+      keyword: "STUDIES PURCHASE",
       category: 0,
-      syntax: `<b>studies</b> [nowait] <b>purchase <u>study_list</u></b>`,
+      syntax: `<b>studies</b> [nowait] <b>purchase <u>id</u></b>`,
       description: "Purchase Time Studies specified from a list of Time Studies.",
       sections: [
         {
@@ -720,12 +708,12 @@ export const TASAutomator = {
               `
             },
             {
-              header: "<i>study_list</i>",
+              header: "<i>study_list (NYI)</i>",
               description: `
                 The exported Time Study tree format is supported here, which is simply a list of Time Study IDs
                 separated by commas. This command also supports a more flexible formatting, additionally allowing
-                ranges of studies (for example, <u>11-62</u>) and the following aliases:<br>
-                <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b></blockquote>
+                ranges of studies (for example, <u>11,21,22,31,32,42|5!</u>) and the following aliases:<br>
+                <blockquote><b>antimatter, infinity, time, active, passive, idle, light, dark</b>(NYI)</blockquote>
                 A variable name may be used in place of the entire Time Study list as well (see the definition panel),
                 although in that case the shorthand ranges and aliases are not allowed.`
             },
@@ -741,12 +729,13 @@ export const TASAutomator = {
     {
       id: 3,
       isUnlocked: () => true,
-      keyword: "PRESTIGE (no respec)",
+      keyword: "PRESTIGE",
       category: 1,
       syntax: `
         <b>infinity</b> [nowait]<br>
         <b>eternity</b> [nowait] [respec]<br>
-        <b>reality</b> [nowait] [respec]`,
+        <b>reality</b> [nowait] [respec]<br>
+        <b>armageddon</b> [nowait] [respec]`,
       description: `Triggers an Infinity, Eternity, or Reality reset if possible, otherwise the automator will wait at
         this command until it becomes possible. If you find that your script often gets stuck on this command, an
         Autobuyer may be triggering a prestige before the Automator reaches this line - consider using <i>nowait</i> or
@@ -782,10 +771,10 @@ export const TASAutomator = {
     {
       id: 4,
       isUnlocked: () => true,
-      keyword: "UNLOCK (NYI)",
+      keyword: "UNLOCK DILATION",
       category: 1,
-      syntax: "<b>unlock</b> [nowait] <u>feature</u>",
-      description: "Unlocks the specified Eternity Challenge or Time Dilation.",
+      syntax: "<b>unlockDilation</b> [nowait]",
+      description: "Unlocks Time Dilation.",
       sections: [
         {
           name: "MODIFIERS",
@@ -793,8 +782,8 @@ export const TASAutomator = {
             {
               header: "<i>nowait</i>",
               description: `
-                If present, the Automator will move on to the next command even if unlocking the feature fails. By
-                default, the Automator will keep running this command until the unlock succeeds.
+                If present, the TAS Automator will move on to the next command even if unlocking the feature fails. By
+                default, the TAS Automator will keep running this command until the unlock succeeds.
               `
             },
           ]
@@ -802,24 +791,28 @@ export const TASAutomator = {
       ],
       examples: [
         "unlock dilation",
-        "unlock ec7"
+        "unlock dilation nowait",
       ]
     },
     {
       id: 5,
       isUnlocked: () => true,
-      keyword: "START (use StartChallenge, dilation not added yet)",
+      keyword: "START CHALLENGE",
       category: 1,
       syntax: `
-        <b>start</b> ec<u>N</u><br>
-        <b>start</b> dilation`,
-      description: `Start a specified Eternity Challenge or a Dilated Eternity. This command will also attempt
-        to unlock the EC if not unlocked, but will not do the same for Dilation (use UNLOCK command to do that).
+        <b>startChallenge</b> ec<u>N</u><br>
+        <b>startChallenge</b> ic<u>N</u><br>
+        <b>startChallenge</b> nc<u>N</u><br>
+        <b>startChallenge</b> dilation`,
+      description: `Start a specified Eternity, Infinity, Normal Challenge or a Dilated Eternity. This command will not attempt
+        to unlock the EC or Dilation (use UNLOCK command to do that).
         If you are already in the specified EC or Dilated Eternity, running this command again will do nothing;
-        otherwise, the Automator will keep attempting to start the Eternity until it succeeds.`,
+        otherwise, the TAS Automator will keep attempting to start the Challenge until it succeeds.`,
       examples: [
-        "start ec12",
-        "start dilation"
+        "startChallenge ec12",
+        "startChallenge dilation",
+        "startChallenge nowait nc12",
+        "startChallenge ic5",
       ]
     },
     {
@@ -976,7 +969,7 @@ export const TASAutomator = {
       category: 4,
       syntax: "<b>wait</b> <u>condition</u>",
       description: `Forces Automator to wait for some condition or event. To wait for a certain duration of time,
-        use the PAUSE command instead.`,
+        use the TIMEOUT command instead.`,
       sections: [
         {
           name: "POSSIBLE CONDITIONS",
@@ -1018,63 +1011,7 @@ export const TASAutomator = {
     {
       id: 12,
       isUnlocked: () => true,
-      keyword: "PAUSE (Use Timeout)",
-      category: 4,
-      syntax: "<b>pause</b> <u>interval</u>",
-      description: `Tells the automator to stop moving forward and executing commands for a certain amount of time.
-        Note that if the pause duration is shorter than the automator's execution speed, the automator will wait until
-        the next execution tick before moving on.`,
-      examples: [
-        "pause 10s",
-        "pause 1 minute",
-        "pause 34 seconds"
-      ],
-      sections: [
-        {
-          name: "INTERVAL FORMATTING",
-          items: [
-            {
-              header: "<i>Specified Interval</i>",
-              description: `This command accepts time units of milliseconds ("ms"), seconds ("s", "sec", or "seconds"),
-                minutes ("m", "min", or "minutes"), and hours ("h" or "hours"). You cannot provide just a number and
-                nothing else; a unit of time must be specified.`,
-            },
-            {
-              header: "<i>Defined Constant</i>",
-              description: `A defined constant may be used instead, see the definition panel. The defined value will
-                be assumed to be in units of seconds.`
-            },
-          ]
-        },
-        {
-          name: "OTHER",
-          items: [
-            {
-              header: "<i>Offline Side-effects</i>",
-              description: `This command may behave undesirably when it runs during offline progress due to limited
-                tick count. A 1-second pause that is usually 20-30 ticks might be only 1 game tick when processing
-                hours of offline progress, which might not be enough for the resources needed for the rest of the
-                script.`,
-            },
-            {
-              header: "<i>Alternatives</i>",
-              description: `Using another command like 'WAIT' will allow you to set it for a certain resource amount,
-                in order to ensure that the game has the proper state before moving onward.`
-            },
-            {
-              header: "<i>Manual Skip</i>",
-              description: `You can manually force the Automator to continue execution past a PAUSE command without
-                waiting the entire specified time by stepping forward one line (to put it on the next one) and then
-                resuming execution. If you find yourself doing this regularly, consider modifying your script.`
-            }
-          ]
-        }
-      ]
-    },
-    {
-      id: 13,
-      isUnlocked: () => true,
-      keyword: "IF (NYI)",
+      keyword: "IF",
       category: 4,
       syntax: `<b>if</b> <u>condition</u> {<br>
         <blockquote>commands</blockquote>
@@ -1088,32 +1025,59 @@ export const TASAutomator = {
       ]
     },
     {
+      id: 13,
+      isUnlocked: () => true,
+      keyword: "ELSE IF",
+      category: 4,
+      syntax: `<b>} else if</b> <u>condition</u> {<br>
+        <blockquote>commands</blockquote>
+        }`,
+      description: `Defines an inner block of block of the automator script which will only be executed if the specified
+        comparison is true when this line is reached and if the pevious comparisons were false. If false, The automator will instead skip to the
+        first line after the block and continue execution from there.`,
+      examples: [
+        "else if ec10 completions < 5",
+        "else if ep > 1e6000"
+      ]
+    },
+    {
       id: 14,
       isUnlocked: () => true,
-      keyword: "UNTIL (NYI)",
+      keyword: "ELSE",
       category: 4,
-      syntax: `<b>until</b> <u>comparison</u> {<br>
+      syntax: `<b>} else if</b> <u>condition</u> {<br>
         <blockquote>commands</blockquote>
-        }<br><b>until</b> <u>prestige_event</u> {<br>
-          <blockquote>commands</blockquote>
         }`,
-      description: `Defines an inner block of the script where commands are repeated; the comparison is checked at the
-        start and every time the loop repeats. If the condition is true when the UNTIL statement is first reached, the
-        inner block of commands will be skipped entirely.
-        <br><br>
-        If an prestige event (ie. Infinity, Eternity, or Reality) is specified instead of a condition, then the block
-        will always be entered and the commands within the block will repeat until the event occurs for the first time
-        <i>after</i> entering the block. Note that the Automator will finish the rest of the loop and then exit after
-        the prestige event occurs - it will not immediately exit the loop in the middle.`,
+      description: `Defines an inner block of block of the automator script which will only be executed if the specified
+        comparison is true when this line is reached and if the pevious comparisons were false. If false, the automator will instead skip to the
+        first line after the block and continue execution from there.`,
       examples: [
-        "until ep > 1e500",
-        "until reality",
+        "else if ec10 completions < 5",
+        "else if ep > 1e6000"
       ]
     },
     {
       id: 15,
       isUnlocked: () => true,
-      keyword: "WHILE (NYI)",
+      keyword: "UNTIL",
+      category: 4,
+      syntax: `<b>until</b> <u>prestige_event</u> {<br>
+          <blockquote>commands</blockquote>
+        }`,
+      description: `Defines an inner block of the script where commands are repeated; the block
+        will always be entered and the commands within the block will repeat until the event occurs for the first time
+        <i>after</i> entering the block. Note that the Automator will finish the rest of the loop and then exit after
+        the prestige event occurs - it will not immediately exit the loop in the middle.`,
+      examples: [
+        "until dimenionBoost",
+        "until eternity",
+        "until reality",
+      ]
+    },
+    {
+      id: 16,
+      isUnlocked: () => true,
+      keyword: "WHILE",
       category: 4,
       syntax: `<b>while</b> <u>comparison</u> {<br>
         <blockquote>commands</blockquote>
@@ -1127,7 +1091,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 16,
+      id: 17,
       isUnlocked: () => true,
       keyword: "STOP",
       category: 4,
@@ -1143,7 +1107,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 17,
+      id: 18,
       isUnlocked: () => true,
       keyword: "Currency List",
       category: 4,
@@ -1186,9 +1150,9 @@ export const TASAutomator = {
       }
     },
     {
-      id: 18,
+      id: 19,
       isUnlocked: () => true,
-      keyword: "Formatting Comparisons (NYI)",
+      keyword: "Formatting Comparisons",
       category: 4,
       syntax: "<u>resource1</u> <u>condition</u> <u>resource2</u>",
       description: `
@@ -1202,7 +1166,7 @@ export const TASAutomator = {
             {
               header: "<i>resource</i>",
               description: `
-                This can be any Automator Currency, a defined constant, or a number which must be formatted in
+                This can be any Automator Currency, a defined constant/Variable, or a number which must be formatted in
                 scientific notation (eg. 1000, 1e100, 1.8e308). Unlike more general programming languages, this must
                 be a single value (ie. math expressions such as "ip + pending ip" are not allowed).
               `
@@ -1210,10 +1174,7 @@ export const TASAutomator = {
             {
               header: "<i>condition</i>",
               description: `
-                This must be an inequality operator (<, <=, >, >=), which takes on its typical mathematical meaning.
-                Equality operators (==, !=) are not allowed, as the nature of the game means that numbers will often
-                never be exactly equal and thus checking based on direct equality may lead to unexpected script
-                behavior.
+                This must be an inequality operator (<, <=, >, >=, !<, !>=, ==, !==), which takes on its typical mathematical meaning.
               `
             },
           ]
@@ -1225,9 +1186,9 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 19,
+      id: 20,
       isUnlocked: () => true,
-      keyword: "Commands with inner blocks (NYI)",
+      keyword: "Commands with inner blocks",
       category: 4,
       syntax: `<b>header_command</b> {<br>
         <blockquote>inner_commands</blockquote>
@@ -1238,18 +1199,28 @@ export const TASAutomator = {
         purchasing), or to skip them entirely (eg. not entering an EC if it already has full completions). These blocks
         can be nested if desired, with inner blocks being placed within one another.
         <br><br>
-        In the text editor mode: Specify the inner block with curly braces, with the opening brace { on the same line as
+        Specify the inner block with curly braces, with the opening brace { on the same line as
         the comparison and the closing brace } on its own line after the last line you want inside the block. Inner
         commands do not need to be indented, although it may be visually helpful to do so.
-        <br><br>
-        In the block editor mode: These commands come with an empty dotted rectangle which indicates which commands are
-        within the inner block. Subsequent blocks can then be dragged inside the dotted rectangle.
         `,
       examples: [
         `if ec10 completions < 5 {<br>
           <blockquote>
           unlock ec10<br>
           start ec10</blockquote>
+        }`,
+        `if ec10 completions < 5 {<br>
+          <blockquote>
+          unlock ec10<br>
+          start ec10</blockquote>
+        } else if ec11 completions < 5 {
+          <blockquote>
+          unlock ec11<br>
+          start ec11</blockquote>
+        } else {
+          <blockquote>
+          unlock ec12<br>
+          start ec12</blockquote>
         }`,
         `until ep > 1e8 {<br>
           <blockquote>
@@ -1260,7 +1231,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 20,
+      id: 21,
       isUnlocked: () => true,
       keyword: "INFINITY UPGRADES",
       category: 5,
@@ -1300,7 +1271,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 21,
+      id: 22,
       isUnlocked: () => true,
       keyword: "BREAK INFINITY UPGRADES",
       category: 5,
@@ -1340,7 +1311,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 22,
+      id: 23,
       isUnlocked: () => true,
       keyword: "AUTOBUYER UNLOCK AND UPGRADES",
       category: 5,
@@ -1384,7 +1355,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 23,
+      id: 24,
       isUnlocked: () => true,
       keyword: "REPLICANTI UPGRADES",
       category: 5,
@@ -1424,7 +1395,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 24,
+      id: 25,
       isUnlocked: () => true,
       keyword: "ANTIMATTER DIMENIONS",
       category: 5,
@@ -1472,7 +1443,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 25,
+      id: 26,
       isUnlocked: () => true,
       keyword: "INFINITY DIMENIONS",
       category: 5,
@@ -1526,7 +1497,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 26,
+      id: 27,
       isUnlocked: () => true,
       keyword: "TIME DIMENIONS",
       category: 5,
@@ -1580,7 +1551,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 27,
+      id: 28,
       isUnlocked: () => true,
       keyword: "TICKSPEED",
       category: 5,
@@ -1622,7 +1593,7 @@ export const TASAutomator = {
       ]
     },
     {
-      id: 28,
+      id: 29,
       isUnlocked: () => true,
       keyword: "TIMEOUT",
       category: 5,
@@ -1632,6 +1603,66 @@ export const TASAutomator = {
       examples: [
         "timeOut 2000",
         "timeOut 60000",
+      ]
+    },
+    {
+      id: 30,
+      isUnlocked: () => true,
+      keyword: "VARIABLE (NYI)",
+      category: 5,
+      syntax: `
+        <b>var</b> = Value <br>`,
+      description: `Sets the value of a Variable.`,
+      examples: [
+        "var AM = 2000",
+        "var EM = 1e50",
+        "var fish = 2000",
+      ]
+    },
+    {
+      id: 31,
+      isUnlocked: () => true,
+      keyword: "DILATION UPGRADES",
+      category: 5,
+      syntax: `
+        <b>dilationUpgrade</b> [nowait] IDNumber amount [ping] <br>`,
+      description: `Buy Dilation Upgrades.`,
+      sections: [
+        {
+          name: "MODIFIERS",
+          items: [
+            {
+              header: "<i>nowait</i>",
+              description: `
+                If present, the TAS Automator will move on to the next command instead of repeatedly trying on this
+                command in situations where the Upgrade is not purchasable or already purchased.
+              `
+            },
+            {
+              header: "<i>ping</i>",
+              description: `
+                Adding "ping" will noitfy you when the command has bought an upgrade.
+              `
+            },
+            {
+              header: "<i>IDNumber</i>",
+              description: `
+                I have no clue, Guess.
+              `
+            },
+            {
+              header: "<i>amount</i>",
+              description: `
+                Over 1000 will buy max.
+              `
+            },
+          ]
+        }
+      ],
+      examples: [
+        "dilationUpgrade 3 1000",
+        "dilationUpgrade nowait 6 1",
+        "dilationUpgrade 8 1 ping",
       ]
     },
   ],

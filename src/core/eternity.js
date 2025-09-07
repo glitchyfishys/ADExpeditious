@@ -319,7 +319,8 @@ class EPMultiplierState extends GameMechanicState {
     return this.cachedEffectValue.value;
   }
 
-  purchase() {
+  purchase(auto) {
+    if (RealityUpgrade(15).isLockingMechanics) return auto ? false : RealityUpgrade(15).tryShowWarningModal();
     if (!this.isAffordable) return false;
     Currency.eternityPoints.subtract(this.cost);
     ++this.boughtAmount;

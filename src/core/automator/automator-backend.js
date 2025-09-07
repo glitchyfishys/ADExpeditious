@@ -1,6 +1,7 @@
 import { compile } from "./compiler";
 
 export const AUTOMATOR_COMMAND_STATUS = Object.freeze({
+  NULL: -1,
   NEXT_INSTRUCTION: 0,
   NEXT_TICK_SAME_INSTRUCTION: 1,
   NEXT_TICK_NEXT_INSTRUCTION: 2,
@@ -10,6 +11,9 @@ export const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   HALT: 5,
   RESTART: 6,
   TIME_OUT: 7,
+  ENTER_BLOCK: 8,
+  EXIT_BLOCK: 9,
+  SKIP_BLOCK: 10,
 });
 
 export const AUTOMATOR_MODE = Object.freeze({

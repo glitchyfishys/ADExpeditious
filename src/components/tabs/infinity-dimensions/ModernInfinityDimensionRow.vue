@@ -104,6 +104,7 @@ export default {
       this.enslavedRunning = Enslaved.isRunning;
     },
     buySingleInfinityDimension() {
+      InfinityDimension(this.tier).unlock();
       InfinityDimension(this.tier).buySingle();
     },
     buyMaxInfinityDimension() {
