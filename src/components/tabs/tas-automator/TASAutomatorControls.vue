@@ -86,7 +86,7 @@ export default {
     },
     rewind: () => TASAutomatorBackend.restart(),
     play() {
-      TASAutomatorBackend.compile();
+      if (!TASAutomatorBackend.stack.top) TASAutomatorBackend.compile();
       if (TASAutomatorData.cachedErrors > 0) {
         TASAutomatorBackend.mode = AUTOMATOR_MODE.PAUSE;
         return;
@@ -100,7 +100,7 @@ export default {
     },
     stop: () => TASAutomatorBackend.stop(),
     step() {
-      TASAutomatorBackend.compile();
+      if (!TASAutomatorBackend.stack.top) TASAutomatorBackend.compile();
       if (TASAutomatorData.cachedErrors > 0) TASAutomatorBackend.mode = AUTOMATOR_MODE.PAUSE;
       else if (TASAutomatorBackend.isOn) TASAutomatorBackend.mode = AUTOMATOR_MODE.SINGLE_STEP;
       else TASAutomatorBackend.start(TASAutomatorBackend.currentEditingScript.id, AUTOMATOR_MODE.SINGLE_STEP, false);

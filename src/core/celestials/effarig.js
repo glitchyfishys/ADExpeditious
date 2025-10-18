@@ -129,9 +129,10 @@ class EffarigUnlockState extends BitUpgradeState {
   }
 
   purchase() {
-    if (this.isUnlocked || !Currency.relicShards.purchase(this.cost)) return;
+    if (this.isUnlocked || !Currency.relicShards.purchase(this.cost)) return false;
     this.unlock();
     this.config.onPurchased?.();
+    return true;
   }
 }
 

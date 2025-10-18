@@ -77,7 +77,7 @@ export const perkShop = {
     id: 5,
     description: () => `Fill all empty slots in your inventory with Music Glyphs`,
     cost: () => Math.clampMin(GameCache.glyphInventorySpace.value, 1),
-    otherReq: () => GameCache.glyphInventorySpace.value > 0,
+    otherReq: () => GameCache.glyphInventorySpace.value > 0 && Ra.unlocks.perkShopIncrease.canBeApplied,
     formatCost: value => formatInt(value),
     costCap: () => Number.MAX_VALUE,
     cap: () => Number.MAX_VALUE

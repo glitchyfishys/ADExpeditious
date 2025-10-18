@@ -214,11 +214,12 @@ export class DarkMatterDimensionState extends DimensionState {
   }
 
   ascend() {
-    if (this.interval > this.intervalPurchaseCap) return;
+    if (this.interval > this.intervalPurchaseCap) return false;
     this.data.ascensionCount++;
 
     // Immediately buy as many interval upgrades as possible
     while (this.buyInterval());
+    return true;
   }
 
   static get dimensionCount() { return 4; }

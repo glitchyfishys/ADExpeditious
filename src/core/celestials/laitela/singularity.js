@@ -266,7 +266,7 @@ export const Singularity = {
     },
 
   perform() {
-    if (!this.capIsReached || Pelle.isDoomed) return;
+    if (!this.capIsReached || Pelle.isDoomed) return false;
 
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_BEFORE);
 
@@ -280,6 +280,7 @@ export const Singularity = {
     }
 
     EventHub.dispatch(GAME_EVENT.SINGULARITY_RESET_AFTER);
+    return true;
   }
 };
 

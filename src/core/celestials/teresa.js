@@ -88,6 +88,16 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     return this.cost <= this.currency.value && otherReq;
   }
 
+  purchase() {
+    if (!this.canBeBought || !this.isAvailableForPurchase) return false;
+    if (GameEnd.creditsEverClosed) return false;
+    this.currency.subtract(this.cost);
+    this.boughtAmount++;
+    this.onPurchased();
+    GameUI.update();
+    return true;
+  }
+
   onPurchased() {
     if (this.id === 0) {
       GameCache.staticGlyphWeights.invalidate();

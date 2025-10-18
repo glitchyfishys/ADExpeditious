@@ -523,12 +523,12 @@ export const TASAutomatorBackend = {
   step() {
     if (this.stack.isEmpty || TASAutomatorData.cachedErrors > 0) return;
     if(this.stack.top == undefined) {
-      if(this.stack.top == undefined) this.hasJustCompleted = true;
       if(player.speedrun.TASAutomator.state.repeat) this.restart();
       else {
         this.stop();
         return false;
       }
+      if(this.stack.top == undefined) this.hasJustCompleted = true;
     }
     let keepGoing = true;
     for (let steps = 0; steps < 50 && keepGoing; steps++) {
@@ -586,7 +586,7 @@ export const TASAutomatorBackend = {
 
   enterBlock() {
     this.TopBlockEntered = true;
-    this.TopBlock.Start = this.stack.top.line;
+    this.TopBlock.Start = this.stack.line + 1;
     this.TopBlock.Type = this.stack.top.BlockType;
     this.stack.blockDepth++;
     this.nextCommand();

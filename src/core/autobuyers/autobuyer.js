@@ -142,7 +142,7 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
   }
 
   upgradeInterval(free, forced = false) {
-    if (!forced && (this.hasMaxedInterval || !this.isUnlocked || this.isBought == false || !this.canBeUpgraded)) return false;
+    if (!forced && (this.hasMaxedInterval || !this.isUnlocked || !this.canBeUpgraded)) return false;
     if (!free && !Currency.infinityPoints.purchase(this.cost)) return false;
     this.data.cost *= 2;
     this.data.interval = Math.clampMin(this.data.interval * 0.6, 100);

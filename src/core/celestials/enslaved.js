@@ -280,9 +280,10 @@ export const Tesseracts = {
   },
 
   buyTesseract() {
-    if (!this.canBuyTesseract) return;
-    if (GameEnd.creditsEverClosed) return;
+    if (!this.canBuyTesseract) return false;
+    if (GameEnd.creditsEverClosed) return false;
     player.celestials.enslaved.tesseracts++;
+    return true;
   },
 
   // This used to be a somewhat complicated function which spaced costs out super-exponentially, but the decision to

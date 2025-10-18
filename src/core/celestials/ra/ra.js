@@ -171,25 +171,28 @@ class RaPetState extends GameMechanicState {
   }
 
   purchaseMemoryUpgrade() {
-    if (!this.canBuyMemoryUpgrade || this.memoryUpgradeCapped) return;
+    if (!this.canBuyMemoryUpgrade || this.memoryUpgradeCapped) return false;
 
     this.memories -= this.memoryUpgradeCost;
     this.data.memoryUpgrades++;
+    return true;
   }
 
   purchaseChunkUpgrade() {
-    if (!this.canBuyChunkUpgrade || this.chunkUpgradeCapped) return;
+    if (!this.canBuyChunkUpgrade || this.chunkUpgradeCapped) return false;
 
     this.memories -= this.chunkUpgradeCost;
     this.data.chunkUpgrades++;
+    return true;
   }
 
   levelUp() {
-    if (this.memories < this.requiredMemories) return;
+    if (this.memories < this.requiredMemories) return false;
 
     this.memories -= this.requiredMemories;
     this.level++;
     Ra.checkForUnlocks();
+    return true;
   }
 
   get unlocks() {

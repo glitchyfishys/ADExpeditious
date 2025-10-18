@@ -32,7 +32,7 @@ class BlackHoleUpgradeState {
   }
 
   purchase() {
-    if (!this.isAffordable || this.value === 0) return;
+    if (!this.isAffordable || this.value === 0) return false;
 
     // Keep the cycle phase consistent before and after purchase so that upgrading doesn't cause weird behavior
     // such as immediately activating it when inactive (or worse, skipping past the active segment entirely).
@@ -58,6 +58,7 @@ class BlackHoleUpgradeState {
     if (bh.isPermanent) player.blackHole[this.id - 1].active = true;
 
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT);
+    return true;
   }
 }
 
@@ -344,11 +345,12 @@ export const BlackHoles = {
   },
 
   unlock() {
-    if (!this.canBeUnlocked) return;
+    if (!this.canBeUnlocked) return false;
     player.blackHole[0].unlocked = true;
     Currency.realityMachines.purchase(100);
     player.records.timePlayedAtBHUnlock = player.records.totalTimePlayed;
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UNLOCKED);
+    return true;
   },
 
   togglePause: (automatic = false) => {

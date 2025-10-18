@@ -242,7 +242,7 @@ export const Speedrun = {
     realTimeSpeedAutobuyers: "Delta Time Autobuyers",
     gameSpeed: "Game Speed",
     gameSpeedAch: "Achievements Affect Game Speed",
-    glyphsHaveFourEffects: 'Glyphs Always Have Four Effects',
+    glyphsHaveFourEffects: 'Glyphs Always Have Max Effects',
     effarigGlyphsHaveAllEffects: 'Effarig Glyphs Can Have Up To Seven Effects',
     glyphsHaveMaxRarity: 'Glyphs Always Have Max Rarity',
     glyphRarity: 'Glyph Rarity Multiplier',
