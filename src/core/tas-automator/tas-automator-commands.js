@@ -1,5 +1,5 @@
 
-const Red = { // what is ^ for? it for the start of the line
+const Red = { // What is ^ for? It's for the start of the line
   Notify: /^Notify/ui,
   String: [
     /^".*"/,
@@ -91,12 +91,27 @@ const Red = { // what is ^ for? it for the start of the line
   Currency: /^(TotalCompletions|PendingCompletions|EC1?[0-9]Completions|FilterScore|TimeShards|Singularities|Realities|Eternities|InfinityPower|TotalInfinities|BankedInfinities|Infinities|Replicanti|Reminants|RealityShards|BaseTG|Matter|TotalTT|TotalST|Pending(IP|EP|RM|TP)|AM|IP|EP|RM|IM|AG|RG|TG|TP|DT|TT|RS|DB|DM|DE|PP|ST)/ui,
   Operator: /^!?(>=|<=|>|<|==)/ui,
   TimeStudies: /^TimeStudies/ui,
+
+  // The fun stuff
+  Var: /^Var/ui,
+  Text: /^[0-z|_]*/ui,
+  GoTo: /^GoTo/ui,
 }
+
+Red.SetOperators = [
+  /\+=/ui,
+  /-=/ui,
+  /\*=/ui,
+  /\/=/ui,
+  /\^=/ui,
+  /=/ui,
+]
 
 Red.Value = [
   Red.Boolean,
   Red.Currency,
   Red.Number,
+  Red.Text,
 ]
 
 Red.PrestigeEvent = [
@@ -157,7 +172,7 @@ const Currencys = {
 const ValueStrings = ["number", "true", "false", "am", "ip","ep", "rm", "im", "tt", "tp", "dt", "ag", "rg", "rs", "basetg", "tg", "db", "dm", "de", "pp", "st",
   "replicanti", "infinities", "bankedinfinities", "totalinfinities", "eternities", "realities", "infinitypower", "Reminants", "TotalST",
   "singularities", "timeshards", "realityshards", "totalcompletions", "pendingcompletions", "ec1completions", "totaltt", "matter",
-  "pendingip", "pendingep", "pendingtp", "pendingrm", "pendingglyphlevel", "FilterScore"
+  "pendingip", "pendingep", "pendingtp", "pendingrm", "pendingglyphlevel", "filterScore", "variable"
 ]
 
 class TASAutomatorCommand {
@@ -182,6 +197,7 @@ class TASAutomatorCommand {
     let inline = [];
     this.rule.forEach(r => {
       commandLine = commandLine.replace(Red.Space, "");
+
       if (Array.isArray(r)) {
         r.some(v => {
           commandLine = commandLine.replace(Red.Space, "");
@@ -234,6 +250,7 @@ class TASAutomatorCommand {
     let c = 0;
     this.rule.forEach(r => {
       commandLine = commandLine.replace(Red.Space, "");
+      
       if (Array.isArray(r)) {
         commandLine = commandLine.replace(Red.Space, "");
         r.some(v => {
@@ -386,6 +403,8 @@ function NoWait(Str) {
   AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
 }
 
+const VARS = {};
+
 function getCurrencyValue(Str){
   if (Red.Number.test(Str)) return new Decimal(Str);
   else if (Currencys.AM.test(Str)) return Currency.antimatter.value;
@@ -445,7 +464,11 @@ function getCurrencyValue(Str){
   else if (Currencys.BaseTG.test(Str)) return player.dilation.baseTachyonGalaxies;
   else if (Currencys.TG.test(Str)) return player.dilation.totalTachyonGalaxies;
   else if (Currencys.DB.test(Str)) return player.dimensionBoosts;
-  else return new Decimal(0);
+  return VARS[Str] || new Decimal(0);
+}
+
+function getVariable(ID){
+  return VARS[ID] || ID + " has not be defined";
 }
 
 function checkValue(Value1, Operator, Value2) {
@@ -489,6 +512,7 @@ function PelleCheck() {
   && AlchemyResources.all.length == AlchemyResources.all.countWhere(r => r.capped);
 }
 
+
 // command priority is important.
 // keep the strings in lowercase, i dont want to use .toLowerCase()
 export const TASAutomatorCommands = [
@@ -514,14 +538,115 @@ export const TASAutomatorCommands = [
       key: Red.Notify,
       rule: [
         Red.Notify,
-        Red.String,
+        [Red.String[0], Red.String[1], Red.Any],
       ],
       string: [
         "notify",
-        ["'text'", '"text"'],
+        ["'text'", '"text"', "value"],
       ],
       command: ctx => {
-        GameUI.notify.automator(ctx[1].replaceAll("'", "").replaceAll('"', ""), 2500);
+        if (Red.String[0].test(ctx[1]) || Red.String[1].test(ctx[1])) GameUI.notify.automator(ctx[1].replace(/"|'/g, ""), 2500);
+        else GameUI.notify.automator(getVariable(ctx[1]).replace(/"|'/g, ""), 2500);
+        return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "goto",
+      key: Red.GoTo,
+      rule: [
+        Red.GoTo,
+        [Red.Number, Red.Text],
+      ],
+      string: [
+        "goto",
+        ["number", "*"],
+      ],
+      command: ctx => {
+        const pos = Number.parseInt(getVariable(ctx[1]));
+        const C = TASAutomatorBackend.stack._data.some((x, i) => {
+          if (x.line >= pos) {
+            TASAutomatorBackend.stack.line = i;
+            return true;
+          }
+        })
+        
+        return C ? AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION :AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+      },
+    }),
+  new TASAutomatorCommand (
+    {
+      id: "variable",
+      key: Red.Var,
+      rule: [
+        Red.Var,
+        Red.Text,
+        Red.SetOperators,
+        Red.Any,
+      ],
+      string: [
+        "var",
+        "*",
+        ["+=", "-=", "*=", "/=", "/=","^=","="],
+        ["*"],
+      ],
+      command: (ctx, line) => {
+
+        const Type = !isNaN(new Number(ctx[3])) ? "N" : ((Red.String[0].test(ctx[3]) || Red.String[1].test(ctx[3])) ? "S" : "V"); // need to change for Break Eternity
+        const VAL = getCurrencyValue(ctx[3]);
+        // console.log(Type, VAL, ctx);
+
+
+        if (VARS[ctx[1]] == undefined) VARS[ctx[1]] = ""; // set placeholder
+
+        if (Type == "V") {
+          const SType = !isNaN(new Number(VAL.toString())) ? "N" : "S"; // need to change for Break Eternity
+          if (/\+=/.test(ctx[2])) {
+            if (SType == "N" && isNaN(new Number(VARS[ctx[1]].toString()))) VARS[ctx[1]] += VAL.toString();
+            else if (SType == "N") VARS[ctx[1]] = Decimal.add(VARS[ctx[1]], VAL).toString();
+            else if (SType == "S") VARS[ctx[1]] += VAL.replace(/^"|^'/, "").replace(/"$|'$/, "");
+          } else if (/-=/.test(ctx[2])) {
+            if (SType == "N") VARS[ctx[1]] = Decimal.sub(VARS[ctx[1]], VAL).toString();
+            if (SType == "S") TASAutomatorData.logCommandEvent("Can not Subtract a String", line);
+          } else if (/\*=/.test(ctx[2])) {
+            if (SType == "N") VARS[ctx[1]] = Decimal.mul(VARS[ctx[1]], VAL).toString();
+            if (SType == "S") TASAutomatorData.logCommandEvent("Can not Muiltply a String", line);
+          } else if (/\/=/.test(ctx[2])) {
+            if (SType == "N") VARS[ctx[1]] = Decimal.div(VARS[ctx[1]], VAL).toString();
+            if (SType == "S") TASAutomatorData.logCommandEvent("Can not Divide a String", line);
+          } else if (/\^=/.test(ctx[2])) {
+            if (SType == "N") VARS[ctx[1]] = Decimal.pow(VARS[ctx[1]], VAL).toString();
+            if (SType == "S") TASAutomatorData.logCommandEvent("Can not Power a String", line);
+          } else if (/=/.test(ctx[2])) {
+            VARS[ctx[1]] = VAL.toString();
+          }
+
+          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+        }
+
+
+
+        if (/\+=/.test(ctx[2])) {
+          if (Type == "N" && isNaN(new Number(VARS[ctx[1]].toString()))) VARS[ctx[1]] += Decimal.add(VARS[ctx[1]], ctx[3]).toString();
+          else if (Type == "N") VARS[ctx[1]] = Decimal.add(VARS[ctx[1]], ctx[3]).toString();
+          else if (Type == "S") VARS[ctx[1]] += ctx[3].replace(/^"/, "").replace(/"$/, "").replace(/^'/, "").replace(/'$/, "");
+        } else if (/-=/.test(ctx[2])) {
+          if (Type == "N") VARS[ctx[1]] = Decimal.sub(VARS[ctx[1]], ctx[3]).toString();
+          if (Type == "S") TASAutomatorData.logCommandEvent("Can not Subtract a String", line);
+        } else if (/\*=/.test(ctx[2])) {
+          if (Type == "N") VARS[ctx[1]] = Decimal.mul(VARS[ctx[1]], ctx[3]).toString();
+          if (Type == "S") TASAutomatorData.logCommandEvent("Can not Muiltply a String", line);
+        } else if (/\/=/.test(ctx[2])) {
+          if (Type == "N") VARS[ctx[1]] = Decimal.div(VARS[ctx[1]], ctx[3]).toString();
+          if (Type == "S") TASAutomatorData.logCommandEvent("Can not Divide a String", line);
+        } else if (/\^=/.test(ctx[2])) {
+          if (Type == "N") VARS[ctx[1]] = Decimal.pow(VARS[ctx[1]], ctx[3]).toString();
+          if (Type == "S") TASAutomatorData.logCommandEvent("Can not Power a String", line);
+        } else if (/=/.test(ctx[2])) {
+          if (Type == "N") VARS[ctx[1]] = new Decimal(ctx[3]).toString();
+          if (Type == "S") VARS[ctx[1]] = ctx[3];
+        }
+
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
       },
     }),
@@ -590,7 +715,9 @@ export const TASAutomatorCommands = [
         "{"
       ],
       command: ctx => {
-        const Enter = checkValue(ctx[1], ctx[2], ctx[3]);
+        const a = getVariable(ctx[1]) || ctx[1];
+        const b = getVariable(ctx[3]) || ctx[3];
+        const Enter = checkValue(a, ctx[2], b);
 
         if (Enter) return AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK;
         else return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
@@ -644,7 +771,9 @@ export const TASAutomatorCommands = [
         "{"
       ],
       command: ctx => {
-        const Enter = checkValue(ctx[1], ctx[2], ctx[3]);
+        const a = getVariable(ctx[1]) || ctx[1];
+        const b = getVariable(ctx[3]) || ctx[3];
+        const Enter = checkValue(a, ctx[2], b);
 
         if (Enter) return AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK;
         else return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
@@ -674,7 +803,9 @@ export const TASAutomatorCommands = [
       ],
       command: ctx => {
         if (TASAutomatorBackend.TopBlockEntered) return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
-        const Enter = checkValue(ctx[3], ctx[4], ctx[5]);
+        const a = getVariable(ctx[3]) || ctx[3];
+        const b = getVariable(ctx[5]) || ctx[5];
+        const Enter = checkValue(a, ctx[4], b);
 
         if (Enter) return AUTOMATOR_COMMAND_STATUS.ENTER_BLOCK;
         else return AUTOMATOR_COMMAND_STATUS.SKIP_BLOCK;
@@ -2349,7 +2480,7 @@ CodeMirror.defineSimpleMode("TAS", {
     { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },
     { regex: /blob\s\s/ui, token: "blob" },
     { regex: /\}/ui, dedent: true, next: "codeBlock" },
-    { regex: /StartChallenge|AntimatterGalaxy|ReplicantiGalaxy|DimensionBoost/ui, token: "keyword", next: "commandArgs" },
+    { regex: /Var|GoTo|StartChallenge|AntimatterGalaxy|ReplicantiGalaxy|DimensionBoost/ui, token: "keyword", next: "commandArgs" },
     { regex: /AntimatterDimension|InfinityDimension|TimeDimension/ui, token: "keyword", next: "commandArgs" },
     { regex: /Tickspeed|UnlockBlackHole|BlackHole|ImaginaryUpgrade|RealityUpgrade|ReplicantiUpgrade|UpgradeAutobuyer|EPmult|IPmult|DilationUpgrade|EternityUpgrade|BreakInfinityUpgrade|InfinityUpgrade|UnlockDilation/ui, token: "keyword", next: "commandArgs" },
     { regex: /StartCelestial|PelleUpgrade|DarkMatterDimension|Tesseract|Memory|NamelessUpgrade|RelicUpgrade|PourTeresa|Singularity|BreakInfinity|UnlockReplicanti|PerkShop|Perk|GalaxyGeneratorUpgrade|GalaxyGenerator/ui, token: "keyword", next: "commandArgs" },

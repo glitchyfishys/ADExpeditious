@@ -175,7 +175,7 @@ export const normalAchievements = [
     },
     checkRequirement: () => player.galaxies === 1,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
-    get reward() { return `Multiply starting tick speed by ${format(1.02, 2, 2)}.`; },
+    get reward() { return `Multiply starting tickspeed by ${format(1.02, 2, 2)}.`; },
     effect: 1 / 1.02
   },
   {

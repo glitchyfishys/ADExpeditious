@@ -5431,7 +5431,7 @@ export const news = [
   },
   {
     id: "ai523",
-    text: "The current cooldown on Research Dimensions is [current tick speed]. This may be extended to next update in [time]."
+    text: "The current cooldown on Research Dimensions is [current tickspeed]. This may be extended to next update in [time]."
   },
   {
     id: "ai524",

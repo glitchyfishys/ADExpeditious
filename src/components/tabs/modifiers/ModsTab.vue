@@ -186,6 +186,22 @@ export default {
         :type="'float'"
         /><br>
       </div>
+
+      <div style="border: solid var(--color-text) 2px">
+        <div class="text-big">Tickspeed</div>
+        <Input
+        :modKey="'TickMul'"
+        :type="'decimal'"
+        />
+        <Input
+        :modKey="'TickPow'"
+        :type="'float'"
+        />
+        <Input
+        :modKey="'GalStrength'"
+        :type="'float'"
+        /><br>
+      </div>
     </div>
 
     <div class="o-subsect">  <!-- Presteage  -->

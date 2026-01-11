@@ -57,6 +57,7 @@ export class TASAutomatorScript {
       if (command.replace(/^[ \t]+/, "") == "" || TASAutomatorCommands[0].key.test(command)) return false;
       
       TASAutomatorCommands.some((com, __) => {
+        // console.log(com.key)
         if (com.key.test(command.replace(/^[ \t]+/, ''))) {
           if(!com.checkRule(command)) return false;
           let isBlock = com.string[0] === "if";

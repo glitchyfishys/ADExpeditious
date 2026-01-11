@@ -492,15 +492,15 @@ function keyboardTASAutomatorToggle() {
     TASAutomatorBackend.restart();
     TASAutomatorBackend.start(visibleIndex);
     if (TASAutomatorData.cachedErrors === 0) {
-      GameUI.notify.automator(`Starting script "${TASAutomatorBackend.scriptName}"`);
+      GameUI.notify.automator(`Starting TAS script "${TASAutomatorBackend.scriptName}"`);
     } else {
-      GameUI.notify.error(`Cannot start script "${TASAutomatorBackend.scriptName}" (has errors)`);
+      GameUI.notify.error(`Cannot start TAS script "${TASAutomatorBackend.scriptName}" (has errors)`);
     }
     return;
   }
   const action = TASAutomatorBackend.isRunning ? "Resuming" : "Pausing";
   const linenum = TASAutomatorBackend.currentLineNumber;
-  GameUI.notify.automator(`${action} script "${TASAutomatorBackend.scriptName}" at line ${linenum}`);
+  GameUI.notify.automator(`${action} TAS script "${TASAutomatorBackend.scriptName}" at line ${linenum}`);
 }
 
 function keyboardAutomatorRestart() {

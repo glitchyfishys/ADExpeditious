@@ -60,9 +60,11 @@ export default {
     <b>Not Yet Implemented And Info:</b> Lots of commands, Code Blocks
     Contains, Variables, Scroll to line are NYI. <br>
     Changing scripts stops TAS. <br>
+    The toggle hotkey is "I". <br>
     Errors are undetailed. <br>
     The TAS Automator also runs when the Game is Paused. <br>
     Some Errors are listed in recently executed commands. <br>
+    Running a lot of long "Notify" commands will the ability to click on things. <br>
     The "🐟" command is suppose to crash the game.
   </div>
 </template>

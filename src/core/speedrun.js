@@ -148,6 +148,9 @@ export const Speedrun = {
   defaultModifiers: {
       ADMul: DC.D1,
       ADPow: 1,
+      GalStrength: 1,
+      TickMul: DC.D1,
+      TickPow: 1,
       IDMul: DC.D1,
       IDPow: 1,
       TDMul: DC.D1,
@@ -210,6 +213,9 @@ export const Speedrun = {
   modifierNames: {
     ADMul: 'AD Multiplier',
     ADPow: 'AD Power',
+    GalStrength: "Galaxy Strength",
+    TickMul: "Tickspeed Multiplier",
+    TickPow: "Tickspeed Power",
     IDMul: 'ID Multiplier',
     IDPow: 'ID Power',
     TDMul: 'TD Multiplier',

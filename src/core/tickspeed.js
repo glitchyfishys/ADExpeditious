@@ -60,6 +60,7 @@ export function getTickSpeedMultiplier() {
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
   galaxies *= 1 + ImaginaryUpgrade(9).effectOrDefault(0);
   if (Pelle.isDoomed) galaxies *= 0.5;
+  galaxies *= player.speedrun.mods.galaxyStrength;
 
   galaxies *= Pelle.specialGlyphEffect.power;
   const perGalaxy = DC.D0_965;
@@ -146,7 +147,8 @@ export const Tickspeed = {
     const tickspeed = Effarig.isRunning
       ? Effarig.tickspeed
       : this.baseValue.powEffectOf(DilationUpgrade.tickspeedPower);
-    return player.dilation.active || PelleStrikes.dilation.hasStrike ? dilatedValueOf(tickspeed) : tickspeed;
+    return (player.dilation.active || PelleStrikes.dilation.hasStrike ? dilatedValueOf(tickspeed) : tickspeed)
+    .div(player.speedrun.mods.TickMul).pow(player.speedrun.mods.TickPow); // why is tickspeed still like this? 
   },
 
   get cost() {
@@ -168,7 +170,7 @@ export const Tickspeed = {
   },
 
   get baseValue() {
-    return DC.E3.timesEffectsOf(
+    return DC.D1.timesEffectsOf(
       Achievement(36),
       Achievement(45),
       Achievement(66),
@@ -185,7 +187,7 @@ export const Tickspeed = {
   },
 
   get perSecond() {
-    return Decimal.divide(1000, this.current);
+    return this.current.recip();
   },
 
   multiplySameCosts() {
